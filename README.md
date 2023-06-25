@@ -19,6 +19,13 @@ Over the summer of 2023, I will be working on this project until it will be of a
 ### 🔍 Features
 
 -   [ ] User Authentication
+
+*   `Passport.js` for local auth and OAuth2.0
+*   `express-session` (and cookies) vs `jwt` for session management
+*   `MongoDB` to store and handle user data
+*   `Mongoose` object modelling library (ODM) for MongoDB
+*   `ReactContext` vs `Redux` for state management
+
 -   [ ] Profile Management (profile picture, bio, location)
 -   [ ] Tweeting (text, images, videos)
 -   [ ] Feed (tweets from followed users, algorithmic order)
@@ -30,8 +37,8 @@ Over the summer of 2023, I will be working on this project until it will be of a
 
 ### 👇🏼 TODO
 
--   [x] Decide on SQL vs NoSQL -> FINAL: MongoDB
--   [ ] Decide on a stack
+-   [x] Decide on SQL vs NoSQL - **MongoDB**
+-   [x] Decide on a stack - **MERN**
 -   [ ] ...
 
 ## 🔌 Technologies
@@ -41,7 +48,7 @@ I have decided to use the PERN stack for this project due to my previous experie
 <a href="#">
    <img src=https://user-images.githubusercontent.com/25181517/183897015-94a058a6-b86e-4e42-a37f-bf92061753e5.png height=40px width=40px alt="React" valign="middle" title="React" style="background: white; border-radius: .85rem; padding: 0.3rem; margin-right: 0.4rem;">
 </a> <a href="#">
-   <img src=https://reactrouter.com/_brand/react-router-mark-color.png height=40px width=55px alt="React" valign="middle" title="React" style="background: white; border-radius: .85rem; padding: 0.3rem; margin-right: 0.4rem;">
+   <img src=https://reactrouter.com/_brand/react-router-mark-color.png height=40px width=48px alt="React" valign="middle" title="React" style="background: white; border-radius: .85rem; padding: 0.3rem; margin-right: 0.4rem;">
 </a> <a href="#">
    <img src=https://user-images.githubusercontent.com/25181517/187896150-cc1dcb12-d490-445c-8e4d-1275cd2388d6.png height=40px width=40px alt="Redux" valign="middle" title="Redux"
    style="background: white; border-radius: .85rem; padding: 0.3rem; margin-right: 0.4rem;"> 
