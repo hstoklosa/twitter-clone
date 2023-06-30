@@ -1,0 +1,236 @@
+@font-face {
+    font-family: "Chirp";
+    font-weight: 500;
+    src: url("../assets/fonts/Chirp-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Chirp";
+    font-weight: 600;
+    src: url("../assets/fonts/Chirp-Medium.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Chirp";
+    font-weight: 700;
+    src: url("../assets/fonts/Chirp-Bold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Chirp";
+    font-weight: 800;
+    src: url("../assets/fonts/Chirp-Heavy.woff2") format("woff2");
+}
+
+:root {
+    --primary-colour: rgb(29, 155, 240);
+    --primary-hover: rgb(26, 140, 216);
+
+    --empty-hover: rgba(239, 243, 244, 0.1);
+    --empty-hover2: rgba(231, 233, 234, 0.1);
+    --tweet-hover: rgba(255, 255, 255, 0.03);
+
+    --white: rgb(231, 233, 234);
+    --black: #3c4043;
+    --blue: rgb(29, 155, 240);
+    --grey: rgb(113, 118, 123);
+    --border: rgb(47, 51, 54);
+
+    --retweet: rgb(0, 186, 124);
+    --like: rgb(249, 24, 128);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    color: var(--white);
+    font-family: "Chirp";
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+button {
+    background: none;
+    outline: none;
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    font: inherit;
+}
+
+/* Common */
+
+.link-blue {
+    color: var(--blue);
+}
+
+.link-grey {
+    color: var(--grey);
+}
+
+.link-blue,
+.link-grey {
+    font-size: 0.8rem;
+}
+
+.link-blue:hover,
+.link-grey:hover {
+    text-decoration: underline;
+}
+
+.logo-container {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.3rem;
+    border-radius: 50%;
+    transition: background-color 0.2s linear;
+}
+
+.logo-container img {
+    width: 28px;
+    height: auto;
+}
+
+/* Sidebar */
+
+.column#navbar .sticky-wrapper {
+    position: sticky;
+    top: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0.5rem;
+}
+
+.navbar {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.navbar_icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.navbar .navbar-link {
+    font-size: 1.3rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.75rem;
+    margin-bottom: 0.8rem;
+    border-radius: 2rem;
+    width: calc(auto + 3rem) !important;
+    transition: background-color 0.1s linear;
+}
+
+.navbar-link.current {
+    font-weight: 700;
+}
+
+.navbar-link.current .navbar_icon {
+    stroke-width: 2.5;
+}
+
+.navbar-link:hover {
+    background-color: var(--empty-hover);
+}
+
+.navbar-btn {
+    font-size: 1.1rem;
+    width: 100%;
+    border-radius: 999rem;
+    background-color: var(--primary-colour);
+    margin-bottom: 0.8rem;
+    padding: 1rem;
+    transition: background-color 0.1s linear;
+}
+
+.navbar-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.navbar-account img {
+    width: 40px;
+    border-radius: 50%;
+}
+
+.navbar-account {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: auto;
+    padding: 0.7rem 1rem;
+    border-radius: 999rem;
+    transition: background-color 0.1s linear;
+}
+
+.navbar-account:hover {
+    background-color: var(--empty-hover2);
+}
+
+.navbar-account_names {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 0.8rem;
+}
+
+.navbar-account_names .display_name {
+    font-size: 0.9rem;
+    margin-bottom: 0.1rem;
+}
+
+.navbar-account_names .username {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--grey);
+}
+
+.navbar-account_icon {
+    margin-left: auto;
+}
+
+/* Links Widget */
+
+.links-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+    margin-top: 1rem;
+}
+
+.links-container a {
+    font-weight: 400;
+    padding-right: 0.5rem;
+    margin: 0.1rem 0;
+}
+
+/* Utils */
+
+.container {
+    width: 75%;
+    max-width: 1270px;
+    min-height: 100vh;
+    margin: 0 auto;
+    display: grid;
+    justify-content: center; /* centers the columns */
+    grid-template-columns: 275px 600px 350px;
+    gap: 10px;
+    width: 100%;
+}
