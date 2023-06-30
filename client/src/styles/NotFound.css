@@ -1,0 +1,25 @@
+#not-found .container {
+    min-height: 100vh;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.header {
+    font-size: 72px;
+    color: var(--white);
+}
+
+.message {
+    color: var(--white);
+    font-size: 20px;
+}
+
+.home-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #0088cc;
+    text-decoration: none;
+    font-size: 16px;
+}

@@ -7,13 +7,14 @@ import { AuthProvider } from "../src/context/AuthProvider";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/Root";
+import NotFound from "./routes/NotFound";
 import Login from "./routes/Login";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
-        errorElement: <h1>TODO</h1>,
+        errorElement: <NotFound />,
         children: [
             {
                 path: "/",
