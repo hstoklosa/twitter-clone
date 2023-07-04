@@ -1,5 +1,4 @@
 import logo from "../../assets/logo-white.png";
-import elon from "../../assets/elon.jpg";
 
 import { IconContext } from "react-icons";
 import { TbSettings } from "react-icons/tb";
@@ -10,7 +9,20 @@ import { IoNotificationsOutline, IoEllipsisHorizontal } from "react-icons/io5";
 import { HiOutlineUser } from "react-icons/hi";
 import { PiDotsThreeCircle } from "react-icons/pi";
 
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
+
 const Sidebar = ({ minimal }) => {
+    const { auth, signOut } = useAuth();
+
+    const handleSignOut = () => {
+        signOut();
+
+        return <Navigate to="/" replace />;
+    };
+
+    console.log(auth);
+
     return (
         <section className="column" id="navbar">
             <div className="sticky-wrapper">
@@ -89,11 +101,11 @@ const Sidebar = ({ minimal }) => {
                 )}
 
                 {!minimal && (
-                    <button className="navbar-account">
-                        <img src={elon} alt="User Image" />
+                    <button className="navbar-account" onClick={handleSignOut}>
+                        <img src={auth.profileImageURL} alt="User Image" />
                         <div className="navbar-account_names">
-                            <p className="display_name">Elon Musk</p>
-                            <p className="username">@elonmusk</p>
+                            <p className="display_name">{auth.displayName}</p>
+                            <p className="username">@{auth.username}</p>
                         </div>
                         <IconContext.Provider value={{ className: "navbar-account_icon" }}>
                             <IoEllipsisHorizontal size="15" />
