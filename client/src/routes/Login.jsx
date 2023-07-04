@@ -1,19 +1,43 @@
 import "../styles/Login.css";
 
-import { Links, Signup } from "../components";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+
+import { SignupModal, LoginModal, Feed, Links, Signup, Loading } from "../components";
+import { useAuth } from "../context/AuthProvider";
 
 const Login = () => {
+    const { auth } = useAuth();
+
+    const [signupModal, setSignupModal] = useState(false);
+    const [loginModal, setLoginModal] = useState(false);
+
+    const openSignupModal = () => setSignupModal(true);
+    const closeSignupModal = () => setSignupModal(false);
+
+    const openLoginModal = () => setLoginModal(true);
+    const closeLoginModal = () => setLoginModal(false);
+
+    if (auth) {
+        return <Navigate to="/home" replace />;
+    }
+
     return (
         <>
-            <div className="column second">
+            <SignupModal isOpen={signupModal} closeModal={closeSignupModal} />
+            <LoginModal isOpen={loginModal} closeModal={closeLoginModal} />
+
+            <div className="column" id="general">
                 <header>
                     <h1>Explore</h1>
                 </header>
+
+                <Feed />
             </div>
 
-            <div className="column last">
+            <div className="column" id="widgets">
                 <div className="sticky-wrapper">
-                    <Signup />
+                    <Signup openModal={openSignupModal} />
                     <Links />
                 </div>
             </div>
@@ -24,12 +48,12 @@ const Login = () => {
                     <p>People on Twitter are the first to know.</p>
                 </div>
                 <div className="footer_btns">
-                    <a href="https://twitter.com" className="btn login">
+                    <button className="btn login" onClick={openLoginModal}>
                         Log In
-                    </a>
-                    <a href="https://twitter.com" className="btn signup">
+                    </button>
+                    <button className="btn signup" onClick={openSignupModal}>
                         Sign up
-                    </a>
+                    </button>
                 </div>
             </div>
         </>

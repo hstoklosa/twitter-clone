@@ -1,0 +1,106 @@
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-modal_header {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.login-modal_content {
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-modal_content h1 {
+    margin-top: 0.5rem;
+    margin-bottom: 4rem;
+}
+
+.signin-methods {
+    width: 100%;
+}
+
+.category-separator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+}
+
+.category-separator .line {
+    height: 1px;
+    width: 44%;
+    background-color: var(--input-border);
+}
+
+.category-separator p {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.login-modal_content .btn-next {
+    padding: 0.6rem 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.login-modal_content .btn-forgot-password {
+    margin-bottom: 4rem;
+}
+
+.login-modal_content .input-container {
+    margin-bottom: 1.5rem;
+}
+
+.no-account {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--grey);
+    align-self: flex-start;
+    margin-left: 0.3rem;
+}
+
+.no-account .link-blue {
+    font-size: 0.95rem !important;
+}
+
+.forgot-password.link-blue {
+    font-size: 0.95rem !important;
+    font-weight: 500;
+    align-self: flex-start;
+}
+
+.login-modal_content .page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 55%;
+}
+
+.login-modal_content .page.page-2 {
+    width: 70%;
+}
+
+.login-modal_content .page-2 .password-input {
+    margin-bottom: 0.5rem;
+}
+
+.login-modal_content .page-2 .forgot-password {
+    margin-bottom: 2rem;
+}
+
+.login-modal_content .page-2 .btn-next {
+    margin-bottom: 0.8rem;
+}
+
+.login-modal_content .page .input-container {
+    width: 100%;
+}

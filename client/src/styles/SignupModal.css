@@ -1,0 +1,101 @@
+.signup-modal_header {
+    width: 80%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 1rem;
+}
+
+.signup-modal_header h3 {
+    font-weight: 700;
+    margin-left: 1.6rem;
+}
+
+.signup-modal_content {
+    height: 85%;
+    width: 80%;
+    padding: 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.signup-modal_content .page {
+    padding: 1rem 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.signup-modal_content h2 {
+    font-size: 1.75rem;
+}
+
+.btn-close-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    transition: background-color 0.2s linear;
+}
+
+.btn-close-modal:hover {
+    background-color: rgba(239, 243, 244, 0.1);
+}
+
+.btn-close_icon {
+    position: block;
+
+    /* margin-right: 2rem; */
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.25px;
+    color: var(--black);
+    background-color: #fff;
+    border-radius: 9999rem;
+    width: 100%;
+    padding: 1.1rem 1.2rem;
+    transition: background-color 0.2s linear;
+}
+
+.btn-next:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.dob-container h4 {
+    margin: 1rem 0 0.6rem 0;
+}
+
+.signup-modal_content p {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--grey);
+    margin-bottom: 1rem;
+}
+
+.select-container .month-select {
+    width: 45%;
+}
+
+.day-select {
+    width: 20%;
+}
+
+.year-select {
+    width: 30%;
+}

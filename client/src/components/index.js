@@ -2,4 +2,8 @@ export { default as Sidebar } from "./shared/Sidebar";
 export { default as Links } from "./widgets/Links";
 export { default as Signup } from "./widgets/Signup";
 export { default as Feed } from "./twitter/Feed";
-
+export { default as BaseModal } from "./modals/BaseModal";
+export { default as SignupModal } from "./modals/SignupModal";
+export { default as LoginModal } from "./modals/LoginModal";
+export { default as InputContainer } from "./shared/InputContainer";
+export { default as SelectContainer } from "./shared/SelectContainer";
