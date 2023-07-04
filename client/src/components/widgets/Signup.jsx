@@ -3,7 +3,7 @@ import "../../styles/Login.css";
 import { IconContext } from "react-icons";
 import { FcGoogle } from "react-icons/fc";
 
-const Signup = () => {
+const Signup = ({ openModal }) => {
     return (
         <div className="signup-container">
             <h2>New to Twitter Clone?</h2>
@@ -16,7 +16,7 @@ const Signup = () => {
                 Sign up with Google
             </a>
 
-            <button type="button" className="signup-btn">
+            <button type="button" className="signup-btn" onClick={openModal}>
                 Create Account
             </button>
 

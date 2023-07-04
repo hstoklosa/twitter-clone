@@ -6,7 +6,7 @@ import { Sidebar } from "../components/";
 const Root = () => {
     return (
         <div className="container">
-            <Sidebar minimal={false} />
+            <Sidebar minimal={true} />
             <Outlet />
         </div>
     );

@@ -30,10 +30,15 @@
 
     --border: rgb(47, 51, 54);
     --input-border: rgb(51, 54, 57);
+    --input-disabled: rgb(32, 35, 39);
+    --label-disabled: rgb(113, 118, 123);
 
     --empty-btn-border: rgb(83, 100, 113);
     --empty-hover: rgba(239, 243, 244, 0.1);
     --empty-hover2: rgba(231, 233, 234, 0.1);
+    --borderless-hover: rgba(29, 155, 240, 0.1);
+
+    --input-placeholder: #71767b;
 
     --white: rgb(231, 233, 234);
     --grey: rgb(113, 118, 123);
@@ -74,7 +79,8 @@ button {
     font: inherit;
 }
 
-input {
+input,
+textarea {
     background: none;
     outline: none;
     border: none;
@@ -105,7 +111,7 @@ select {
 /* Common */
 
 .link-blue {
-    color: var(--blue);
+    color: var(--primary-colour) !important;
 }
 
 .link-grey {
@@ -135,7 +141,8 @@ select {
     top: 0;
     display: flex;
     flex-direction: column;
-    padding: 0.5rem 1rem;
+    /* padding: 0.5rem 1rem; */
+    padding: 0.2rem 2rem 0.2rem 1rem;
 }
 
 .logo-container {
@@ -193,7 +200,7 @@ select {
 }
 
 .navbar-link .text {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 500;
 }
 
@@ -277,7 +284,7 @@ select {
     justify-content: flex-start;
     align-items: center;
     height: 55px;
-    padding: 0.5rem 1rem 0.5rem 1rem;
+    padding: 0.2rem 1rem 0.2rem 1rem;
     background-color: rgba(0, 0, 0, 0.65);
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(12px);
@@ -313,6 +320,29 @@ select {
     background-color: var(--empty-hover);
 }
 
+/* Base Modal */
+
+.modal {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: rgba(91, 112, 131, 0.4);
+}
+
+.modal-content {
+    width: 600px;
+    height: 650px;
+    padding: 1rem;
+    background-color: #000;
+    border-radius: 1rem;
+}
+
 /* Inputs */
 
 .input-container input {
@@ -320,11 +350,19 @@ select {
     color: #fff;
     position: relative;
     height: 60px;
-    padding: 1.2rem 0.5rem 0 0.6rem;
+    padding: 1.3rem 0.5rem 0 0.6rem;
     border: 1px solid var(--input-border);
     border-radius: 0.2rem;
     caret-color: #fff;
     transition: all 0.1s ease-in-out;
+}
+
+.input-container input.error {
+    border: 1px solid red !important;
+}
+
+.input-container input.error + label {
+    color: red !important;
 }
 
 .input-container input::placeholder {
@@ -364,6 +402,19 @@ select {
     font-size: 0.85rem;
 }
 
+.input-container input:disabled {
+    background-color: var(--input-disabled);
+    color: var(--label-disabled);
+
+    border: none !important;
+    user-select: none;
+}
+
+.input-container input:disabled + label {
+    color: var(--label-disabled) !important;
+    user-select: none;
+}
+
 .btn-show-password {
     display: flex;
     justify-content: center;
@@ -371,7 +422,7 @@ select {
     position: absolute;
     right: 0;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-10%);
     margin-right: 0.8rem;
 }
 
@@ -447,6 +498,10 @@ select {
     }
     .container {
         grid-template-columns: auto 600px 350px;
+    }
+    .column#navbar .sticky-wrapper {
+        padding: 0.2rem 1rem;
+        align-items: center;
     }
 }
 
