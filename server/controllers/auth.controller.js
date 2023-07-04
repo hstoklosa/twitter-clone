@@ -106,7 +106,6 @@ const signIn = (req, res, next) => {
         // Authentication failed
         if (!user) {
             return next(new CustomError(400, info.message));
-            // return res.status(400).json({ message: info.message });
         }
 
         req.logIn(user, (err) => {
@@ -142,11 +141,13 @@ const logout = (req, res) => {
 };
 
 const isAuth = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next();
+    console.log(req.session);
+
+    if (req.user) {
+        return res.status(200).json({ auth: true, user: req.user, message: "You're logged in" });
     }
 
-    return res.status(401).json({ message: "You're not logged in" });
+    return res.status(401).json({ auth: false, message: "You're not logged in" });
 };
 
 module.exports = {

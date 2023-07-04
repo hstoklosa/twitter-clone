@@ -20,6 +20,8 @@ router.get("/google/fail", (req, res) => res.send("Failed to authenticate with G
 
 router.get("/logout", authController.logout);
 
+router.get("/check-auth", authController.isAuth);
+
 router.get("/check-identifier/:identifier", authController.checkIdentifier);
 
 router.get("/confirm-email/:email", authController.confirmEmail);
