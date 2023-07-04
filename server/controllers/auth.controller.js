@@ -141,8 +141,6 @@ const logout = (req, res) => {
 };
 
 const isAuth = (req, res, next) => {
-    console.log(req.session);
-
     if (req.user) {
         return res.status(200).json({ auth: true, user: req.user, message: "You're logged in" });
     }

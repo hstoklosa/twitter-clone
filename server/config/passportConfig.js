@@ -3,23 +3,24 @@ const localStrategy = require("./strategies/localStrategy");
 const googleStrategy = require("./strategies/googleStrategy");
 const User = require("../models/User.model");
 
+passport.use(localStrategy);
+passport.use(googleStrategy);
+
 passport.serializeUser((user, done) => {
     console.log(user);
+    console.log("SERIALIZING USER");
 
-    done(null, user.id);
+    done(null, user._id);
 });
 
-passport.deserializeUser(async (id, done) => {
-    console.log(id);
+passport.deserializeUser(async (_id, done) => {
+    console.log("FINDING USER");
 
     const currentUser = await User.findOne({
-        id,
+        _id,
     });
 
     done(null, currentUser);
 });
-
-passport.use(localStrategy);
-passport.use(googleStrategy);
 
 module.exports = passport;
