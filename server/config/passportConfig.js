@@ -20,7 +20,16 @@ passport.deserializeUser(async (_id, done) => {
         _id,
     });
 
-    done(null, currentUser);
+    done(null, {
+        _id: currentUser._id,
+        username: currentUser.username,
+        email: currentUser.email,
+        displayName: currentUser.displayName,
+        bio: currentUser.bio,
+        profileImageURL: currentUser.profileImageURL,
+        location: currentUser.location,
+        createdAt: currentUser.createdAt,
+    });
 });
 
 module.exports = passport;

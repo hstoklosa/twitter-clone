@@ -2,18 +2,7 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../../models/User.model");
 
 const addGoogleUser = (data) => {
-    const user = new User({
-        username: "",
-        email: data.emails[0].value,
-        password: "",
-        provider: data.provider,
-        providerId: data.id,
-        displayName: data.displayName,
-        bio: "",
-        profileImageURL: data._json.picture,
-        location: data._json.locale,
-    });
-
+    const user = new User(data);
     return user.save();
 };
 
@@ -29,7 +18,17 @@ module.exports = new GoogleStrategy(
         const user = await User.findOne({ email: profile.emails[0].value });
 
         if (!user) {
-            const newUser = await addGoogleUser(profile);
+            const newUser = await addGoogleUser({
+                username: "",
+                email: data.emails[0].value,
+                password: "",
+                provider: data.provider,
+                providerId: data.id,
+                displayName: data.displayName,
+                bio: "",
+                profileImageURL: data._json.picture,
+                location: data._json.locale,
+            });
             return cb(null, newUser);
         }
 
