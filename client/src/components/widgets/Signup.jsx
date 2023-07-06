@@ -9,7 +9,7 @@ const Signup = ({ openModal }) => {
             <h2>New to Twitter Clone?</h2>
             <p>Sign up now to get your own personalized timeline!</p>
 
-            <a href="http://localhost:3001/auth/google" target="__blank" className="signup-btn">
+            <a href="http://localhost:8080/auth/google" target="__blank" className="signup-btn">
                 <IconContext.Provider value={{ className: "signup_icon" }}>
                     <FcGoogle size="18" />
                 </IconContext.Provider>

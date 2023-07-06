@@ -12,7 +12,9 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         (async () => {
-            const response = await sendRequest("http://localhost:3001/auth/check-auth/");
+            const response = await sendRequest("http://localhost:8080/auth/check-auth/");
+
+            console.log("xd");
 
             if (response.auth) {
                 return setAuth(response.user);
@@ -23,7 +25,7 @@ const AuthProvider = ({ children }) => {
     const signUp = async (user) => {
         const { displayName, username, email, password } = user;
 
-        const response = await sendRequest("http://127.0.0.1:3001/auth/signup/", "POST", {
+        const response = await sendRequest("http://localhost:8080/auth/signup/", "POST", {
             displayName,
             username,
             email,
@@ -39,7 +41,7 @@ const AuthProvider = ({ children }) => {
     };
 
     const signIn = async ({ identifier, password }) => {
-        const response = await sendRequest("http://localhost:3001/auth/signin/", "POST", {
+        const response = await sendRequest("http://localhost:8080/auth/signin/", "POST", {
             identifier,
             password,
         });
@@ -53,11 +55,11 @@ const AuthProvider = ({ children }) => {
     };
 
     const signOut = async () => {
-        return await sendRequest("http://localhost:3001/auth/logout", "GET");
+        return await sendRequest("http://localhost:8080/auth/logout", "GET");
     };
 
     const confirmEmail = async (email, setCode) => {
-        const response = await sendRequest(`http://localhost:3001/auth/confirm-email/${email}`, "GET");
+        const response = await sendRequest(`http://localhost:8080/auth/confirm-email/${email}`, "GET");
 
         if (response) {
             setCode(response.code);
@@ -65,7 +67,7 @@ const AuthProvider = ({ children }) => {
     };
 
     const checkIdentifier = async (identifier) => {
-        const response = await sendRequest(`http://localhost:3001/auth/check-identifier/${identifier}`, "GET");
+        const response = await sendRequest(`http://localhost:8080/auth/check-identifier/${identifier}`, "GET");
         return response.exists;
     };
 

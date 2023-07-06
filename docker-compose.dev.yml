@@ -1,6 +1,7 @@
 services:
     mongo:
         image: mongo
+        container_name: tc-database
         ports:
             - "27017:27017"
         # our mongodb depends on volume to keep the data alive.

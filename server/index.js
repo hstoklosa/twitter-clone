@@ -26,10 +26,11 @@ mongoose
 
 // Middleware
 
+app.use(morgan("dev"));
+app.use(cookieParser());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(cookieParser());
 
 app.use(
     cors({
@@ -42,7 +43,7 @@ app.use(
 
 app.use(
     session({
-        name: "tcid",
+        name: process.env.SESSION_NAME,
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
@@ -55,8 +56,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session()); // express-session piggyback
-
-app.use(morgan("dev"));
 
 // Verify cookies and session
 app.use((req, res, next) => {
@@ -80,7 +79,7 @@ app.use((err, req, res, next) => {
 });
 
 // Starting point
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.SERVER_PORT || 3001;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

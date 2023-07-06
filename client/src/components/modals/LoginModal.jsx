@@ -79,7 +79,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
                         <h1>Sign in to Twitter</h1>
 
                         <div className="signin-methods">
-                            <a href="http://localhost:3001/oauth/google" className="signup-btn">
+                            <a href="http://localhost:8080/oauth/google" className="signup-btn">
                                 <IconContext.Provider value={{ className: "signup_icon" }}>
                                     <FcGoogle size="18" />
                                 </IconContext.Provider>
