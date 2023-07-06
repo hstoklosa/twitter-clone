@@ -1,0 +1,43 @@
+services:
+    mongo:
+        image: mongo
+        ports:
+            - "27017:27017"
+        # our mongodb depends on volume to keep the data alive.
+        volumes:
+            - data-volume:/data/db
+
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        image: tc-server
+        container_name: tc-node-server
+        ports:
+            - "8080:8080"
+        env_file:
+            - ./server/.env
+        volumes:
+            - ./server/:/app
+            # - /app/node_modules
+        depends_on:
+            - mongo
+
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        image: tc-client
+        container_name: tc-react-client
+        ports:
+            - "3000:3000"
+        env_file:
+            - ./client/.env
+        volumes:
+            - ./client:/app
+        depends_on:
+            - server
+
+volumes:
+    data-volume:
+    # node_modules:
