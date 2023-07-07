@@ -5,5 +5,6 @@ export { default as Feed } from "./twitter/Feed";
 export { default as BaseModal } from "./modals/BaseModal";
 export { default as SignupModal } from "./modals/SignupModal";
 export { default as LoginModal } from "./modals/LoginModal";
+export { default as Loading } from "./shared/Loading";
 export { default as InputContainer } from "./shared/InputContainer";
 export { default as SelectContainer } from "./shared/SelectContainer";

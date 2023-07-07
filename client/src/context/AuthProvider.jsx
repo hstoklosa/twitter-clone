@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useLoading } from "./LoadingProvider";
 import { sendRequest } from "../utils";
 
 const AuthContext = createContext();
@@ -9,17 +10,35 @@ const useAuth = () => {
 
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState();
+    const { loadingDispatch } = useLoading();
 
+    // async useEffect
     useEffect(() => {
+        loadingDispatch({
+            type: "SET_LOADING",
+            payload: {
+                name: "auth",
+                isLoading: true,
+            },
+        });
+
         (async () => {
             const response = await sendRequest("http://localhost:8080/auth/check-auth/");
-
-            console.log("xd");
 
             if (response.auth) {
                 return setAuth(response.user);
             }
+
+            setAuth(null);
         })();
+
+        loadingDispatch({
+            type: "SET_LOADING",
+            payload: {
+                name: "auth",
+                isLoading: false,
+            },
+        });
     }, []);
 
     const signUp = async (user) => {
@@ -37,6 +56,7 @@ const AuthProvider = ({ children }) => {
             return { success: true };
         }
 
+        setAuth(null);
         return { success: false };
     };
 
@@ -51,6 +71,7 @@ const AuthProvider = ({ children }) => {
             return { success: true };
         }
 
+        setAuth(null);
         return { success: false };
     };
 
