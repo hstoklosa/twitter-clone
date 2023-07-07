@@ -2,7 +2,7 @@ import "../../styles/LoginModal.css";
 import logo from "../../assets/logo-white.png";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { IconContext } from "react-icons";
 import { IoMdClose } from "react-icons/io";
@@ -72,9 +72,9 @@ const LoginModal = ({ isOpen, closeModal }) => {
             <form className="login-modal_content">
                 {page === 1 && (
                     <div className="page page-1">
-                        <a href="/" className="logo-container">
+                        <Link to={`/`} className="logo-container">
                             <img src={logo} alt="Logo" />
-                        </a>
+                        </Link>
 
                         <h1>Sign in to Twitter</h1>
 
@@ -120,9 +120,9 @@ const LoginModal = ({ isOpen, closeModal }) => {
 
                 {page === 2 && (
                     <div className="page page-2">
-                        <a href="/" className="logo-container">
+                        <Link to={`/`} className="logo-container">
                             <img src={logo} alt="Logo" />
-                        </a>
+                        </Link>
 
                         <h1>Enter your password</h1>
 

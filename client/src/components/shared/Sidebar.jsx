@@ -1,5 +1,7 @@
 import logo from "../../assets/logo-white.png";
 
+import { NavLink } from "react-router-dom";
+
 import { IconContext } from "react-icons";
 import { TbSettings } from "react-icons/tb";
 import { FiSearch } from "react-icons/fi";
@@ -9,83 +11,76 @@ import { IoNotificationsOutline, IoEllipsisHorizontal } from "react-icons/io5";
 import { HiOutlineUser } from "react-icons/hi";
 import { PiDotsThreeCircle } from "react-icons/pi";
 
-import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
 const Sidebar = ({ minimal }) => {
     const { auth, signOut } = useAuth();
 
-    const handleSignOut = () => {
-        signOut();
-
-        return <Navigate to="/" replace />;
-    };
-
-    console.log(auth);
+    const handleSignOut = () => signOut();
 
     return (
         <section className="column" id="navbar">
             <div className="sticky-wrapper">
-                <a href="/" className="logo-container">
+                <NavLink to={`/`} className="logo-container">
                     <img src={logo} alt="Logo" />
-                </a>
+                </NavLink>
 
                 {minimal && (
                     <nav className="navbar">
-                        <a href="https://twitter.com/" className="navbar-link current">
+                        <NavLink to={`/explore`} activeClassName="current" className="navbar-link current">
                             <IconContext.Provider value={{ className: "navbar_icon explore" }}>
                                 <FiSearch size="25" />
                             </IconContext.Provider>
                             <span className="text">Explore</span>
-                        </a>
-                        <a href="https://twitter.com/" className="navbar-link">
+                        </NavLink>
+                        <NavLink to={`/settings`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
                                 <TbSettings size="25" />
                             </IconContext.Provider>
                             <span className="text">Settings</span>
-                        </a>
+                        </NavLink>
                     </nav>
                 )}
 
                 {!minimal && (
                     <nav className="navbar">
-                        <a href="https://twitter.com/" className="navbar-link current">
+                        <NavLink to={`/home`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon explore" }}>
                                 <BiSolidHomeCircle size="25" />
                             </IconContext.Provider>
                             <span className="text">Home</span>
-                        </a>
-                        <a href="https://twitter.com/" className="navbar-link current">
+                        </NavLink>
+                        <NavLink to={`/explore`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon explore" }}>
                                 <FiSearch size="25" />
                             </IconContext.Provider>
                             <span className="text">Explore</span>
-                        </a>
-                        <a href="https://twitter.com/" className="navbar-link">
+                        </NavLink>
+                        <NavLink to={`/notifications`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
                                 <IoNotificationsOutline size="25" />
                             </IconContext.Provider>
                             <span className="text">Notifications</span>
-                        </a>
-                        <a href="https://twitter.com/" className="navbar-link">
+                        </NavLink>
+                        <NavLink to={`/messages`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
                                 <BiEnvelope size="25" />
                             </IconContext.Provider>
                             <span className="text">Messages</span>
-                        </a>
-                        <a href="https://twitter.com/" className="navbar-link">
+                        </NavLink>
+                        <NavLink to={`/bookmarks`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
                                 <BiBookmark size="25" />
                             </IconContext.Provider>
                             <span className="text">Bookmarks</span>
-                        </a>
-                        <a href="https://twitter.com/" className="navbar-link">
+                        </NavLink>
+                        <NavLink to={`/profile/{}`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
                                 <HiOutlineUser size="25" />
                             </IconContext.Provider>
                             <span className="text">Profile</span>
-                        </a>
-                        <button className="navbar-link">
+                        </NavLink>
+                        <button type="button" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
                                 <PiDotsThreeCircle size="25" />
                             </IconContext.Provider>
