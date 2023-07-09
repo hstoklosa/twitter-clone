@@ -79,6 +79,10 @@ button {
     font: inherit;
 }
 
+button:disabled {
+    cursor: not-allowed;
+}
+
 input,
 textarea {
     background: none;
@@ -137,11 +141,17 @@ select {
     text-decoration: underline;
 }
 
+.container main {
+    display: flex;
+    gap: 2.5rem !important;
+}
+
 /* FIRST COLUMN: Sidebar */
 
 #navbar {
     display: flex;
     flex-direction: column;
+    width: 275px;
 }
 
 .column#navbar .sticky-wrapper {
@@ -151,7 +161,7 @@ select {
     display: flex;
     flex-direction: column;
     /* padding: 0.5rem 1rem; */
-    padding: 0.2rem 2rem 0.2rem 1rem;
+    padding: 0.2rem 1rem 0.2rem 0.2rem;
 }
 
 .logo-container {
@@ -160,7 +170,7 @@ select {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
     border-radius: 50%;
     transition: background-color 0.2s linear;
 }
@@ -183,25 +193,29 @@ select {
 .navbar_icon {
     font-size: 1.5rem;
     margin-right: 1rem;
+    width: 26px;
+    height: 26px;
+    stroke-width: 0;
 }
 
 .navbar .navbar-link {
+    position: relative;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 0.75rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.85rem;
     border-radius: 2rem;
     width: calc(auto + 3rem) !important;
     transition: background-color 0.1s linear;
 }
 
-.navbar-link.current {
+.navbar-link.active {
     font-weight: 700 !important;
 }
 
-.navbar-link.current .navbar_icon {
-    stroke-width: 2.5;
+.navbar-link.active .navbar_icon {
+    stroke-width: 0.3;
 }
 
 .navbar-link:hover {
@@ -215,7 +229,7 @@ select {
 
 .navbar-btn {
     font-size: 1.1rem;
-    width: 100%;
+    width: 240px;
     border-radius: 999rem;
     background-color: var(--primary-colour);
     margin-bottom: 0.8rem;
@@ -238,6 +252,7 @@ select {
     width: 100%;
     margin: 0;
     margin-top: auto !important;
+    margin-bottom: 1rem;
     /* margin-bottom: 7rem; delete this */
     padding: 0.7rem 1rem;
     border-radius: 999rem;
@@ -282,7 +297,7 @@ select {
 .column#general {
     border-right: 1px solid var(--border);
     border-left: 1px solid var(--border);
-    /* padding: 0 1rem; */
+    width: 600px !important;
 }
 
 .column#general header {
@@ -305,14 +320,14 @@ select {
 
 /* THIRD COLUMN: Widgets */
 
-.column#widegts {
-    width: 100%;
+.column#widgets {
+    width: 350px;
 }
 
 .column#widgets .sticky-wrapper {
     position: sticky;
     top: 0;
-    padding: 0.5rem 1rem;
+    padding-top: 0.3rem;
 }
 
 /* Buttons */
@@ -495,14 +510,15 @@ select {
 .links-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-content: space-around;
     margin-top: 1rem;
+    width: 100%;
 }
 
 .links-container a {
     font-weight: 400;
-    padding-right: 0.5rem;
+    padding-right: 0.55rem;
     margin: 0.1rem 0;
 }
 
@@ -513,20 +529,20 @@ select {
     max-width: 1270px;
     min-height: 100vh;
     margin: 0 auto;
-    display: grid;
-    justify-content: center; /* centers the columns */
-    grid-template-columns: 275px 600px 350px;
+    display: flex;
+    justify-content: center;
+    /* display: grid;
+    justify-content: center; 
+    grid-template-columns: 275px 600px 350px; */
     width: 100%;
 }
 
 @media screen and (max-width: 1287px) {
-    .logo-container {
-        margin: 0 !important;
-    }
     #navbar {
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: auto !important;
     }
     .navbar {
         align-items: center;
@@ -560,9 +576,7 @@ select {
         height: 60px;
         padding: 0 !important;
     }
-    .container {
-        grid-template-columns: auto 600px 350px;
-    }
+
     .column#navbar .sticky-wrapper {
         padding: 0.2rem 1rem;
         align-items: center;
@@ -570,11 +584,17 @@ select {
 }
 
 @media screen and (max-width: 1040px) {
+    .column#navbar {
+        align-items: flex-end;
+    }
     .column#widgets {
         display: none;
     }
-    .container {
-        grid-template-columns: 70px 600px;
+    .column#general {
+        /* min-width: 600px !important; */
+    }
+    .container main {
+        width: auto;
     }
 }
 

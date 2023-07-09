@@ -62,7 +62,8 @@
 
 .tweet-actions {
     display: flex;
-    margin-top: 0.3rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.2rem;
 }
 
 .tweet-btn {
@@ -75,6 +76,22 @@
     justify-content: center;
     align-items: center;
     margin-right: 2rem;
+    transition: all 0.2s ease-out;
+}
+
+.tweet-btn.comment.applied .tweet_icon,
+.tweet-btn.comment.applied p {
+    color: var(--primary-colour);
+}
+
+.tweet-btn.retweet.applied .tweet_icon,
+.tweet-btn.retweet.applied p {
+    color: var(--retweet);
+}
+
+.tweet-btn.like.applied .tweet_icon,
+.tweet-btn.like.applied p {
+    color: var(--like);
 }
 
 .tweet-btn .icon-container {
@@ -85,6 +102,7 @@
     height: 30px;
     margin-right: 0.5rem;
     border-radius: 50%;
+    transition: all 0.2s ease-out;
 }
 
 .tweet-btn.more {

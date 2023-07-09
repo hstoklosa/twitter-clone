@@ -1,40 +1,26 @@
 import "../../styles/Feed.css";
 import Tweet from "./Tweet";
 
-const Feed = () => {
+const dummyTweet = {
+    _id: "123456789",
+    content: "42+10",
+    createdAt: "Jun 28",
+    author: {
+        displayName: "Elon Musk",
+        username: "elonmusk",
+    },
+    replies: [""],
+    retweets: [""],
+    likes: ["64aadf20e66c076cab2c939d"],
+    views: [""],
+};
+
+const Feed = ({ tweets }) => {
     return (
         <section id="feed">
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
-            <Tweet />
+            {[...Array(10)].map((_, idx) => (
+                <Tweet key={dummyTweet._id} tweet={dummyTweet} />
+            ))}
         </section>
     );
 };
