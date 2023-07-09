@@ -1,14 +1,34 @@
 require("dotenv").config();
 
 const express = require("express");
-const cors = require("cors");
 const morgan = require("morgan");
+const cors = require("cors");
 const mongoose = require("mongoose");
-const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
 const passport = require("./config/passportConfig");
 const CustomError = require("./config/CustomError");
+
+const app = express();
+
+// Test and prepare MongoDB connection
+
+(async () => {
+    try {
+        const connection = await mongoose.connect(process.env.MONGO_URI, {
+            useUnifiedTopology: true,
+        });
+
+        if (connection) {
+            console.log("MongoDB connection established!");
+        }
+    } catch (err) {
+        console.error(err);
+    }
+
+    console.log("Couldn't establish a MongoDB connection!");
+})();
 
 const sessionStore = new MongoStore({
     mongoUrl: process.env.MONGO_URI,
@@ -16,27 +36,20 @@ const sessionStore = new MongoStore({
     autoRemove: "native",
 });
 
-const app = express();
-
-// Create MongoDB connection
-mongoose
-    .connect(process.env.MONGO_URI, { useUnifiedTopology: true })
-    .catch((err) => console.error(err))
-    .then(() => console.log("MongoDB connection established!"));
-
 // Middleware
 
 app.use(morgan("dev"));
-app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cookieParser());
+
 app.use(
+    // put = replace entirely, patch = replace part
     cors({
-        // put = replace resource entirely, patch = replace part of a resource????
         origin: "http://localhost:3000",
-        methods: ["GET", "POST", "DELETE", "PUT"],
+        methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
         credentials: true,
     })
 );
@@ -45,9 +58,9 @@ app.use(
     session({
         name: process.env.SESSION_NAME,
         secret: process.env.SESSION_SECRET,
+        store: sessionStore,
         resave: false,
         saveUninitialized: true,
-        store: sessionStore,
         cookie: {
             maxAge: 24 * 60 * 60 * 1000, // 1 day
         },
@@ -57,28 +70,33 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session()); // express-session piggyback
 
-// Verify cookies and session
 app.use((req, res, next) => {
-    console.log("Cookies: ", req.cookies);
     console.log("Session: ", req.session);
-
+    console.log("Cookies: ", req.cookies);
     next();
 });
 
 // Routes
+
 app.use("/auth", require("./routes/auth"));
 
-// Error handling (detailed logging on the server, genereic logs on the client)
+// Generic and detailed error handling middleware
+
 app.use((err, req, res, next) => {
     if (err instanceof CustomError) {
-        return res.status(err.status).json({ error: true, message: err.message });
+        return res.status(err.status).json({
+            error: err.message,
+        });
     }
 
     console.error(err);
-    res.status(500).json({ error: true, message: "An error occurred on the server." });
+    return res.status(500).json({
+        error: "An error occurred on the server.",
+    });
 });
 
-// Starting point
+// Starting the server
+
 const PORT = process.env.SERVER_PORT || 3001;
 
 app.listen(PORT, () => {

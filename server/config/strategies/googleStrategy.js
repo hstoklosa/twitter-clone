@@ -1,11 +1,6 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../../models/User.model");
 
-const addGoogleUser = (data) => {
-    const user = new User(data);
-    return user.save();
-};
-
 module.exports = new GoogleStrategy(
     {
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -13,29 +8,42 @@ module.exports = new GoogleStrategy(
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, cb) => {
-        console.log(profile.emails[0].value);
+        try {
+            const user = await User.findOne({ email: profile.emails[0].value });
 
-        const user = await User.findOne({ email: profile.emails[0].value });
+            if (!user) {
+                const {
+                    displayName,
+                    provider,
+                    id: providerId,
+                    emails: [{ value: email }],
+                    _json: { picture: profileImageURL, locale: location },
+                } = profile;
 
-        if (!user) {
-            const newUser = await addGoogleUser({
-                username: "",
-                email: data.emails[0].value,
-                password: "",
-                provider: data.provider,
-                providerId: data.id,
-                displayName: data.displayName,
-                bio: "",
-                profileImageURL: data._json.picture,
-                location: data._json.locale,
-            });
-            return cb(null, newUser);
-        }
+                const newUser = await User.addGoogleUser({
+                    username: "",
+                    email,
+                    provider,
+                    providerId,
+                    displayName,
+                    dob: new Date("1997-01-01").toISOString().split("T")[0],
+                    profileImageURL,
+                    location,
+                });
 
-        if (user.provider != "google") {
-            return cb(null, false, {
-                message: `You have previously signed up with a different signin method`,
-            });
+                return cb(null, newUser);
+            }
+
+            if (user.provider != "google") {
+                return cb(null, false, {
+                    message: `You have previously signed up with a different signin method`,
+                });
+            }
+
+            // Sending back existing google user
+            return cb(null, user);
+        } catch (err) {
+            cb(err);
         }
     }
 );

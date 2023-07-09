@@ -14,18 +14,30 @@ router.get("/confirm-email/:email", authController.confirmEmail);
 
 // Google provider
 
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get(
+    "/google",
+    passport.authenticate("google", {
+        scope: ["profile", "email"],
+    })
+);
 
-router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/google/fail" }), authController.googleCallback);
+router.get(
+    "/google/callback",
+    passport.authenticate("google", {
+        successRedirect: "http://localhost:3000/home",
+        // failureRedirect: "/google/fail",
+    }),
+    authController.googleCallback
+);
 
-router.get("/google/fail", (req, res) => res.send({ error: true, message: "Google authentication failed!" }));
+router.get("/google/fail", (req, res) => console.log("Google auth failed!"));
 
 // General
 
-router.get("/logout", authController.logout);
+router.get("/check-identifier/:identifier", authController.checkIdentifier);
 
 router.get("/check-auth", authController.isAuth);
 
-router.get("/check-identifier/:identifier", authController.checkIdentifier);
+router.get("/logout", authController.logout);
 
 module.exports = router;
