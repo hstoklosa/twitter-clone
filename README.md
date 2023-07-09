@@ -34,31 +34,80 @@ Over the summer of 2023, I will be working on this project until it will be of a
 
 ## 🔌 Technologies
 
-I have decided to use the **_MERN_** stack for this project due to the fact that I've been planning to learn and use MongoDB for a while now, and this project is a perfect opportunity to do so.
+I have decided to use the **MERN** stack since I've never used a NoSQL database technology before. In addition, MongoDB has gained a lot of popularity among developers due to its capabilities for storing and handling large amounts of data e.g., for social media apps.
 
-Additinally, I can't ignore the fact that Mongo has gained a ton of popularity among developers over the past few years, and it is usually favoured for social media apps.
+Additinally, I can't ignore the fact that Mongo has gained a ton of popularity among developers due to its capabilities, and it is usually favoured for social media applications.
 <br/><br/>
 
 <p align="center">
    <a href="https://react.dev/" target="__blank">
-      <img src=https://user-images.githubusercontent.com/25181517/183897015-94a058a6-b86e-4e42-a37f-bf92061753e5.png width=50px alt="React" valign="middle" title="React" style="margin-right: 1rem; ">
-   </a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://reactrouter.com/en/main" target="__blank">
-      <img src=https://global.discourse-cdn.com/ionicframework/optimized/3X/b/1/b1ba5917ce8abb85ceedd52d2d5862970b07c714_2_500x500.png width=50px alt="React Router" valign="middle" title="React Router" style="margin-right: 1rem; border-radius: 50%;">
-   </a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://nodejs.org/en" target="__blank">
-      <img src=https://static-00.iconduck.com/assets.00/node-js-icon-454x512-nztofx17.png width=50px alt="Nodejs" valign="middle" title="Nodejs" style="margin-right: 1rem;">
-   </a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://expressjs.com/" target="__blank">
-      <img src=https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Status_iucn_EX_icon.svg/480px-Status_iucn_EX_icon.svg.png width=50px alt="Express" valign="middle" title="Express" style="margin-right: 1rem;">
-   </a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="https://www.mongodb.com/" target="__blank">
-      <img src=https://icons-for-free.com/download-icon-MongoDB-1329545826074381322_256.ico width=50px alt="MongoDB" valign="middle" title="MongoDB" style="margin-right: 1rem;">
-   </a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="#" target="__blank">
-      <img src=https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png.webp width=50px alt="Docker" valign="middle" title="Docker" style="margin-right: 1rem;">
+      <img 
+        src=https://github.com/imexotic/imexotic/blob/main/assets/react.png?raw=true  
+        width=50px 
+        valign="middle" 
+        title="React" 
+        alt="React" 
+        style="margin-right: 1rem; ">
+   </a> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <a href="https://reactrouter.com/en/main" target="__blank">
+      <img 
+        src=https://github.com/imexotic/imexotic/blob/main/assets/react_router.png?raw=true width=50px 
+        valign="middle" 
+        title="React Router" 
+        alt="React Router" 
+        style="margin-right: 1rem;">
+   </a> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <a href="https://redux-toolkit.js.org/" target="__blank">
+      <img 
+        src=https://github.com/imexotic/imexotic/blob/main/assets/redux.png?raw=true
+        width=50px 
+        valign="middle" 
+        title="Redux Toolkit" 
+        alt="Redux Toolkit" 
+        style="margin-right: 1rem;">
+   </a> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <a href="https://nodejs.org/en" target="__blank">
+      <img 
+        src=https://github.com/imexotic/imexotic/blob/main/assets/node.png?raw=true 
+        height=50px 
+        valign="middle" 
+        title="Nodejs" 
+        alt="Nodejs" 
+        style="margin-right: 1rem;">
+   </a> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <a href="https://expressjs.com/" target="__blank">
+      <img 
+        src=https://github.com/imexotic/imexotic/blob/main/assets/express.png?raw=true 
+        width=50px 
+        valign="middle" 
+        title="Express" 
+        alt="Express" 
+        style="margin-right: 1rem;">
+   </a> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <a href="https://www.mongodb.com/" target="__blank">
+      <img 
+        src=https://raw.githubusercontent.com/imexotic/imexotic/main/assets/mongodb.ico width=50px 
+        valign="middle" 
+        title="MongoDB"
+        alt="MongoDB" 
+        style="margin-right: 1rem;">
+   </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <a href="https://www.docker.com/" target="__blank">
+      <img 
+        src=https://raw.githubusercontent.com/imexotic/imexotic/main/assets/docker.webp height=50px 
+        valign="middle" 
+        title="Docker" 
+        alt="Docker" 
+        style="margin-right: 1rem;">
    </a>
-   <br/><br/>
+   <br/>
+   <br/>
 </p>
-
-<!-- <div style="background: white; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 0.85rem; border-radius: .85rem; overflow: hidden;">
-   <img src=https://reactrouter.com/_brand/react-router-mark-color.png height=45px width=45px alt="Docker" valign="middle" title="Docker" style="">
-</div> -->
 
 ## 📖 Usage
 
@@ -106,9 +155,7 @@ CLIENT: http://localhost:3000
 
 For now there is only `docker-compose.developer.yml` that can be used to build the multi-container for local development. However, as I will be working on the project and getting closer to the finish line, I will be creating a `docker-compose.production.yml` for this repository.
 
-`env_file` options for development are already set up in `docker-compose.developer.yml`. All you have to do is ensure that you have the following environmental variables setup in the client/server.
-
-You can rename the `.sample.env` file to `.env`, and fill in the values accordingly.
+`env_file` options for development are already set up in `docker-compose.developer.yml`. All you have to do is to rename the `.sample.env` file to `.env`, and fill in the values accordingly.
 
 The process for setting up **production environmental variables** will vary on the hosting platform that you're planning to use, therefore make sure to consult their documentation about the topic.
 

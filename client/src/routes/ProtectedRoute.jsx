@@ -1,18 +1,20 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
-import { useLoading } from "../context/LoadingProvider";
+import { useSelector } from "react-redux";
 
 import { Loading } from "../components";
 
 const ProtectedRoute = ({ children }) => {
-    const { auth } = useAuth();
-    const { loadingState } = useLoading();
+    const { user, authLoading } = useSelector((state) => ({
+        user: state.auth.user,
+        authLoading: state.loading["auth/checkAuth"],
+    }));
 
-    if (loadingState.auth) {
+    if (authLoading) {
         return <Loading />; // or some loading spinner :D
     }
 
-    if (auth === null && !loadingState.auth) {
+    if (user === null && !authLoading) {
+        console.log("SENDING_TO_LOGIN");
         return <Navigate to="/" replace />;
     }
 

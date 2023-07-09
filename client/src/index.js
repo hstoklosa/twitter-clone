@@ -12,7 +12,8 @@ import { loadingReducer } from "./redux/loadingSlice";
 import Root from "./routes/Root";
 import NotFound from "./routes/NotFound";
 import Login from "./routes/Login";
-
+import Home from "./routes/Home";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 const store = configureStore({
     reducer: {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
                 path: "/",
                 index: true,
                 element: <Login />,
+            },
+            {
+                path: "/home",
+                element: (
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                ),
             },
         ],
     },
