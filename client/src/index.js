@@ -4,14 +4,22 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { LoadingProvider } from "./context/LoadingProvider";
-import { AuthProvider } from "./context/AuthProvider";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import { authReducer } from "./redux/authSlice";
+import { loadingReducer } from "./redux/loadingSlice";
 
 import Root from "./routes/Root";
 import NotFound from "./routes/NotFound";
 import Login from "./routes/Login";
-import Home from "./routes/Home";
-import ProtectedRoute from "./routes/ProtectedRoute";
+
+
+const store = configureStore({
+    reducer: {
+        auth: authReducer,
+        loading: loadingReducer,
+    },
+});
 
 const router = createBrowserRouter([
     {
@@ -24,14 +32,6 @@ const router = createBrowserRouter([
                 index: true,
                 element: <Login />,
             },
-            {
-                path: "/home",
-                element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
-                ),
-            },
         ],
     },
 ]);
@@ -40,10 +40,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
     <React.StrictMode>
-        <LoadingProvider>
-            <AuthProvider>
-                <RouterProvider router={router} />
-            </AuthProvider>
-        </LoadingProvider>
+        <Provider store={store}>
+            <RouterProvider router={router} />
+        </Provider>
     </React.StrictMode>
 );

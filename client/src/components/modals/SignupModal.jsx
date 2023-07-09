@@ -2,20 +2,22 @@ import "../../styles/SignupModal.css";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { IconContext } from "react-icons";
 import { IoMdClose } from "react-icons/io";
 import { BiArrowBack } from "react-icons/bi";
 
 import { BaseModal, InputContainer, SelectContainer } from "../index";
-import { useAuth } from "../../context/AuthProvider";
+import { checkIdentifier, confirmEmail, signUp } from "../../redux/authSlice";
 import { emailRegex, months, days, years } from "../../utils";
 
 const NUM_PAGES = 4;
 
 const SignupModal = ({ isOpen, closeModal }) => {
     const navigate = useNavigate();
-    const { confirmEmail, checkIdentifier, signUp } = useAuth();
+    const dispatch = useDispatch();
+    const code = useSelector((state) => state.auth.code);
 
     const [page, setPage] = useState(1);
     const [formState, setFormState] = useState({
@@ -26,10 +28,7 @@ const SignupModal = ({ isOpen, closeModal }) => {
         month: "",
         day: "",
         year: "",
-        code: "",
     });
-
-    const [code, setCode] = useState("");
 
     const [emailError, setEmailError] = useState(null);
     const [codeError, setCodeError] = useState(null);
@@ -39,22 +38,26 @@ const SignupModal = ({ isOpen, closeModal }) => {
     const nextPage = () => page < NUM_PAGES && setPage(page + 1);
     const prevPage = () => page > 1 && setPage(page - 1);
 
-    const handleEmailBlur = (e) => {
+    const handleEmailBlur = async (e) => {
         const passRegex = emailRegex.test(String(e.target.value).toLowerCase());
-        const duplicateEmail = checkIdentifier(e.target.value);
+        const identifierExists = await checkIdentifier(e.target.value);
 
         if (!passRegex) {
             return setEmailError("Provide a valid email address!");
         }
 
-        if (!duplicateEmail) {
+        if (identifierExists) {
             return setEmailError("Provide a unique email address!");
         }
     };
 
     const handleEmailConfirmation = () => {
         nextPage();
-        confirmEmail(formState.email, setCode);
+        const result = dispatch(confirmEmail(formState.email));
+
+        if (result.error) {
+            return;
+        }
     };
 
     const handleVerificationBlur = (e) => {
@@ -83,13 +86,14 @@ const SignupModal = ({ isOpen, closeModal }) => {
         return setUsernameError(null);
     };
 
-    const handleSignUp = () => {
-        const response = signUp(formState);
+    const handleSignUp = async () => {
+        const result = await dispatch(signUp(formState));
 
-        if (response.success) {
-            closeModal();
-            return navigate("/home");
+        if (result.error) {
+            return;
         }
+
+        console.log(result.payload.user);
     };
 
     const updateFormState = (field, value) => {
@@ -214,7 +218,6 @@ const SignupModal = ({ isOpen, closeModal }) => {
                                 label="Verification Code"
                             />
                         </div>
-
                         <button className="btn-next" disabled={formState.code !== code} onClick={nextPage}>
                             Next
                         </button>

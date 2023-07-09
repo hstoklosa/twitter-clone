@@ -35,7 +35,7 @@ export const sendRequest = async (url, method = "GET", body = null, headers = {}
 
         return response.json(); // parses JSON response into native JavaScript objects
     } catch (err) {
-        console.error(err);
-        return null;
+        console.error(err.message);
+        return err;
     }
 };

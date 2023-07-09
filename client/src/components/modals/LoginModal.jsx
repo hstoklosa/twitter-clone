@@ -3,19 +3,20 @@ import logo from "../../assets/logo-white.png";
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { IconContext } from "react-icons";
 import { IoMdClose } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
+import { checkIdentifier, signIn } from "../../redux/authSlice";
 import { BaseModal, InputContainer } from "../index";
-import { useAuth } from "../../context/AuthProvider";
 
 const NUM_PAGES = 3;
 
 const LoginModal = ({ isOpen, closeModal }) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { checkIdentifier, signIn } = useAuth();
 
     const [page, setPage] = useState(1);
 
@@ -41,10 +42,10 @@ const LoginModal = ({ isOpen, closeModal }) => {
     };
 
     const handleSignIn = async () => {
-        const response = await signIn(formState);
+        const result = await dispatch(signIn(formState));
 
-        if (!response.success) {
-            return setPasswordError("The provided password is incorrect!");
+        if (result.error) {
+            return;
         }
 
         closeModal();
@@ -79,11 +80,11 @@ const LoginModal = ({ isOpen, closeModal }) => {
                         <h1>Sign in to Twitter</h1>
 
                         <div className="signin-methods">
-                            <a href="http://localhost:8080/oauth/google" className="signup-btn">
+                            <a href="http://localhost:8080/auth/google" className="signup-btn">
                                 <IconContext.Provider value={{ className: "signup_icon" }}>
                                     <FcGoogle size="18" />
                                 </IconContext.Provider>
-                                Sign up with Google
+                                Sign in with Google
                             </a>
                             <div className="category-separator">
                                 <div className="line"></div>
@@ -103,7 +104,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
                                 label="Username/email"
                             />
                         </div>
-                        <button type="button" className="btn-next" disabled={!formState.identifier && !identifierError} onClick={nextPage}>
+                        <button type="button" className="btn-next" disabled={!formState.identifier || identifierError} onClick={nextPage}>
                             Next
                         </button>
                         <button className="btn-forgot-password" onClick={() => console.log(page)}>

@@ -1,22 +1,44 @@
 import logo from "../../assets/logo-white.png";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { signOut } from "../../redux/authSlice";
 
 import { IconContext } from "react-icons";
-import { TbSettings } from "react-icons/tb";
-import { FiSearch } from "react-icons/fi";
 import { FaFeatherAlt } from "react-icons/fa";
-import { BiSolidHomeCircle, BiEnvelope, BiBookmark } from "react-icons/bi";
-import { IoNotificationsOutline, IoEllipsisHorizontal } from "react-icons/io5";
-import { HiOutlineUser } from "react-icons/hi";
+import {
+    BiSearch,
+    BiHomeCircle,
+    BiSolidHomeCircle,
+    BiEnvelope,
+    BiSolidEnvelope,
+    BiBookmark,
+    BiSolidBookmark,
+    BiBell,
+    BiSolidBell,
+    BiUser,
+    BiSolidUser,
+    BiCog,
+} from "react-icons/bi";
+import { IoEllipsisHorizontal } from "react-icons/io5";
 import { PiDotsThreeCircle } from "react-icons/pi";
 
-import { useAuth } from "../../context/AuthProvider";
-
 const Sidebar = ({ minimal }) => {
-    const { auth, signOut } = useAuth();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
 
-    const handleSignOut = () => signOut();
+    const handleSignOut = async () => {
+        const result = await dispatch(signOut());
+
+        if (result.error) {
+            return;
+        }
+
+        // event handler navigation
+        navigate("/");
+        return;
+    };
 
     return (
         <section className="column" id="navbar">
@@ -29,13 +51,13 @@ const Sidebar = ({ minimal }) => {
                     <nav className="navbar">
                         <NavLink to={`/explore`} activeClassName="current" className="navbar-link current">
                             <IconContext.Provider value={{ className: "navbar_icon explore" }}>
-                                <FiSearch size="25" />
+                                <BiSearch size="25" />
                             </IconContext.Provider>
                             <span className="text">Explore</span>
                         </NavLink>
                         <NavLink to={`/settings`} activeClassName="current" className="navbar-link">
-                            <IconContext.Provider value={{ className: "navbar_icon settings" }}>
-                                <TbSettings size="25" />
+                            <IconContext.Provider value={{ className: "navbar_icon explore" }}>
+                                <BiCog size="25" />
                             </IconContext.Provider>
                             <span className="text">Settings</span>
                         </NavLink>
@@ -46,19 +68,19 @@ const Sidebar = ({ minimal }) => {
                     <nav className="navbar">
                         <NavLink to={`/home`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon explore" }}>
-                                <BiSolidHomeCircle size="25" />
+                                <BiHomeCircle size="25" />
                             </IconContext.Provider>
                             <span className="text">Home</span>
                         </NavLink>
                         <NavLink to={`/explore`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon explore" }}>
-                                <FiSearch size="25" />
+                                <BiSearch size="25" />
                             </IconContext.Provider>
                             <span className="text">Explore</span>
                         </NavLink>
                         <NavLink to={`/notifications`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
-                                <IoNotificationsOutline size="25" />
+                                <BiBell size="25" />
                             </IconContext.Provider>
                             <span className="text">Notifications</span>
                         </NavLink>
@@ -76,7 +98,7 @@ const Sidebar = ({ minimal }) => {
                         </NavLink>
                         <NavLink to={`/profile/{}`} activeClassName="current" className="navbar-link">
                             <IconContext.Provider value={{ className: "navbar_icon settings" }}>
-                                <HiOutlineUser size="25" />
+                                <BiUser size="25" />
                             </IconContext.Provider>
                             <span className="text">Profile</span>
                         </NavLink>
@@ -97,10 +119,10 @@ const Sidebar = ({ minimal }) => {
 
                 {!minimal && (
                     <button className="navbar-account" onClick={handleSignOut}>
-                        <img src={auth.profileImageURL} alt="User Image" />
+                        <img src={user?.profileImageURL} alt="User Image" />
                         <div className="navbar-account_names">
-                            <p className="display_name">{auth.displayName}</p>
-                            <p className="username">@{auth.username}</p>
+                            <p className="display_name">{user?.displayName}</p>
+                            <p className="username">@{user?.username}</p>
                         </div>
                         <IconContext.Provider value={{ className: "navbar-account_icon" }}>
                             <IoEllipsisHorizontal size="15" />

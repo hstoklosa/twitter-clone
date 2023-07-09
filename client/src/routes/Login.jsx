@@ -2,12 +2,12 @@ import "../styles/Login.css";
 
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import { SignupModal, LoginModal, Feed, Links, Signup, Loading } from "../components";
-import { useAuth } from "../context/AuthProvider";
+import { SignupModal, LoginModal, Feed, Links, Signup } from "../components";
 
 const Login = () => {
-    const { auth } = useAuth();
+    const user = useSelector((state) => state.auth.user);
 
     const [signupModal, setSignupModal] = useState(false);
     const [loginModal, setLoginModal] = useState(false);
@@ -18,12 +18,12 @@ const Login = () => {
     const openLoginModal = () => setLoginModal(true);
     const closeLoginModal = () => setLoginModal(false);
 
-    if (auth) {
+    if (user) {
         return <Navigate to="/home" replace />;
     }
 
     return (
-        <>
+        <main>
             <SignupModal isOpen={signupModal} closeModal={closeSignupModal} />
             <LoginModal isOpen={loginModal} closeModal={closeLoginModal} />
 
@@ -56,7 +56,7 @@ const Login = () => {
                     </button>
                 </div>
             </div>
-        </>
+        </main>
     );
 };
 

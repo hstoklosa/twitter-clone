@@ -13,7 +13,10 @@ const InputContainer = ({ type, id, name, value, onChange, onBlur, onFocus, labe
                 type={isVisible ? "text" : type}
                 id={id}
                 name={name}
-                className={`${value ? "not-empty" : ""} ${error && "error"}`}
+                className={`
+                     ${value ? "not-empty" : ""} 
+                     ${error && value.length > 0 ? "error" : ""}
+               `}
                 value={value}
                 onChange={onChange}
                 onBlur={onBlur}
@@ -23,7 +26,7 @@ const InputContainer = ({ type, id, name, value, onChange, onBlur, onFocus, labe
 
             <label htmlFor={name}>{label || name.charAt(0).toUpperCase() + name.slice(1)}</label>
 
-            {error && <p className="error-message">{error}</p>}
+            {error && value.length > 0 ? <p className="error-message">{error}</p> : null}
 
             {type === "password" && (
                 <button type="button" className="btn-show-password" onClick={toggle}>
