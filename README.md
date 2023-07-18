@@ -1,10 +1,8 @@
 # <p align="center"> Twitter Clone 🐦 </p>
 
-A simplified version of Twitter, which has been designed to mimic the core features of Twitter itself, such as the ability to post tweets, follow other users, and like tweets.
+<p align="center">A simplified version of Twitter, which has been designed to mimic the core features of Twitter itself, such as the ability to post tweets, follow other users, and like tweets.</p>
 
 ## Roadmap 🎉
-
-### Progess Update: 23/06/2023
 
 The goal of this side-project is to create a fully functional full-stack Twitter clone, which will be deployed and used as my resume project. I believe that such project is a perfect opportunity to further & demonstrate my coding capabilities.
 
@@ -12,7 +10,25 @@ The project is currently in the beginning phases of development, and in order to
 
 Over the summer of 2023, I will be working on this project until it will be of a satisfactory standard to be deployed and included as my resume project.
 
-### Progess Update: --/--/2023
+### Progess Update: 04/07/2023
+
+In the first week of the project commencing, I have managed to implement an authentication system that somewhat resembles the one used by Twitter by combining `passport.js` and `MongoDB`.
+
+1. The application now supports local authentication as well as OAuth2.0 (Google), and it works alongside MongoDB to store user data and the sessions from `express-session` to maintain a persistant authentication for the user across the application. I have constructed appropriate pages on the client-side of the application to accomodate the backend authentication system, including Login (local & OAuth2.0) and Home pages.
+
+2. Lastly, in order to allow the user to navigate through the application (either auth/not auth), I familiarised myself with the newly released `react-router-dom v6.14` library and applied the `RouterProvider` with some basic routes - Login & ProtectedRoute (Home, Profile...).
+
+### Progess Update: 18/07/2023
+
+**PERSONAL NOTE:** A month into my boxing training, and it is great! :D
+
+**PERSONAL NOTE:** Lately I've been diving into new technologies that I will be using to build the Twitter clone. It's been somewhat time-consuming (thus the lack of updates), but I still managed to become familiar with their usage and how they can be combined to build a fully functional app.
+
+1. I've learnt `Docker` and `docker-compose` to create a multi-container application. The architecture splits the full-stack application into 3 containers (client, server, database), which run and communicate with each other in parallel. The technology will save me a lot of time in the future, because it allows for **faster deployements and migrations**.
+
+2. I've opted to use `@redux/toolkit` and `react-redux` instead of the `useContext` hook for maintaining a consistent global state. Although `redux` is a verbose and requires much more boilerplate code, the `toolkit` offers a more efficient implementation of the same store functionality.
+
+3. The backend error-handling has been upgraded with a `CustomHttpError` object and re-implemented error-handling middleware that decides upon the content of the error response based on the current environment. It responds with either detailed or generic error messages, which can be caught by the `asyncThunk` function and displayed to the user.
 
 ### 🔍 Features
 
@@ -145,12 +161,6 @@ tc-react-client     tc-client           "docker-entrypoint.s…"   client       
 
 ```
 
-```
-DATABASE: mongodb://mongo:27017/<database_name>
-SERVER: http://localhost:8080
-CLIENT: http://localhost:3000
-```
-
 ### ❌ Environmental Variables
 
 For now there is only `docker-compose.developer.yml` that can be used to build the multi-container for local development. However, as I will be working on the project and getting closer to the finish line, I will be creating a `docker-compose.production.yml` for this repository.
@@ -162,20 +172,26 @@ The process for setting up **production environmental variables** will vary on t
 **SERVER**
 
 ```
-CLIENT_URL=
 SERVER_PORT=
-
-SESION_NAME=
-SESSION_SECRET=
 MONGO_URI=
+CLIENT_URL=
 
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_CALLBACK_URL=
+SESSION_NAME=
+SESSION_SECRET=
 
 MAIL_USER=
 MAIL_PASS=
 MAIL_SERVICE=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=
+```
+
+** CLIENT **
+
+```
+REACT_APP_API_URL=
 ```
 
 <!-- ### 🚀 Deployment
