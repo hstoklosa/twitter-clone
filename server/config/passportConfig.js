@@ -14,12 +14,11 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-    console.log("DESERIALIZING USER");
-
     const currentUser = await User.findOne({
         _id: id,
     });
 
+    console.log("DESERIALIZING USER");
     console.log(currentUser);
 
     const { _id, displayName, dob, username, email, profileImageURL, bio, location, followers, following, createdAt } = currentUser;

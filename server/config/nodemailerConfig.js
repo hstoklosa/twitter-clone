@@ -14,9 +14,4 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const mailOptions = {
-    from: MAIL_USER,
-    to: MAIL_USER,
-};
-
-module.exports = { transporter, mailOptions };
+module.exports = { transporter };

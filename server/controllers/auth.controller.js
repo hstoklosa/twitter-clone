@@ -1,9 +1,10 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const User = require("../models/User.model");
-const { transporter } = require("../config/nodemailer");
 const passport = require("../config/passportConfig");
-const CustomError = require("../config/CustomError");
+const CustomHttpError = require("../config/CustomHttpError");
+
+const User = require("../models/User.model");
+const { transporter } = require("../config/nodemailerConfig");
 
 const checkIdentifier = async (req, res, next) => {
     const { identifier } = req.params;
@@ -23,13 +24,13 @@ const confirmEmail = async (req, res, next) => {
 
     try {
         await transporter.sendMail({
-            from: '"Hubert - Twitter Clone" <' + process.env.MAIL_USER + ">",
+            from: '"Twitter Clone" <' + process.env.MAIL_USER + ">",
             to: email,
             subject: "Email Verification",
             text: "Thanks for giving my app a try! \nYour verification code is: " + code,
         });
     } catch (err) {
-        return next(new CustomError(400, err.message));
+        return next(new CustomHttpError(400, err.message));
     }
 
     return res.status(200).json({
@@ -41,7 +42,7 @@ const signUp = async (req, res, next) => {
     const { displayName, dob, username, email, password } = req.body;
 
     if (!displayName || !dob || !username || !email || !password) {
-        return next(new CustomError(400, "The provided information is invalid!"));
+        return next(new CustomHttpError(400, "The provided information is invalid!"));
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -54,7 +55,7 @@ const signUp = async (req, res, next) => {
             email,
             password: hashedPassword,
             provider: "local",
-            profileImageURL: "https://lh3.googleusercontent.com/a/AAcHTtcmDL2ohQjMDbM2iT2wQR7HVKnA6hPCZltup3GLbLF4=s96-c",
+            profileImageURL: "http://localhost:8080/default_pfp.png",
         });
 
         req.login(newUser, (err) => {
@@ -76,7 +77,7 @@ const signUp = async (req, res, next) => {
         });
     } catch (err) {
         if (err.code === 11000) {
-            return next(new CustomError(400, "User with the provided username/email already exists!"));
+            return next(new CustomHttpError(400, "User with the provided username/email already exists!"));
         }
 
         return next(err);
@@ -91,7 +92,7 @@ const signIn = (req, res, next) => {
 
         // Authentication failed
         if (!user) {
-            return next(new CustomError(400, info.message));
+            return next(new CustomHttpError(400, info.message));
         }
 
         req.logIn(user, (err) => {
@@ -121,20 +122,6 @@ const signIn = (req, res, next) => {
     })(req, res, next);
 };
 
-const googleCallback = (req, res, next) => {
-    const { user, authInfo } = req;
-
-    if (!user) {
-        const message = authInfo ? authInfo.message : "Google authentication failed!";
-
-        return next(new CustomError(400, message));
-    }
-
-    return res.status(200).json({
-        user: req.user,
-    });
-};
-
 const logout = (req, res) => {
     req.logout((err) => {
         if (err) {
@@ -148,13 +135,15 @@ const logout = (req, res) => {
 };
 
 const isAuth = (req, res, next) => {
-    if (req.user) {
+    console.log(req.user);
+
+    if (req.isAuthenticated()) {
         return res.status(200).json({
             user: req.user,
         });
     }
 
-    return next(new CustomError(401, "You are not authenticated!"));
+    return next(new CustomHttpError(401, "You are not authenticated!"));
 };
 
 module.exports = {
@@ -162,7 +151,6 @@ module.exports = {
     confirmEmail,
     signUp,
     signIn,
-    googleCallback,
     logout,
     isAuth,
 };
