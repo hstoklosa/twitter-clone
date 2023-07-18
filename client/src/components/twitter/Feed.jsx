@@ -19,7 +19,7 @@ const Feed = ({ tweets }) => {
     return (
         <section id="feed">
             {[...Array(10)].map((_, idx) => (
-                <Tweet key={dummyTweet._id} tweet={dummyTweet} />
+                <Tweet key={idx} tweet={dummyTweet} />
             ))}
         </section>
     );

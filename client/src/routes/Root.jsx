@@ -4,24 +4,26 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Sidebar } from "../components/";
-import { checkAuth } from "../redux/authSlice";
+import { Loading, Sidebar } from "../components/";
+import { checkAuth } from "../slices/authSlice";
 
 const Root = () => {
+    const { user, authLoading } = useSelector((state) => ({
+        user: state.auth.user,
+        authLoading: state.loading["auth/checkAuth"],
+    }));
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth.user);
 
+    // checkAuth to check for existing session
     useEffect(() => {
         (async () => {
-            const result = await dispatch(checkAuth());
-
-            console.log("REFRESH_AUTH: ", result);
-
-            if (result.error) {
-                return;
-            }
+            await dispatch(checkAuth());
         })();
     }, []);
+
+    if (authLoading) {
+        return <Loading />;
+    }
 
     return (
         <div className="container">

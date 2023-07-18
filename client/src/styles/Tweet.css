@@ -108,6 +108,7 @@
 .tweet-btn.more {
     margin-left: auto;
     margin-right: 0;
+    padding: 0 !important;
 }
 
 .tweet-btn .tweet_icon {

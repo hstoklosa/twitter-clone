@@ -3,11 +3,12 @@ import "./styles/App.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { authReducer } from "./redux/authSlice";
-import { loadingReducer } from "./redux/loadingSlice";
+
+import { authReducer } from "./slices/authSlice";
+import { loadingReducer } from "./slices/loadingSlice";
+import { errorReducer } from "./slices/errorSlice";
 
 import Root from "./routes/Root";
 import NotFound from "./routes/NotFound";
@@ -19,6 +20,7 @@ const store = configureStore({
     reducer: {
         auth: authReducer,
         loading: loadingReducer,
+        error: errorReducer,
     },
 });
 
@@ -38,6 +40,46 @@ const router = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <Home />
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/:username",
+                element: (
+                    <ProtectedRoute>
+                        <h1>TBC</h1>
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/explore",
+                element: (
+                    <ProtectedRoute>
+                        <h1>TBC</h1>
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/notifications",
+                element: (
+                    <ProtectedRoute>
+                        <h1>TBC</h1>
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/messages",
+                element: (
+                    <ProtectedRoute>
+                        <h1>TBC</h1>
+                    </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/bookmarks",
+                element: (
+                    <ProtectedRoute>
+                        <h1>TBC</h1>
                     </ProtectedRoute>
                 ),
             },

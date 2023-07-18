@@ -48,10 +48,10 @@ const Login = () => {
                     <p>People on Twitter are the first to know.</p>
                 </div>
                 <div className="footer_btns">
-                    <button className="btn login" onClick={openLoginModal}>
+                    <button className="login" onClick={openLoginModal}>
                         Log In
                     </button>
-                    <button className="btn signup" onClick={openSignupModal}>
+                    <button className="white-btn signup" onClick={openSignupModal}>
                         Sign up
                     </button>
                 </div>

@@ -112,7 +112,7 @@ const Tweet = ({ tweet }) => {
                     <button className="tweet-btn view" disabled={!user} onClick={handleShare}>
                         <div className="icon-container">
                             <IconContext.Provider value={{ className: "tweet_icon" }}>
-                                <IoMdStats size="19" />
+                                <IoMdStats size="18" />
                             </IconContext.Provider>
                         </div>
                         <p>{tweet.views.length}</p>

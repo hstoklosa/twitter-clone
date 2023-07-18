@@ -25,22 +25,11 @@
     justify-content: center;
     align-items: center;
     font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.25px;
-    color: var(--black);
-    background-color: #fff;
-    border-radius: 1rem;
-    width: 100%;
     padding: 0.6rem 1rem;
-    transition: background-color 0.2s linear;
 }
 
 .signup-btn .signup_icon {
     margin-right: 0.3rem;
-}
-
-.signup-btn:hover {
-    background-color: rgb(230, 230, 230);
 }
 
 .agreement-text a {
@@ -68,17 +57,25 @@
     font-weight: 500;
 }
 
-.footer_btns .btn {
-    padding: 0.5rem 0.8rem;
+.footer_btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer_btns .login,
+.footer_btns .signup {
     font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 99rem;
     transition: background-color 0.2s linear;
     user-select: none;
 }
 
 .footer_btns .login {
     border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 1rem;
     margin-right: 0.7rem;
+    width: auto;
 }
 
 .footer_btns .login:hover {
@@ -86,9 +83,9 @@
 }
 
 .footer_btns .signup {
-    background-color: #fff;
     color: var(--black);
-    border-radius: 99999rem;
+    background-color: #fff;
+    width: auto;
 }
 
 .footer_btns .signup:hover {

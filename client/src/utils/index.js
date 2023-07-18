@@ -15,7 +15,7 @@ const generateOptions = (start, end) => {
 export const days = generateOptions(1, 31);
 export const years = generateOptions(1900, new Date().getFullYear());
 
-export const sendRequest = async (url, method = "GET", body = null, headers = {}) => {
+export const sendRequest = async (url, { method = "GET", headers = {}, body = null } = {}) => {
     try {
         const options = {
             method: method,
@@ -33,9 +33,16 @@ export const sendRequest = async (url, method = "GET", body = null, headers = {}
 
         const response = await fetch(url, options);
 
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response.json(); // parses JSON response -> object
     } catch (err) {
-        console.error(err.message);
+        console.error("send request error: ", err.message);
         return err;
     }
+};
+
+export const formatDate = (date, options) => {
+    const formDate = new Date(date);
+    const formattedDate = formDate.toLocaleDateString("en-US", options);
+
+    return formattedDate;
 };
