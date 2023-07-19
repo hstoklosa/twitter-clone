@@ -15,6 +15,20 @@ const generateOptions = (start, end) => {
 export const days = generateOptions(1, 31);
 export const years = generateOptions(1900, new Date().getFullYear());
 
+export const formatDate = (date, options) => {
+    const formDate = new Date(date);
+    const formattedDate = formDate.toLocaleDateString("en-US", options);
+
+    return formattedDate;
+};
+
+export const updateFormState = (setter, field, value) => {
+    setter((prevState) => ({
+        ...prevState,
+        [field]: value,
+    }));
+};
+
 export const sendRequest = async (url, { method = "GET", headers = {}, body = null } = {}) => {
     try {
         const options = {
@@ -22,13 +36,17 @@ export const sendRequest = async (url, { method = "GET", headers = {}, body = nu
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
                 ...headers,
             },
         };
 
         if (body && method !== "GET" && method !== "HEAD") {
-            options.body = JSON.stringify(body);
+            if (body instanceof FormData) {
+                options.body = body;
+                delete options.headers["Content-Type"];
+            } else {
+                options.body = JSON.stringify(body);
+            }
         }
 
         const response = await fetch(url, options);
@@ -38,11 +56,4 @@ export const sendRequest = async (url, { method = "GET", headers = {}, body = nu
         console.error("send request error: ", err.message);
         return err;
     }
-};
-
-export const formatDate = (date, options) => {
-    const formDate = new Date(date);
-    const formattedDate = formDate.toLocaleDateString("en-US", options);
-
-    return formattedDate;
 };

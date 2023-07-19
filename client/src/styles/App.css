@@ -46,6 +46,8 @@
 
     --retweet: rgb(0, 186, 124);
     --like: rgb(249, 24, 128);
+
+    --spinner-border-colour: rgba(29, 155, 240, 0.1);
 }
 
 * {
@@ -66,6 +68,7 @@ body {
 }
 
 a {
+    cursor: pointer;
     text-decoration: none;
     color: #fff;
 }
@@ -161,7 +164,8 @@ select {
     display: flex;
     flex-direction: column;
     /* padding: 0.5rem 1rem; */
-    padding: 0.2rem 1rem 0.2rem 0.2rem;
+    /* padding: 0.2rem 1rem 0.2rem 0.2rem; */
+    padding: 0 0.5rem;
 }
 
 .logo-container {
@@ -230,15 +234,8 @@ select {
 .navbar-btn {
     font-size: 1.1rem;
     width: 240px;
-    border-radius: 999rem;
-    background-color: var(--primary-colour);
-    margin-bottom: 0.8rem;
     padding: 1rem;
     transition: background-color 0.1s linear;
-}
-
-.navbar-btn:hover {
-    background-color: var(--primary-hover);
 }
 
 .navbar-btn_icon {
@@ -246,15 +243,15 @@ select {
 }
 
 .navbar-account {
+    position: relative;
     align-self: flex-end;
     display: flex;
     align-items: center;
     width: 100%;
     margin: 0;
     margin-top: auto !important;
-    margin-bottom: 1rem;
-    /* margin-bottom: 7rem; delete this */
-    padding: 0.7rem 1rem;
+    margin-bottom: 0.9rem;
+    padding: 0.7rem 0.7rem;
     border-radius: 999rem;
     cursor: pointer;
     transition: background-color 0.1s linear;
@@ -264,8 +261,18 @@ select {
     background-color: var(--empty-hover2);
 }
 
-.navbar-account img {
+.navbar-account .account-settings {
+    bottom: auto;
+    top: -70px !important;
+    left: 10px;
+}
+
+.navbar-account .pfp-container {
     width: 40px;
+    height: 40px;
+}
+
+.navbar-account img {
     border-radius: 50%;
 }
 
@@ -278,12 +285,12 @@ select {
 }
 
 .navbar-account_names .display_name {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     margin-bottom: 0.1rem;
 }
 
 .navbar-account_names .username {
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     font-weight: 500;
     color: var(--grey);
 }
@@ -294,13 +301,7 @@ select {
 
 /* SECOND COLUMN: General */
 
-.column#general {
-    border-right: 1px solid var(--border);
-    border-left: 1px solid var(--border);
-    width: 600px !important;
-}
-
-.column#general header {
+#general header {
     position: sticky;
     top: 0;
     z-index: 999;
@@ -314,8 +315,42 @@ select {
     backdrop-filter: blur(12px);
 }
 
-.column#general header h1 {
-    font-size: 1.3rem;
+#general header h1 {
+    font-size: 1.25rem !important;
+}
+
+.header-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    transition: background-color 0.2s linear;
+}
+
+.header-btn:hover {
+    background-color: rgba(239, 243, 244, 0.1);
+}
+
+.header-btn_icon {
+    position: block;
+
+    /* margin-right: 2rem; */
+}
+
+.column#general {
+    border-right: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    min-width: 600px !important;
+}
+
+img.banner,
+img.pfp {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* THIRD COLUMN: Widgets */
@@ -325,6 +360,9 @@ select {
 }
 
 .column#widgets .sticky-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: sticky;
     top: 0;
     padding-top: 0.3rem;
@@ -332,16 +370,46 @@ select {
 
 /* Buttons */
 
-.btn-forgot-password {
+.btn-empty {
     border: 1px solid var(--empty-btn-border);
     border-radius: 9999rem;
     width: 100%;
-    padding: 0.6rem 0;
+    padding: 0.4rem 1rem;
+    transition: background-color 0.1s linear;
+}
+
+.btn-empty:hover {
+    background-color: var(--empty-hover);
+}
+
+.white-btn {
+    font-weight: 500;
+    letter-spacing: 0.25px;
+    color: var(--black);
+    background-color: #fff;
+    border-radius: 99rem;
+    width: 100%;
+    padding: 0.6rem 1rem;
     transition: background-color 0.2s linear;
 }
 
-.btn-forgot-password:hover {
-    background-color: var(--empty-hover);
+.white-btn:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.blue-btn {
+    border-radius: 999rem;
+    background-color: var(--primary-colour);
+    padding: 1rem;
+    transition: background-color 0.1s linear;
+}
+
+.blue-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.blue-btn:disabled {
+    filter: brightness(0.8);
 }
 
 /* Base Modal */
@@ -369,27 +437,31 @@ select {
 
 /* Inputs */
 
-.input-container input {
+.input-container .input {
     font-size: 0.9rem;
     color: #fff;
     position: relative;
     height: 60px;
-    padding: 1.3rem 0.5rem 0 0.6rem;
+    padding: 1.3rem 0.6rem 0rem 0.6rem;
     border: 1px solid var(--input-border);
     border-radius: 0.2rem;
     caret-color: #fff;
     transition: all 0.1s ease-in-out;
 }
 
-.input-container input.error {
+.input-container textarea.input {
+    padding-top: 2rem;
+}
+
+.input-container .input.error {
     border: 1px solid red !important;
 }
 
-.input-container input.error + label {
+.input-container .input.error + label {
     color: red !important;
 }
 
-.input-container input::placeholder {
+.input-container .input::placeholder {
     color: var(--grey);
     position: absolute;
     top: 50px;
@@ -406,27 +478,30 @@ select {
     transition: all 0.1s ease-in-out;
 }
 
-.input-container input:focus {
+.input-container .input:focus {
     border: 1px solid var(--primary-colour);
 }
 
-.input-container input:focus + label {
+.input-container .input:focus + label {
     color: var(--primary-colour);
     transform: translateY(10px);
     font-size: 0.85rem;
 }
 
-.input-container input.not-empty {
+.input-container .input.highlight {
     border: 1px solid var(--primary-colour);
 }
 
-.input-container input.not-empty + label {
-    color: var(--primary-colour);
+.input-container .input.not-empty + label {
     transform: translateY(10px);
     font-size: 0.85rem;
 }
 
-.input-container input:disabled {
+.input-container .input.highlight + label {
+    color: var(--primary-colour);
+}
+
+.input-container .input:disabled {
     background-color: var(--input-disabled);
     color: var(--label-disabled);
 
@@ -434,7 +509,7 @@ select {
     user-select: none;
 }
 
-.input-container input:disabled + label {
+.input-container .input:disabled + label {
     color: var(--label-disabled) !important;
     user-select: none;
 }
@@ -510,7 +585,7 @@ select {
 .links-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
     align-content: space-around;
     margin-top: 1rem;
     width: 100%;
@@ -589,9 +664,6 @@ select {
     }
     .column#widgets {
         display: none;
-    }
-    .column#general {
-        /* min-width: 600px !important; */
     }
     .container main {
         width: auto;

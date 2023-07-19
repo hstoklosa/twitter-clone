@@ -174,7 +174,9 @@ const Sidebar = ({ minimal }) => {
                             </FloatOptions>
                         )}
                         <button className="navbar-account" onClick={openAccountFloat}>
-                            <img src={user?.profileImageURL} alt="User PFP" />
+                            <div className="pfp-container">
+                                <img src={user?.profileImageURL} className="pfp" alt="User PFP" />
+                            </div>
 
                             <div className="navbar-account_names">
                                 <p className="display_name">{user?.displayName}</p>

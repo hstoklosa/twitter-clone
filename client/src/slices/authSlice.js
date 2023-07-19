@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { sendRequest, formatDate } from "../utils/index";
 
 export const checkAuth = createAsyncThunk("auth/checkAuth", async (_, thunkAPI) => {
-    const response = await sendRequest(`${process.env.REACT_APP_API_URL}/auth/check`);
+    const response = await sendRequest(`${process.env.REACT_APP_API_URL}/auth/me`);
 
     if (response.error) {
         console.log("checkAuth Error: ", response.error);

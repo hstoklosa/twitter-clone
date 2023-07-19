@@ -2,7 +2,7 @@ import { IconContext } from "react-icons";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useEffect, useState } from "react";
 
-const InputContainer = ({ type, id, value, onChange, onBlur, onFocus, label, error, highlight = true, ...props }) => {
+const InputContainer = ({ type, id, value, onChange, onBlur, onFocus, label, error, highlight = true, multiline = false, ...props }) => {
     const [localError, setLocalError] = useState(null);
     const [isVisible, setVisible] = useState(false);
 
@@ -26,22 +26,24 @@ const InputContainer = ({ type, id, value, onChange, onBlur, onFocus, label, err
         onBlur && onBlur(e);
     };
 
+    const inputProps = {
+        id,
+        type: isVisible ? "text" : type,
+        className: `input ${value && `not-empty ${highlight && "highlight"}`} ${localError && value.length > 0 ? "error" : ""}`,
+        value,
+        onChange: handleChange,
+        onFocus: handleFocus,
+        onBlur: handleBlur,
+        ...props,
+    };
+
     return (
         <div className="input-container">
-            <input
-                id={id}
-                type={isVisible ? "text" : type}
-                className={`${value && `not-empty ${highlight && "highlight"}`} ${localError && value.length > 0 ? "error" : ""}`}
-                value={value}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                {...props}
-            />
+            {multiline ? <textarea {...inputProps} /> : <input {...inputProps} />}
 
-            <label htmlFor={id}>{label || id.charAt(0).toUpperCase() + id.slice(1)}</label>
+            <label htmlFor={id}>{label}</label>
 
-            {localError && value.length > 0 ? <p className="error-message">{localError}</p> : null}
+            {localError && value.length > 0 ? <p className="error-message">{localError}</p> : ""}
 
             {type === "password" && (
                 <button type="button" className="btn-show-password" onClick={toggle}>
