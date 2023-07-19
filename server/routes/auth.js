@@ -30,7 +30,7 @@ router.get(
 // General
 router.get("/check-identifier/:identifier", authController.checkIdentifier);
 
-router.get("/check", authController.isAuth);
+router.get("/me", authController.isAuth);
 
 router.get("/logout", authController.logout);
 

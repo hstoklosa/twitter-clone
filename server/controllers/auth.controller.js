@@ -135,8 +135,6 @@ const logout = (req, res) => {
 };
 
 const isAuth = (req, res, next) => {
-    console.log(req.user);
-
     if (req.isAuthenticated()) {
         return res.status(200).json({
             user: req.user,
