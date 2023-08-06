@@ -6,6 +6,12 @@ COPY package*.json ./
 
 RUN npm install --silent
 
-EXPOSE 8080
+# RUN npm install --global nodemon
+
+COPY . .
+
+ARG DOCKER_PORT
+
+EXPOSE $DOCKER_PORT
 
 CMD [ "npm", "start" ]

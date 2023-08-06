@@ -1,10 +1,12 @@
+# Mongodb depends on volumes to keep the data alive.
+
 services:
     mongo:
         image: mongo
-        container_name: tc-database
+        container_name: mongodb
+        env_file: ./.env
         ports:
-            - "27017:27017"
-        # our mongodb depends on volume to keep the data alive.
+            - $MONGO_LOCAL_PORT:$MONGO_DOCKER_PORT
         volumes:
             - data-volume:/data/db
 
@@ -12,15 +14,16 @@ services:
         build:
             context: ./server
             dockerfile: Dockerfile
-        image: tc-server
-        container_name: tc-node-server
+            args:
+                - DOCKER_PORT=$SERVER_DOCKER_PORT
+        image: tc-node-backend
+        container_name: backend
         ports:
-            - "8080:8080"
-        env_file:
-            - ./server/.env
+            - $SERVER_LOCAL_PORT:$SERVER_DOCKER_PORT
+        env_file: ./.env
         volumes:
             - ./server/:/app
-            # - /app/node_modules
+            - /app/node_modules
         depends_on:
             - mongo
 
@@ -28,17 +31,19 @@ services:
         build:
             context: ./client
             dockerfile: Dockerfile
-        image: tc-client
-        container_name: tc-react-client
+            args:
+                - API_URL=$SERVER_ORIGIN
+                - DOCKER_PORT=$CLIENT_DOCKER_PORT
+        image: tc-react-frontend
+        container_name: frontend
         ports:
-            - "3000:3000"
-        env_file:
-            - ./client/.env
+            - $CLIENT_LOCAL_PORT:$CLIENT_DOCKER_PORT
+        env_file: ./.env
         volumes:
-            - ./client:/app
+            - ./client/:/app
+            - /app/node_modules
         depends_on:
             - server
 
 volumes:
     data-volume:
-    # node_modules:
