@@ -1,0 +1,38 @@
+.tab-list {
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+
+.tab-item {
+    flex: 1;
+    width: 100%;
+    height: 53px;
+    position: relative;
+    font-size: 0.9375rem;
+    color: var(--grey);
+    font-weight: 500;
+    padding: 0 1rem;
+    transition: background-color 0.1s linear;
+}
+
+.tab-item:hover {
+    background-color: var(--empty-hover2);
+}
+
+.tab-item.active {
+    color: #fff;
+    font-weight: 700;
+}
+
+.tab-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 55px;
+    height: 3px;
+    background-color: var(--primary-colour);
+    border-radius: 99999rem;
+}
