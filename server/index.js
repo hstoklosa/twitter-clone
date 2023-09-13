@@ -71,6 +71,8 @@ app.use(passport.initialize());
 app.use(passport.session()); // express-session piggyback
 
 // API routes
+app.use("/uploads", express.static("uploads"));
+
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 
