@@ -12,6 +12,7 @@ const passport = require("./config/passportConfig");
 const errorHandler = require("./middlewares/errorHandler");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
+const tweetRoute = require("./routes/tweet");
 
 // Test MongoDB connection
 (async () => {
@@ -75,6 +76,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
+app.use("/api/tweets", tweetRoute);
 
 // Error handling middleware
 app.use(errorHandler);
