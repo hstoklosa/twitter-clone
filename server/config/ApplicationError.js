@@ -43,9 +43,7 @@ class BadRequestError extends ApplicationError {
 }
 
 class UnauthenticatedError extends ApplicationError {
-    constructor(
-        message = "You are not authenticated to access this resource!"
-    ) {
+    constructor(message = "You are not authenticated to access this resource!") {
         super(ErrorStatus.UNAUTHENTICATED, message);
     }
 }

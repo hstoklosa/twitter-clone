@@ -9,10 +9,9 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("./config/passportConfig");
 
-const errorHandler = require("./middleware/errorHandler");
+const errorHandler = require("./middlewares/errorHandler");
 const authRoute = require("./routes/auth");
-
-const app = express();
+const userRoute = require("./routes/user");
 
 // Test MongoDB connection
 (async () => {
@@ -33,17 +32,17 @@ const app = express();
 })();
 
 // Configurations
+const corsOptions = {
+    origin: process.env.CLIENT_ORIGIN,
+    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
+    credentials: true,
+};
+
 const sessionStore = new MongoStore({
     mongoUrl: process.env.MONGO_URI,
     ttl: 14 * 24 * 60 * 60,
     autoRemove: "native",
 });
-
-const corsOptions = {
-    origin: process.env.CLIENT_URL,
-    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
-    credentials: true,
-};
 
 const sessionOptions = {
     name: process.env.SESSION_NAME,
@@ -52,14 +51,15 @@ const sessionOptions = {
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        maxAge: 24 * 60 * 60 * 1000, // 1d
     },
 };
+
+const app = express();
 
 // Middleware
 app.use(morgan("dev"));
 
-app.use(express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -70,20 +70,14 @@ app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session()); // express-session piggyback
 
-app.use((req, res, next) => {
-    console.log("Session: ", req.session);
-    console.log("Cookies: ", req.cookies);
-    next();
-});
-
-// Routes
+// API routes
 app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
 
 // Error handling middleware
 app.use(errorHandler);
 
-// Start the server
-const PORT = process.env.SERVER_PORT || 3001;
+const PORT = process.env.SERVER_DOCKER_PORT || 3001;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

@@ -1,21 +1,18 @@
-const CustomHttpError = require("../config/CustomHttpError");
+const { ApplicationError } = require("../config/ApplicationError");
 
 const errorHandler = (err, req, res, next) => {
     const errorResponse = {
         status: 500,
-        message: "Internal server error!",
+        message: "Internal server error. Try again later!",
     };
 
-    // production & development
-    if (err instanceof CustomHttpError) {
-        err.status && (errorResponse.status = err.status);
+    if (ApplicationError.isTrustedError(err)) {
+        errorResponse.status = err.status;
+        errorResponse.message = err.message;
     }
 
-    // development
     if (process.env.NODE_ENV !== "production") {
         errorResponse.stack = err.stack;
-        errorResponse.message = err.message;
-        console.error(err);
     }
 
     return res.status(errorResponse.status).json({
