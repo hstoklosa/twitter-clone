@@ -1,6 +1,7 @@
-# <p align="center"> Twitter Clone 🐦 </p>
+# <p align="center"> X Clone</p>
 
-<p align="center">A simplified version of Twitter, which has been designed to mimic the core features of Twitter itself, such as the ability to post tweets, follow other users, and like tweets.</p>
+<p align="center"><img src="https://static.dezeen.com/uploads/2023/07/x-logo-twitter-elon-musk_dezeen_2364_col_0.jpg" width=150 /></p>
+<p align="center">A simplified version of X (previously Twitter). </p>
 
 ## Roadmap 🎉
 
@@ -20,8 +21,6 @@ In the first week of the project commencing, I have managed to implement an auth
 
 ### Progess Update: 18/07/2023
 
-**PERSONAL NOTE:** A month into my boxing training, and it is great! :D
-
 **PERSONAL NOTE:** Lately I've been diving into new technologies that I will be using to build the Twitter clone. It's been somewhat time-consuming (thus the lack of updates), but I still managed to become familiar with their usage and how they can be combined to build a fully functional app.
 
 1. I've learnt `Docker` and `docker-compose` to create a multi-container application. The architecture splits the full-stack application into 3 containers (client, server, database), which run and communicate with each other in parallel. The technology will save me a lot of time in the future, because it allows for **faster deployements and migrations**.
@@ -29,6 +28,10 @@ In the first week of the project commencing, I have managed to implement an auth
 2. I've opted to use `@redux/toolkit` and `react-redux` instead of the `useContext` hook for maintaining a consistent global state. Although `redux` is a verbose and requires much more boilerplate code, the `toolkit` offers a more efficient implementation of the same store functionality.
 
 3. The backend error-handling has been upgraded with a `CustomHttpError` object and re-implemented error-handling middleware that decides upon the content of the error response based on the current environment. It responds with either detailed or generic error messages, which can be caught by the `asyncThunk` function and displayed to the user.
+
+### Progess Update: 05/08/2023
+
+...
 
 ### 🔍 Features
 
@@ -39,11 +42,11 @@ In the first week of the project commencing, I have managed to implement an auth
 *   `express-session` and `mongo-connect` for sessions management & storage
 *   `@reduxjs/toolkit` instead of `redux` for quicker development
 
--   [ ] Profile Management (profile picture, bio, location)
--   [ ] Tweeting (text, images, videos)
--   [ ] Feed (tweets from followed users, algorithmic order)
--   [ ] Following/Followers
+-   [x] Profile Management (profile picture, bio, location)
+-   [x] Following/Followers
+-   [x] Tweeting (text, images, videos)
 -   [ ] Likes & Retweets
+-   [ ] Feed (tweets from followed users, algorithmic order)
 -   [ ] Search Functionality (user/tweets)
 -   [ ] Direct Messaging
 -   [ ] Real-time Notifications (likes, retweets, follows, dms)
@@ -165,16 +168,24 @@ tc-react-client     tc-client           "docker-entrypoint.s…"   client       
 
 For now there is only `docker-compose.developer.yml` that can be used to build the multi-container for local development. However, as I will be working on the project and getting closer to the finish line, I will be creating a `docker-compose.production.yml` for this repository.
 
-`env_file` options for development are already set up in `docker-compose.developer.yml`. All you have to do is to rename the `.sample.env` file to `.env`, and fill in the values accordingly.
+`env_file` options for development are already set up in `docker-compose.developer.yml`. All you have to do is to rename the `.env.sample` file to `.env`, and fill in the values accordingly.
 
-The process for setting up **production environmental variables** will vary on the hosting platform that you're planning to use, therefore make sure to consult their documentation about the topic.
+The process for setting up **production environmental variables** will vary on the hosting platform that you're planning to use, therefore make sure to check their documentation.
 
-**SERVER**
+**Sample version of .env**
 
 ```
-SERVER_PORT=
 MONGO_URI=
-CLIENT_URL=
+MONGO_LOCAL_PORT=
+MONGO_DOCKER_PORT=
+
+SERVER_ORIGIN=
+SERVER_LOCAL_PORT=
+SERVER_DOCKER_PORT=
+
+CLIENT_ORIGIN=
+CLIENT_LOCAL_PORT=
+CLIENT_DOCKER_PORT=
 
 SESSION_NAME=
 SESSION_SECRET=
@@ -187,20 +198,6 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 GOOGLE_CALLBACK_URL=
 ```
-
-** CLIENT **
-
-```
-REACT_APP_API_URL=
-```
-
-<!-- ### 🚀 Deployment
-
-```
-
-npm build
-
-```-->
 
 ## 📝 License
 
