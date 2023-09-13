@@ -21,7 +21,8 @@ module.exports = new LocalStrategy(
 
             if (user.provider != "local") {
                 return cb(null, false, {
-                    message: "You have previously signed up with a different method.",
+                    message:
+                        "You have previously signed up with a different method.",
                 });
             }
 
@@ -35,7 +36,7 @@ module.exports = new LocalStrategy(
 
             return cb(null, user);
         } catch (err) {
-            return cb(err);
+            cb(err);
         }
     }
 );

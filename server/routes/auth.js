@@ -1,5 +1,5 @@
 const express = require("express");
-const passport = require("passport");
+const passport = require("../config/passportConfig");
 const authController = require("../controllers/auth.controller");
 
 const router = express.Router();
@@ -22,8 +22,8 @@ router.get(
 router.get(
     "/google/callback",
     passport.authenticate("google", {
-        successRedirect: `${process.env.CLIENT_URL}/home`,
-        failureRedirect: `${process.env.CLIENT_URL}`,
+        successRedirect: `${process.env.CLIENT_ORIGIN}/home`,
+        failureRedirect: `${process.env.CLIENT_ORIGIN}`,
     })
 );
 

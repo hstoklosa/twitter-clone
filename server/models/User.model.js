@@ -23,7 +23,7 @@ const userSchema = new Schema(
                 validator: (email) => {
                     return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
                 },
-                message: (props) => `${props.value} is not a valid Email address!`,
+                message: (props) => `${props.value} is not a valid email address!`,
             },
         },
         password: {
