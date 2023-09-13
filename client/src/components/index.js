@@ -6,6 +6,6 @@ export { default as BaseModal } from "./modals/BaseModal";
 export { default as SignupModal } from "./modals/SignupModal";
 export { default as LoginModal } from "./modals/LoginModal";
 export { default as Loading } from "./shared/Loading";
-export { default as InputContainer } from "./inputs/InputContainer";
-export { default as SelectContainer } from "./inputs/SelectContainer";
+export { default as TextInput } from "./inputs/TextInput";
+export { default as SelectInput } from "./inputs/SelectInput";
 export { default as ColumnHeader } from "./shared/ColumnHeader";
