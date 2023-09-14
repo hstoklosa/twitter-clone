@@ -1,20 +1,16 @@
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-
-import { Loading } from "../components";
+import { useCheckAuthQuery } from "../store/api/authApi";
 
 const ProtectedRoute = ({ children }) => {
-    const { auth, authLoading } = useSelector((state) => ({
-        auth: state.auth,
-        authLoading: state.loading["auth/checkAuth"],
-    }));
+    const { data: auth, isFetching: authFetching, isLoading: authLoading } = useCheckAuthQuery();
 
-    if (!auth.hasOwnProperty("user") || authLoading) {
-        return <Loading />;
-    }
-
-    if (!auth.user) {
-        return <Navigate to="/" replace />;
+    if (!auth.isAuthenticated && !authFetching && !authLoading) {
+        return (
+            <Navigate
+                to="/"
+                replace
+            />
+        );
     }
 
     return children;

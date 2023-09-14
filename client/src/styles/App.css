@@ -317,6 +317,14 @@ select {
     font-size: 1.25rem !important;
 }
 
+#general header .tab-list {
+    border-bottom: 0 !important;
+}
+
+#general .tweet-input {
+    border-bottom: 1px solid var(--border);
+}
+
 .header-btn {
     display: flex;
     justify-content: center;

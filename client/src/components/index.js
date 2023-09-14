@@ -9,3 +9,5 @@ export { default as Loading } from "./shared/Loading";
 export { default as TextInput } from "./inputs/TextInput";
 export { default as SelectInput } from "./inputs/SelectInput";
 export { default as ColumnHeader } from "./shared/ColumnHeader";
+export { default as TabList } from "./shared/TabList";
+export { default as Spinner } from "./shared/Spinner";

@@ -2,32 +2,29 @@ import "../styles/Login.css";
 
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import { Loading, Sidebar } from "../components/";
-import { checkAuth } from "../slices/authSlice";
+
+import { useCheckAuthQuery } from "../store/api/authApi";
+import { useGetUserInfoQuery } from "../store/api/userApi";
 
 const Root = () => {
-    const { user, authLoading } = useSelector((state) => ({
-        user: state.auth.user,
-        authLoading: state.loading["auth/checkAuth"],
-    }));
-    const dispatch = useDispatch();
+    const { data: auth, isLoading: authLoading, isFetching: authFetching } = useCheckAuthQuery();
 
-    // checkAuth to check for existing session
-    useEffect(() => {
-        (async () => {
-            await dispatch(checkAuth());
-        })();
-    }, []);
+    const { isLoading: userLoading } = useGetUserInfoQuery(auth?.info?.username, {
+        skip: !auth?.isAuthenticated,
+    });
 
-    if (authLoading) {
+    if (authLoading || userLoading || authFetching) {
         return <Loading />;
     }
 
     return (
         <div className="container">
-            <Sidebar minimal={user ? false : true} />
+            <Sidebar
+                minimal={!auth.isAuthenticated}
+                currentUsername={auth?.info?.username}
+            />
             <Outlet />
         </div>
     );

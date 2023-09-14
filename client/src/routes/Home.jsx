@@ -1,7 +1,6 @@
 import "../styles/App.css";
 
 import { useState } from "react";
-
 import { ColumnHeader, Links, Feed, TweetInput, TabList } from "../components";
 
 const EmptyFeed = () => {
@@ -32,7 +31,6 @@ const Home = () => {
                     />
                 </ColumnHeader>
 
-                {/* <TweetInput maxLength={280} /> */}
                 <Feed
                     tweets={[]}
                     NotFoundComponent={<EmptyFeed />}

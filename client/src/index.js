@@ -2,27 +2,16 @@ import "./styles/App.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-
-import { authReducer } from "./slices/authSlice";
-import { loadingReducer } from "./slices/loadingSlice";
-import { errorReducer } from "./slices/errorSlice";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/Root";
-import NotFound from "./routes/NotFound";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./routes/Login";
 import Home from "./routes/Home";
-import ProtectedRoute from "./routes/ProtectedRoute";
+import NotFound from "./routes/NotFound";
 
-const store = configureStore({
-    reducer: {
-        auth: authReducer,
-        loading: loadingReducer,
-        error: errorReducer,
-    },
-});
+import store from "./store/index";
 
 const router = createBrowserRouter([
     {
@@ -32,8 +21,8 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                index: true,
                 element: <Login />,
+                index: true,
             },
             {
                 path: "/home",
@@ -47,7 +36,7 @@ const router = createBrowserRouter([
                 path: "/:username",
                 element: (
                     <ProtectedRoute>
-                        <h1>TBC</h1>
+                        <Profile />
                     </ProtectedRoute>
                 ),
             },
@@ -55,7 +44,7 @@ const router = createBrowserRouter([
                 path: "/explore",
                 element: (
                     <ProtectedRoute>
-                        <h1>TBC</h1>
+                        <Home />
                     </ProtectedRoute>
                 ),
             },
@@ -63,7 +52,7 @@ const router = createBrowserRouter([
                 path: "/notifications",
                 element: (
                     <ProtectedRoute>
-                        <h1>TBC</h1>
+                        <Home />
                     </ProtectedRoute>
                 ),
             },
@@ -71,7 +60,7 @@ const router = createBrowserRouter([
                 path: "/messages",
                 element: (
                     <ProtectedRoute>
-                        <h1>TBC</h1>
+                        <Home />
                     </ProtectedRoute>
                 ),
             },
@@ -79,7 +68,7 @@ const router = createBrowserRouter([
                 path: "/bookmarks",
                 element: (
                     <ProtectedRoute>
-                        <h1>TBC</h1>
+                        <Home />
                     </ProtectedRoute>
                 ),
             },
