@@ -20,7 +20,7 @@ module.exports = new GoogleStrategy(
                     _json: { picture: profileImageURL, locale: location },
                 } = profile;
 
-                const newUser = await User.addGoogleUser({
+                const newUser = await User.addUser({
                     username: "",
                     email,
                     provider,

@@ -1,5 +1,7 @@
-let mongoose = require("mongoose");
-let Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
 const userSchema = new Schema(
     {
@@ -45,8 +47,8 @@ const userSchema = new Schema(
             type: String,
             maxLength: 100,
             validate: {
+                // Regular expression to validate the URL
                 validator: (url) => {
-                    // Regular expression to validate URL
                     return /^(ftp|http|https):\/\/[^ "]+$/.test(url);
                 },
                 message: (props) => `${props.value} is not a valid URL!`,
@@ -58,13 +60,13 @@ const userSchema = new Schema(
         },
         followers: [
             {
-                type: mongoose.Schema.Types.ObjectId,
+                type: ObjectId,
                 ref: "User",
             },
         ],
         following: [
             {
-                type: mongoose.Schema.Types.ObjectId,
+                type: ObjectId,
                 ref: "User",
             },
         ],
@@ -72,13 +74,8 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-// Static methods related to User
-userSchema.statics.addGoogleUser = function (data) {
-    const user = new this(data);
-    return user.save();
-};
-
-userSchema.statics.addLocalUser = function (data) {
+// static methods
+userSchema.statics.addUser = (data) => {
     const user = new this(data);
     return user.save();
 };

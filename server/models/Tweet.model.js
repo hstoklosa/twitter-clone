@@ -1,8 +1,7 @@
-const { ObjectId } = require("mongodb");
-let mongoose = require("mongoose");
-let Schema = mongoose.Schema;
+const mongoose = require("mongoose");
 
-// TODO: INDEXING
+const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
 const tweetSchema = new Schema(
     {
@@ -18,11 +17,10 @@ const tweetSchema = new Schema(
             },
         },
         author: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: ObjectId,
             ref: "User",
             required: true,
         },
-        // add array structure for more than 1 media per tweet
         media: [
             {
                 url: {
@@ -32,8 +30,8 @@ const tweetSchema = new Schema(
                 mediaType: {
                     type: String,
                     required: true,
-                    // enum: ["image", "gif"],
-                    // message: "Invalid media type.",
+                    enum: ["image", "gif"],
+                    message: "Invalid media type.",
                 },
             },
         ],
@@ -56,28 +54,28 @@ const tweetSchema = new Schema(
             default: "EVERYONE",
         },
         retweetId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: ObjectId,
             ref: "Tweet",
         },
         inReplyTo: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: ObjectId,
             ref: "Tweet",
         },
         likes: [
             {
-                type: mongoose.Schema.Types.ObjectId,
+                type: ObjectId,
                 ref: "User",
             },
         ],
         retweets: [
             {
-                type: mongoose.Schema.Types.ObjectId,
+                type: ObjectId,
                 ref: "User",
             },
         ],
         replies: [
             {
-                type: mongoose.Schema.Types.ObjectId,
+                type: ObjectId,
                 ref: "Tweet",
             },
         ],

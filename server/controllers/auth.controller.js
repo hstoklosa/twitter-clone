@@ -54,7 +54,7 @@ const signUp = asyncHandler(async (req, res, next) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await User.addLocalUser({
+        const newUser = await User.addUser({
             displayName,
             dob,
             username,
