@@ -36,20 +36,21 @@ In the first week of the project commencing, I have managed to implement an auth
 ### 🔍 Features
 
 -   [x] User Authentication
-
-*   `MongoDB` and `Mongoose` to store and model (ODM) data
-*   `Passport.js` for local auth and OAuth2.0
-*   `express-session` and `mongo-connect` for sessions management & storage
-*   `@reduxjs/toolkit` instead of `redux` for quicker development
-
 -   [x] Profile Management (profile picture, bio, location)
 -   [x] Following/Followers
 -   [x] Tweeting (text, images, videos)
--   [ ] Likes & Retweets
--   [ ] Feed (tweets from followed users, algorithmic order)
--   [ ] Search Functionality (user/tweets)
+-   [ ] Likes, retweets & commenting
+-   [ ] Feed (for you & following - algorithmic order)
+-   [ ] Search Functionality (user/tweets/hashtags)
 -   [ ] Direct Messaging
 -   [ ] Real-time Notifications (likes, retweets, follows, dms)
+
+Notes:
+
+-   `MongoDB` and `Mongoose` to store and model (ODM) data
+-   `Passport.js` for local auth and OAuth2.0
+-   `express-session` and `mongo-connect` for sessions management & storage
+-   `@reduxjs/toolkit` instead of `redux` for quicker development
 
 ## 🔌 Technologies
 
@@ -172,7 +173,7 @@ For now there is only `docker-compose.developer.yml` that can be used to build t
 
 The process for setting up **production environmental variables** will vary on the hosting platform that you're planning to use, therefore make sure to check their documentation.
 
-**Sample version of .env**
+**Sample .env**
 
 ```
 MONGO_URI=
