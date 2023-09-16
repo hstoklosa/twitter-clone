@@ -14,3 +14,4 @@ export { default as TabPanel } from "./shared/TabPanel";
 export { default as Spinner } from "./shared/Spinner";
 export { default as TweetInput } from "./inputs/TweetInput";
 export { default as TweetText } from "./twitter/TweetText";
+export { default as TweetModal } from "./modals/TweetModal";
