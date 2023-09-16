@@ -1,16 +1,16 @@
 import { useEffect, useRef } from "react";
 
-const useOutsideClick = (callback) => {
+const useOutsideClick = (callback, options = { click: true, escape: true }) => {
     const ref = useRef();
 
     const handleClick = (e) => {
-        if (ref.current && !ref.current.contains(e.target)) {
+        if (options.click && ref.current && !ref.current.contains(e.target)) {
             callback();
         }
     };
 
     const handleEscape = (e) => {
-        if (e.key === "Escape") {
+        if (options.escape && e.key === "Escape") {
             callback();
         }
     };
@@ -23,7 +23,7 @@ const useOutsideClick = (callback) => {
             document.removeEventListener("mousedown", handleClick);
             document.removeEventListener("keydown", handleEscape);
         };
-    }, [ref]);
+    }, [ref, options]);
 
     return ref;
 };

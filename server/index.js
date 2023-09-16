@@ -23,13 +23,11 @@ const tweetRoute = require("./routes/tweet");
 
         if (connection) {
             console.log("MongoDB connection established!");
-            return;
         }
     } catch (err) {
+        console.error("Couldn't establish a MongoDB connection!");
         console.error(err);
     }
-
-    console.error("Couldn't establish a MongoDB connection!");
 })();
 
 // Configurations
