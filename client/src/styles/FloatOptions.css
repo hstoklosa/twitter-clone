@@ -1,0 +1,28 @@
+.float-options {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    height: auto;
+    width: 250px;
+    position: absolute;
+    z-index: 99999;
+    bottom: 90px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #000;
+    border-radius: 1rem;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px;
+    padding: 0.75rem 0;
+}
+
+.float-options .more-btn {
+    text-align: start;
+    padding: 0.75rem 1rem;
+    transition-property: background-color, box-shadow 0.2s;
+    transition-duration: 0.2s;
+}
+
+.float-options .more-btn:hover {
+    background-color: rgb(22, 24, 28);
+}

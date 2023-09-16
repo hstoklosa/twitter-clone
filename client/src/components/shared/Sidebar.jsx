@@ -22,13 +22,14 @@ import { FaFeatherAlt } from "react-icons/fa";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { PiDotsThreeCircle } from "react-icons/pi";
 
-import { TweetModal } from "../index";
+import { FloatOptions, TweetModal } from "../index";
 
 import { useLazySignOutQuery } from "../../store/api/authApi";
 import { useGetUserInfoQuery } from "../../store/api/userApi";
 
 const Sidebar = ({ minimal, currentUsername }) => {
     const [tweetModal, setTweetModal] = useState(false);
+    const [accountFloat, setAccountFloat] = useState(false);
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
@@ -47,10 +48,14 @@ const Sidebar = ({ minimal, currentUsername }) => {
     const openTweetModal = () => setTweetModal(true);
     const closeTweetModal = () => setTweetModal(false);
 
+    const openAccountFloat = () => setAccountFloat(true);
+    const closeAccountFloat = () => setAccountFloat(false);
+
     const handleSignOut = async () => {
         const result = await signOut();
 
         if (!result.isError) {
+            closeAccountFloat();
             navigate("/");
         }
     };
@@ -220,7 +225,26 @@ const Sidebar = ({ minimal, currentUsername }) => {
 
                 {!minimal && (
                     <>
-                        <button className="navbar-account">
+                        {accountFloat && (
+                            <FloatOptions
+                                isOpen={accountFloat}
+                                onClose={closeAccountFloat}
+                                className="account-settings"
+                            >
+                                <button
+                                    type="button"
+                                    className="more-btn"
+                                    onClick={handleSignOut}
+                                >
+                                    Log out @{username}
+                                </button>
+                            </FloatOptions>
+                        )}
+
+                        <button
+                            className="navbar-account"
+                            onClick={openAccountFloat}
+                        >
                             <div className="pfp-container">
                                 <img
                                     src={profileImageURL}
