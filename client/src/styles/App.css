@@ -438,11 +438,16 @@ img.pfp {
     z-index: 999999999;
     top: 0;
     left: 0;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     width: 100vw;
+    background-color: none;
+}
+
+.modal.open {
+    display: flex;
     background-color: rgba(91, 112, 131, 0.4);
 }
 

@@ -3,6 +3,8 @@ import "../styles/App.css";
 import { useState } from "react";
 import { ColumnHeader, Links, Feed, TweetInput, TabList } from "../components";
 
+const tabs = ["For you", "Following"];
+
 const EmptyFeed = () => {
     return (
         <div className="not-found-container">
@@ -27,10 +29,11 @@ const Home = () => {
                     <TabList
                         activeTab={tab}
                         setActiveTab={setTab}
-                        tabs={["For you", "Following"]}
+                        tabs={tabs}
                     />
                 </ColumnHeader>
 
+                <TweetInput maxLength={280} />
                 <Feed
                     tweets={[]}
                     NotFoundComponent={<EmptyFeed />}
