@@ -10,7 +10,15 @@ import { AiOutlineLink } from "react-icons/ai";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { TbBellPlus, TbBellCheck } from "react-icons/tb";
 
-import { ColumnHeader, Links, Spinner, TabList, Feed, ProfileNotFound } from "../components";
+import {
+    ColumnHeader,
+    Links,
+    Spinner,
+    EditProfile,
+    TabList,
+    Feed,
+    ProfileNotFound,
+} from "../components";
 
 import { useCheckAuthQuery } from "../store/api/authApi";
 import { useGetUserInfoQuery, useGetUserTweetsQuery } from "../store/api/userApi";
@@ -19,6 +27,7 @@ import { formatDate } from "../helpers/date";
 
 const Profile = () => {
     const [tab, setTab] = useState("Tweets");
+    const [editModal, setEditModal] = useState(false);
 
     const { username } = useParams();
 
@@ -35,8 +44,19 @@ const Profile = () => {
 
     const { data: tweets, isLoading: tweetsLoading } = useGetUserTweetsQuery(username);
 
+    const openEditModal = () => setEditModal(true);
+    const closeEditModal = () => setEditModal(false);
+
     return (
         <main>
+            {isCurrentUser && (
+                <EditProfile
+                    isOpen={editModal}
+                    closeModal={closeEditModal}
+                    user={profileUser}
+                />
+            )}
+
             <div
                 className="column"
                 id="general"
@@ -75,7 +95,12 @@ const Profile = () => {
 
                             {isCurrentUser ? (
                                 <div className="options-container">
-                                    <button className="edit btn-empty">Edit Profile</button>
+                                    <button
+                                        className="edit btn-empty"
+                                        onClick={openEditModal}
+                                    >
+                                        Edit Profile
+                                    </button>
                                 </div>
                             ) : (
                                 <IconContext.Provider value={{ className: "reply_icon" }}>

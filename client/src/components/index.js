@@ -16,3 +16,4 @@ export { default as TweetText } from "./twitter/TweetText";
 export { default as TweetModal } from "./modals/TweetModal";
 export { default as FloatOptions } from "./modals/FloatOptions";
 export { default as Tweet } from "./twitter/Tweet";
+export { default as EditProfile } from "./modals/EditProfile";

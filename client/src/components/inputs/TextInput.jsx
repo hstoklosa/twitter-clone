@@ -20,6 +20,8 @@ const TextInput = ({
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [isFocus, setFocus] = useState(false);
 
+    console.log(error);
+
     const toggleVisibility = () => {
         setPasswordVisible(!isPasswordVisible);
     };
@@ -58,8 +60,6 @@ const TextInput = ({
 
     return (
         <div className="input-wrapper">
-            {multiline ? <textarea {...inputAttrs} /> : <input {...inputAttrs} />}
-
             {type === "password" && (
                 <button
                     type="button"
@@ -75,6 +75,8 @@ const TextInput = ({
                     </IconContext.Provider>
                 </button>
             )}
+
+            {multiline ? <textarea {...inputAttrs} /> : <input {...inputAttrs} />}
 
             {maxLength && (
                 <div className="character-count">

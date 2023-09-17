@@ -12,6 +12,7 @@ const SelectInput = ({ name, id, className, value, onChange, options, label }) =
                     selected
                     disabled
                 ></option>
+
                 {options.map((opt, idx) => (
                     <option
                         key={idx}
