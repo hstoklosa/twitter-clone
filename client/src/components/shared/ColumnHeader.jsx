@@ -7,39 +7,35 @@ const ColumnHeader = ({ close, modalBack, routerBack, className, children }) => 
     const { state } = useLocation();
 
     return (
-        <header className={className}>
-            {close && (
-                <button
-                    className="header-btn"
-                    onClick={close}
-                >
-                    <IconContext.Provider value={{ className: "header-btn_icon" }}>
+        <IconContext.Provider value={{ className: "header-btn_icon" }}>
+            <header className={className}>
+                {close && (
+                    <button
+                        className="header-btn"
+                        onClick={close}
+                    >
                         <IoMdClose size="18" />
-                    </IconContext.Provider>
-                </button>
-            )}
+                    </button>
+                )}
 
-            {modalBack && (
-                <button className="header-btn">
-                    <IconContext.Provider value={{ className: "header-btn_icon" }}>
+                {modalBack && (
+                    <button className="header-btn">
                         <BiArrowBack size="18" />
-                    </IconContext.Provider>
-                </button>
-            )}
+                    </button>
+                )}
 
-            {routerBack && (
-                <Link
-                    to={state?.previousPath || "/home"}
-                    className="header-btn"
-                >
-                    <IconContext.Provider value={{ className: "header-btn_icon" }}>
+                {routerBack && (
+                    <Link
+                        to={state?.previousPath || "/home"}
+                        className="header-btn"
+                    >
                         <BiArrowBack size="18" />
-                    </IconContext.Provider>
-                </Link>
-            )}
+                    </Link>
+                )}
 
-            {children}
-        </header>
+                {children}
+            </header>
+        </IconContext.Provider>
     );
 };
 

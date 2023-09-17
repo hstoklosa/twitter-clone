@@ -1,7 +1,7 @@
 .tweet {
     display: flex;
-    padding: 0.5rem 0 0.2rem 1rem; /* padding: 0.6rem 1rem 0.2rem 1rem; */
-    border-top: 1px solid var(--border);
+    padding: 0.75rem 1rem 0.2rem 1rem;
+    /* border-top: 1px solid var(--border); */
     border-bottom: 1px solid var(--border);
     width: 100% !important;
     cursor: pointer;
@@ -11,26 +11,28 @@
     background-color: var(--tweet-hover);
 }
 
-.tweet .img-container {
+.tweet .pfp-container {
     padding: 0.3rem 0.75rem 0 0;
 }
 
-.img-container img {
-    width: 40px;
+.tweet .pfp-container .pfp {
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
 }
 
 .tweet .tweet-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 90%;
 }
 
 .tweet-container .tweet-info {
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     font-size: 0.95rem;
+    margin-bottom: 0.2rem;
 }
 
 .tweet-container .tweet-info .display_name {
@@ -48,6 +50,10 @@
     color: var(--grey);
 }
 
+.tweet-container .tweet-info .icon-container {
+    margin: 0;
+}
+
 .separator {
     margin: 0 0.3rem;
     color: var(--grey);
@@ -60,8 +66,30 @@
     white-space: pre-wrap;
 }
 
+.tweet-content .tweet-text {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    /* display: block; */
+    word-wrap: break-word;
+}
+
+.tweet-text p {
+    width: 100%;
+}
+
+.tweet-content .media-container {
+    margin-top: 0.75rem;
+}
+
+.tweet-content .media-container .tweet_media {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+}
+
 .tweet-actions {
     display: flex;
+    justify-content: space-between;
     margin-top: 0.4rem;
     margin-bottom: 0.2rem;
 }
@@ -75,7 +103,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 2rem;
+    /* margin-right: 2rem; */
     transition: all 0.2s ease-out;
 }
 
@@ -103,6 +131,11 @@
     margin-right: 0.5rem;
     border-radius: 50%;
     transition: all 0.2s ease-out;
+}
+
+.tweet-btn.more .icon-container {
+    width: auto;
+    height: auto;
 }
 
 .tweet-btn.more {

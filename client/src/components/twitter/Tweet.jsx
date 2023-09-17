@@ -1,9 +1,7 @@
-import userImage from "../../assets/elon.jpg";
 import "../../styles/Tweet.css";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 import { IconContext } from "react-icons";
 import { FaRegComment, FaComment } from "react-icons/fa";
@@ -13,25 +11,34 @@ import { IoMdStats } from "react-icons/io";
 import { TbShare2 } from "react-icons/tb";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 
+import { TweetText } from "../index";
+import { useCheckAuthQuery } from "../../store/api/authApi";
+import { useLikeTweetMutation } from "../../store/api/userApi";
+import { getTimeDifference } from "../../helpers/date";
+
 const Tweet = ({ tweet }) => {
-    const user = useSelector((state) => state.auth.user);
+    const {
+        data: {
+            isAuthenticated,
+            info: { id },
+        },
+    } = useCheckAuthQuery();
 
-    const [replied, setReplied] = useState(false);
-    const [retweeted, setRetweeted] = useState(false);
-    const [liked, setLiked] = useState(false);
+    const [likeTweet] = useLikeTweetMutation();
 
-    useEffect(() => {
-        if (user) {
-            if (tweet.likes.includes(user._id)) setLiked(true);
-            if (tweet.replies.includes(user._id)) setReplied(true);
-            if (tweet.retweets.includes(user._id)) setRetweeted(true);
-        }
-    }, [tweet, user]);
+    const [liked, setLiked] = useState(tweet.likes.includes(id));
+    const [retweeted, setRetweeted] = useState(tweet.retweets.includes(id));
+    const [replied, setReplied] = useState(tweet.replies.includes(id));
 
     const handleLinkClick = (e) => {
-        if (!user) {
+        if (!isAuthenticated) {
             e.preventDefault();
         }
+    };
+
+    const handleLike = async (e, id) => {
+        e.preventDefault();
+        await likeTweet({ id }).unwrap();
     };
 
     const handleReply = (e) => {
@@ -39,10 +46,6 @@ const Tweet = ({ tweet }) => {
     };
 
     const handleRetweet = (e) => {
-        e.preventDefault();
-    };
-
-    const handleLike = (e) => {
         e.preventDefault();
     };
 
@@ -55,78 +58,127 @@ const Tweet = ({ tweet }) => {
     };
 
     return (
-        <Link to={`/${tweet.author.username}/${tweet._id}`} className="tweet" onClick={handleLinkClick}>
-            <div className="img-container">
-                <Link to={`/${tweet.author.username}`} onClick={handleLinkClick}>
-                    <img src={userImage} alt="User PFP" />
-                </Link>
-            </div>
-            <div className="tweet-container">
-                <div className="tweet-info">
-                    <Link to={`/${tweet.author.username}`} className="display_name" onClick={handleLinkClick}>
-                        {tweet.author.displayName}
+        <IconContext.Provider value={{ className: "tweet_icon" }}>
+            <Link
+                className="tweet"
+                to={`/${tweet.author.username}/status/${tweet._id}`}
+                onClick={handleLinkClick}
+            >
+                <div className="img-container">
+                    <Link
+                        to={`/${tweet.author.username}`}
+                        className="pfp-container"
+                        onClick={handleLinkClick}
+                    >
+                        <img
+                            src={tweet.author.profileImageURL}
+                            className="pfp"
+                            alt="User PFP"
+                        />
                     </Link>
+                </div>
 
-                    <p className="username">@{tweet.author.username}</p>
-                    <span className="separator">·</span>
-                    <p className="date">{tweet.createdAt}</p>
+                <div className="tweet-container">
+                    <div className="tweet-info">
+                        <Link
+                            to={`/${tweet.author.username}`}
+                            className="display_name"
+                            onClick={handleLinkClick}
+                        >
+                            {tweet.author.displayName}
+                        </Link>
 
-                    <button className="tweet-btn more" disabled={!user} onClick={handleMore}>
-                        <div className="icon-container">
-                            <IconContext.Provider value={{ className: "tweet_icon" }}>
+                        <p className="username">@{tweet.author.username}</p>
+                        <span className="separator">·</span>
+                        <p className="date">{getTimeDifference(tweet.createdAt)}</p>
+
+                        <button
+                            className="tweet-btn more"
+                            disabled={!isAuthenticated}
+                            onClick={handleMore}
+                        >
+                            <div className="icon-container">
                                 <IoEllipsisHorizontal size="16" />
-                            </IconContext.Provider>
-                        </div>
-                    </button>
-                </div>
+                            </div>
+                        </button>
+                    </div>
 
-                <div className="tweet-content">
-                    <p className="tweet_text">{tweet.content}</p>
-                </div>
+                    <div className="tweet-content">
+                        <TweetText
+                            text={tweet.content}
+                            highlight=" "
+                        />
 
-                <div className="tweet-actions">
-                    <button className={`tweet-btn comment ${replied && "applied"}`} disabled={!user} onClick={handleReply}>
-                        <div className="icon-container">
-                            <IconContext.Provider value={{ className: "tweet_icon" }}>
+                        {tweet.media?.[0] && (
+                            <div className="media-container">
+                                <img
+                                    src={tweet.media[0].url}
+                                    className="tweet_media"
+                                    alt="Tweet Media"
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="tweet-actions">
+                        <button
+                            className={`tweet-btn comment ${replied && "applied"}`}
+                            disabled={!isAuthenticated}
+                            onClick={handleReply}
+                        >
+                            <div className="icon-container">
                                 {replied ? <FaComment size="15.5" /> : <FaRegComment size="15.5" />}
-                            </IconContext.Provider>
-                        </div>
-                        <p>{tweet.replies.length}</p>
-                    </button>
-                    <button className={`tweet-btn retweet ${retweeted && "applied"}`} disabled={!user} onClick={handleRetweet}>
-                        <div className="icon-container">
-                            <IconContext.Provider value={{ className: "tweet_icon" }}>
+                            </div>
+                            <p>{tweet.replies.length}</p>
+                        </button>
+
+                        <button
+                            className={`tweet-btn retweet ${retweeted && "applied"}`}
+                            disabled={!isAuthenticated}
+                            onClick={handleRetweet}
+                        >
+                            <div className="icon-container">
                                 <BiRepost size="21" />
-                            </IconContext.Provider>
-                        </div>
-                        <p>{tweet.retweets.length}</p>
-                    </button>
-                    <button className={`tweet-btn like ${liked && "applied"}`} disabled={!user} onClick={handleLike}>
-                        <div className="icon-container">
-                            <IconContext.Provider value={{ className: "tweet_icon" }}>
-                                {liked ? <AiFillHeart size="18" /> : <AiOutlineHeart size="18" />}
-                            </IconContext.Provider>
-                        </div>
-                        <p>{tweet.likes.length}</p>
-                    </button>
-                    <button className="tweet-btn view" disabled={!user} onClick={handleShare}>
-                        <div className="icon-container">
-                            <IconContext.Provider value={{ className: "tweet_icon" }}>
+                            </div>
+                            <p>{tweet.retweets.length}</p>
+                        </button>
+
+                        <button
+                            type="button"
+                            className={`tweet-btn like ${liked && "applied"}`}
+                            disabled={!isAuthenticated}
+                            onClick={(e) => handleLike(e, tweet._id)}
+                        >
+                            <div className="icon-container like-animation">
+                                {liked ? <AiFillHeart size="17" /> : <AiOutlineHeart size="17" />}
+                            </div>
+                            <p>{tweet.likes.length}</p>
+                        </button>
+
+                        <button
+                            className="tweet-btn view"
+                            disabled={!isAuthenticated}
+                            onClick={handleShare}
+                        >
+                            <div className="icon-container">
                                 <IoMdStats size="18" />
-                            </IconContext.Provider>
-                        </div>
-                        <p>{tweet.views.length}</p>
-                    </button>
-                    <button className="tweet-btn share" disabled={!user} onClick={handleShare}>
-                        <div className="icon-container">
-                            <IconContext.Provider value={{ className: "tweet_icon" }}>
+                            </div>
+                            <p>0</p>
+                        </button>
+
+                        <button
+                            className="tweet-btn share"
+                            disabled={!isAuthenticated}
+                            onClick={handleShare}
+                        >
+                            <div className="icon-container">
                                 <TbShare2 size="19" />
-                            </IconContext.Provider>
-                        </div>
-                    </button>
+                            </div>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </IconContext.Provider>
     );
 };
 
