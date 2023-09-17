@@ -10,6 +10,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./routes/Login";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
+import Profile from "./routes/Profile";
 
 import store from "./store/index";
 
