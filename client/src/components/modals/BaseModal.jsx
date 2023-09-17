@@ -1,19 +1,27 @@
 import "../../styles/SignupModal.css";
 
+import { useEffect } from "react";
 import useOutsideClick from "../../hooks/useOutsideClick";
 
-const BaseModal = ({ isOpen, onClose, children }) => {
+const BaseModal = ({ isOpen, onClose, className, children }) => {
     const ref = useOutsideClick(onClose);
 
-    if (!isOpen) {
-        return null;
-    }
+    useEffect(() => {
+        isOpen
+            ? (document.body.style.overflow = "hidden")
+            : (document.body.style.overflow = "unset");
 
-    document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [isOpen]);
 
     return (
-        <div className={`modal ${isOpen ? `open` : ""}`}>
-            <div className="modal-content" ref={ref}>
+        <div className={`modal ${isOpen && "open"} ${className}`}>
+            <div
+                className="modal-content"
+                ref={ref}
+            >
                 {children}
             </div>
         </div>

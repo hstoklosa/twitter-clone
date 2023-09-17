@@ -1,13 +1,13 @@
 import "../../styles/TabList.css";
 
-const TabList = ({ activeTab, setActiveTab, tabs }) => {
+const TabList = ({ tabs = [], currentTab, setCurrentTab, children }) => {
     return (
         <div className="tab-list">
             {tabs.map((tab, idx) => (
                 <button
                     key={idx}
-                    className={`tab-item ${activeTab === tab && "active"}`}
-                    onClick={() => setActiveTab(tab)}
+                    className={`tab-item ${currentTab === tab && "active"}`}
+                    onClick={() => setCurrentTab(tab)}
                 >
                     {tab}
                 </button>
