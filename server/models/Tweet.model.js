@@ -7,7 +7,7 @@ const tweetSchema = new Schema(
     {
         content: {
             type: String,
-            required: true,
+            required: false,
             maxLength: [280, "The tweet can't be longer than 280 characters."],
             validate: {
                 validator: (c) => {

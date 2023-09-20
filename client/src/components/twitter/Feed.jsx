@@ -2,7 +2,7 @@ import "../../styles/Feed.css";
 
 import { Tweet, Spinner } from "../index";
 
-const Feed = ({ tweets = [], isTweetsLoading, EmptyFeedComponent }) => {
+const Feed = ({ tweets = [], isTweetsLoading, lastElementRef, EmptyFeedComponent }) => {
     return (
         <section id="feed">
             {isTweetsLoading ? (
@@ -23,6 +23,7 @@ const Feed = ({ tweets = [], isTweetsLoading, EmptyFeedComponent }) => {
                     <Tweet
                         key={idx}
                         tweet={tweet}
+                        lastElementRef={lastElementRef}
                     />
                 ))
             ) : (

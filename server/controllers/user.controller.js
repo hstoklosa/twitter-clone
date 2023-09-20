@@ -2,10 +2,8 @@ const User = require("../models/User.model");
 const Tweet = require("../models/Tweet.model");
 
 const asyncHandler = require("../middlewares/asyncHandler");
-const {
-    NotFoundError,
-    UnauthorizedError,
-} = require("../config/ApplicationError");
+const paginate = require("../middlewares/paginate");
+const { NotFoundError, UnauthorizedError } = require("../config/ApplicationError");
 
 const getUser = asyncHandler(async (req, res, next) => {
     const { username } = req.params;
@@ -15,11 +13,7 @@ const getUser = asyncHandler(async (req, res, next) => {
     });
 
     if (!user) {
-        return next(
-            new NotFoundError(
-                `User with the username ${username} was not found!`
-            )
-        );
+        return next(new NotFoundError(`User with the username ${username} was not found!`));
     }
 
     const tweetsCount = await Tweet.countDocuments({
@@ -54,9 +48,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
     const { userId } = req.params;
 
     if (currUserId.toString() !== userId) {
-        return next(
-            new UnauthorizedError("You are not allowed to edit this user!")
-        );
+        return next(new UnauthorizedError("You are not allowed to edit this user!"));
     }
 
     const { displayName, bio, location, website } = req.body;
@@ -98,14 +90,8 @@ const followUser = asyncHandler(async (req, res, next) => {
         return next(new NotFoundError("User/s not found!"));
     }
 
-    await User.updateOne(
-        { _id: targetUser },
-        { $push: { followers: sourceUser._id } }
-    );
-    await User.updateOne(
-        { _id: sourceUser },
-        { $push: { following: targetUser._id } }
-    );
+    await User.updateOne({ _id: targetUser }, { $push: { followers: sourceUser._id } });
+    await User.updateOne({ _id: sourceUser }, { $push: { following: targetUser._id } });
 
     return res.status(200).json({
         data: {
@@ -118,20 +104,12 @@ const unfollowUser = asyncHandler(async (req, res, next) => {
     const sourceUser = await User.findById(req.params.userId);
     const targetUser = await User.findById(req.body.targetUserId);
 
-    console.log(req.body, req.params);
-
     if (!sourceUser || !targetUser) {
         return next(new NotFoundError("User/s not found!"));
     }
 
-    await User.updateOne(
-        { _id: targetUser },
-        { $pull: { followers: sourceUser._id } }
-    );
-    await User.updateOne(
-        { _id: sourceUser },
-        { $pull: { following: targetUser._id } }
-    );
+    await User.updateOne({ _id: targetUser }, { $pull: { followers: sourceUser._id } });
+    await User.updateOne({ _id: sourceUser }, { $pull: { following: targetUser._id } });
 
     return res.status(200).json({
         data: {
@@ -142,20 +120,19 @@ const unfollowUser = asyncHandler(async (req, res, next) => {
 
 const getTweets = asyncHandler(async (req, res, next) => {
     const { username } = req.params;
+    const { page, limit, skip } = req.pagination;
 
     const user = await User.findOne({ username });
 
     if (!user) {
-        return next(
-            new NotFoundError(
-                "Can't retrieve tweets since the user does not exist!"
-            )
-        );
+        return next(new NotFoundError("Can't retrieve tweets since the user does not exist!"));
     }
 
     const tweets = await Tweet.find({ author: user._id })
         .populate("author")
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
 
     return res.status(200).json({
         tweets: tweets || [],

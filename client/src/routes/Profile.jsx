@@ -1,7 +1,7 @@
 import "../styles/Profile.css";
 
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 
 import { IconContext } from "react-icons";
 import { BiCalendar, BiEnvelope, BiLink } from "react-icons/bi";
@@ -23,6 +23,7 @@ import {
 import { useCheckAuthQuery } from "../store/api/authApi";
 import { useGetUserInfoQuery, useGetUserTweetsQuery } from "../store/api/userApi";
 
+import usePagination from "../hooks/usePagination";
 import { formatDate } from "../helpers/date";
 
 const Profile = () => {
@@ -30,6 +31,13 @@ const Profile = () => {
     const [editModal, setEditModal] = useState(false);
 
     const { username } = useParams();
+    const { pathname } = useLocation();
+
+    const {
+        data: tweets,
+        isLoading: tweetsLoading,
+        lastElementRef,
+    } = usePagination(useGetUserTweetsQuery, { identifier: username });
 
     const {
         data: { info: currentUser },
@@ -41,8 +49,6 @@ const Profile = () => {
             profileUser: data,
         }),
     });
-
-    const { data: tweets, isLoading: tweetsLoading } = useGetUserTweetsQuery(username);
 
     const openEditModal = () => setEditModal(true);
     const closeEditModal = () => setEditModal(false);
@@ -168,16 +174,18 @@ const Profile = () => {
 
                                 <div className="counts">
                                     <Link
-                                        to={`/${profileUser.username}/following`}
+                                        to={`/${profileUser.username}/follows`}
                                         className="count"
+                                        state={{ tab: "following", previousPath: pathname }}
                                     >
                                         <span>{profileUser.following.length}</span>
                                         Following
                                     </Link>
 
                                     <Link
-                                        to={`/${profileUser.username}/followers`}
+                                        to={`/${profileUser.username}/follows`}
                                         className="count"
+                                        state={{ tab: "followers", previousPath: pathname }}
                                     >
                                         <span>{profileUser.followers.length}</span>
                                         Followers
@@ -197,6 +205,7 @@ const Profile = () => {
                                 <Feed
                                     tweets={tweets}
                                     isTweetsLoading={tweetsLoading}
+                                    lastElementRef={lastElementRef}
                                 />
                             )}
                         </section>

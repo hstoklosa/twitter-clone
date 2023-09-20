@@ -13,10 +13,10 @@ import { IoEllipsisHorizontal } from "react-icons/io5";
 
 import { TweetText } from "../index";
 import { useCheckAuthQuery } from "../../store/api/authApi";
-import { useLikeTweetMutation } from "../../store/api/userApi";
+import { useLikeTweetMutation, useUnlikeTweetMutation } from "../../store/api/userApi";
 import { getTimeDifference } from "../../helpers/date";
 
-const Tweet = ({ tweet }) => {
+const Tweet = ({ tweet, lastElementRef }) => {
     const {
         data: {
             isAuthenticated,
@@ -25,10 +25,7 @@ const Tweet = ({ tweet }) => {
     } = useCheckAuthQuery();
 
     const [likeTweet] = useLikeTweetMutation();
-
-    const [liked, setLiked] = useState(tweet.likes.includes(id));
-    const [retweeted, setRetweeted] = useState(tweet.retweets.includes(id));
-    const [replied, setReplied] = useState(tweet.replies.includes(id));
+    const [unlikeTweet] = useUnlikeTweetMutation();
 
     const handleLinkClick = (e) => {
         if (!isAuthenticated) {
@@ -36,9 +33,12 @@ const Tweet = ({ tweet }) => {
         }
     };
 
-    const handleLike = async (e, id) => {
+    const handleLike = async (e) => {
         e.preventDefault();
-        await likeTweet({ id }).unwrap();
+
+        const isLiked = tweet.likes.includes(id);
+
+        isLiked ? await unlikeTweet({ id: tweet._id }) : await likeTweet({ id: tweet._id });
     };
 
     const handleReply = (e) => {
@@ -63,6 +63,7 @@ const Tweet = ({ tweet }) => {
                 className="tweet"
                 to={`/${tweet.author.username}/status/${tweet._id}`}
                 onClick={handleLinkClick}
+                ref={lastElementRef}
             >
                 <div className="img-container">
                     <Link
@@ -94,8 +95,8 @@ const Tweet = ({ tweet }) => {
 
                         <button
                             className="tweet-btn more"
-                            disabled={!isAuthenticated}
                             onClick={handleMore}
+                            disabled={!isAuthenticated}
                         >
                             <div className="icon-container">
                                 <IoEllipsisHorizontal size="16" />
@@ -122,18 +123,26 @@ const Tweet = ({ tweet }) => {
 
                     <div className="tweet-actions">
                         <button
-                            className={`tweet-btn comment ${replied && "applied"}`}
-                            disabled={!isAuthenticated}
+                            className={`tweet-btn comment ${
+                                tweet.replies.includes(id) && "applied"
+                            }`}
                             onClick={handleReply}
+                            disabled={!isAuthenticated}
                         >
                             <div className="icon-container">
-                                {replied ? <FaComment size="15.5" /> : <FaRegComment size="15.5" />}
+                                {tweet.replies.includes(id) ? (
+                                    <FaComment size="15.5" />
+                                ) : (
+                                    <FaRegComment size="15.5" />
+                                )}
                             </div>
                             <p>{tweet.replies.length}</p>
                         </button>
 
                         <button
-                            className={`tweet-btn retweet ${retweeted && "applied"}`}
+                            className={`tweet-btn retweet ${
+                                tweet.retweets.includes(id) && "applied"
+                            }`}
                             disabled={!isAuthenticated}
                             onClick={handleRetweet}
                         >
@@ -145,20 +154,24 @@ const Tweet = ({ tweet }) => {
 
                         <button
                             type="button"
-                            className={`tweet-btn like ${liked && "applied"}`}
-                            disabled={!isAuthenticated}
+                            className={`tweet-btn like ${tweet.likes.includes(id) && "applied"}`}
                             onClick={(e) => handleLike(e, tweet._id)}
+                            disabled={!isAuthenticated}
                         >
                             <div className="icon-container like-animation">
-                                {liked ? <AiFillHeart size="17" /> : <AiOutlineHeart size="17" />}
+                                {tweet.likes.includes(id) ? (
+                                    <AiFillHeart size="17" />
+                                ) : (
+                                    <AiOutlineHeart size="17" />
+                                )}
                             </div>
                             <p>{tweet.likes.length}</p>
                         </button>
 
                         <button
                             className="tweet-btn view"
-                            disabled={!isAuthenticated}
                             onClick={handleShare}
+                            disabled={!isAuthenticated}
                         >
                             <div className="icon-container">
                                 <IoMdStats size="18" />
@@ -168,8 +181,8 @@ const Tweet = ({ tweet }) => {
 
                         <button
                             className="tweet-btn share"
-                            disabled={!isAuthenticated}
                             onClick={handleShare}
+                            disabled={!isAuthenticated}
                         >
                             <div className="icon-container">
                                 <TbShare2 size="19" />

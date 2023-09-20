@@ -26,9 +26,9 @@ export const userApi = baseApi.injectEndpoints({
             providesTags: (result, err, id) => [{ type: "Post", id }],
         }),
         getUserTweets: builder.query({
-            query: (identifier) => {
+            query: ({ identifier, page, limit }) => {
                 return {
-                    url: `/users/${identifier}/tweets`,
+                    url: `/users/${identifier}/tweets?page=${page}&limit=${limit}`,
                 };
             },
             transformResponse: (response) => response.tweets,
@@ -49,6 +49,7 @@ export const userApi = baseApi.injectEndpoints({
             }),
             transformResponse: (response) => response.data.likedTweets,
         }),
+
         createTweet: builder.mutation({
             query: (data) => {
                 return {
@@ -109,16 +110,28 @@ export const userApi = baseApi.injectEndpoints({
             },
             invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
         }),
+        unlikeTweet: builder.mutation({
+            query: ({ id }) => {
+                return {
+                    url: `/tweets/${id}/like`,
+                    method: "DELETE",
+                };
+            },
+            invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
+        }),
     }),
 });
 
 export const {
     useGetUserInfoQuery,
     useGetUserTweetsQuery,
+    useGetUserFollowersQuery,
+    useGetUserFollowingQuery,
     useUpdateUserMutation,
     useFollowUserMutation,
     useUnfollowUserMutation,
     useLikeTweetMutation,
+    useUnlikeTweetMutation,
     useCreateTweetMutation,
     useGetUserLikesQuery,
 } = userApi;

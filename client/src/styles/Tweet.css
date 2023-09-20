@@ -146,6 +146,7 @@
 
 .tweet-btn .tweet_icon {
     color: var(--grey);
+    transition: all 0.2s ease-out;
 }
 
 .tweet-btn.retweet:hover .icon-container {
