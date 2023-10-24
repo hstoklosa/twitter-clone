@@ -1,20 +1,10 @@
 const multer = require("multer");
 const path = require("path");
 
-const imageTypes = /jpeg|jpg|png|gif/;
-
-const getMetadata = (file) => {
-    const extname = imageTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = imageTypes.test(file.mimetype);
-
-    return {
-        extname,
-        mimetype,
-    };
-};
+const getMetadata = require("../helpers/metadata");
+const { BadRequestError } = require("../utils/errors");
 
 // Handle file uploads
-
 const generateFileName = (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const fileName = uniqueSuffix + path.extname(file.originalname);
@@ -25,19 +15,20 @@ const generateFileName = (req, file, cb) => {
 const fileFilter = (req, file, cb) => {
     const { extname, mimetype } = getMetadata(file);
 
-    if (extname && mimetype) {
-        return cb(null, true);
+    if (!extname || !mimetype) {
+        return cb(new BadRequestError("Invalid file type!"));
     }
 
-    return cb(new Error("Invalid file type!"));
+    cb(null, true);
 };
 
+// Multer setup with 5MB file size constraint
 const storage = multer.diskStorage({
     destination: "uploads/",
     filename: generateFileName,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 1024 * 1024 * 5, // restrict file size to 5MB
+        fileSize: 1024 * 1024 * 5,
     },
 });
 
