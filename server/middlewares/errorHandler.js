@@ -1,4 +1,4 @@
-const { ApplicationError } = require("../config/ApplicationError");
+const { ApplicationError } = require("../utils/errors");
 
 const errorHandler = (err, req, res, next) => {
     const errorResponse = {
@@ -6,7 +6,7 @@ const errorHandler = (err, req, res, next) => {
         message: "Internal server error. Try again later!",
     };
 
-    if (ApplicationError.isTrustedError(err)) {
+    if (ApplicationError.isTrusted(err)) {
         errorResponse.status = err.status;
         errorResponse.message = err.message;
     }
