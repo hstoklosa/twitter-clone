@@ -3,22 +3,77 @@
     top: 45px;
     height: auto;
     max-height: 800px !important;
-    padding: 0.6rem 1rem;
+    padding: 0 !important;
+    overflow-y: auto;
 }
 
-.tweet-modal .tweet-input {
-    width: 100%;
-    padding: 0;
+.tweet-modal .modal-content .quote-preview {
+    margin-bottom: 1rem;
 }
 
 .tweet-modal header {
     width: 100%;
-    margin-bottom: 0.7rem;
     align-items: flex-start;
+    padding: 1rem;
+    border: 0 !important;
 }
 
 .tweet-modal header .header-btn_icon {
-    width: 50px !important;
-    height: 25px;
+    width: 23px !important;
+    height: 23px;
     stroke-width: 0px;
+}
+
+.wrap {
+    display: flex;
+}
+
+.tweet-modal .tweet-input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+}
+
+.tweet-modal .tweet-input_container {
+    display: flex;
+}
+
+.tweet-modal .tweet-input_container textarea::placeholder {
+    color: var(--input-placeholder);
+    letter-spacing: 0.3px;
+}
+
+.tweet-modal .pfp-container {
+    padding-top: 0.3rem;
+    margin-right: 0.75rem !important;
+}
+
+.tweet-modal .pfp-container .pfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.tweet-modal .tweet-input-wrapper .tweet-text {
+    display: block;
+}
+
+.tweet-modal .tweet-input-wrapper {
+    width: 100%;
+    margin: 0.75rem 0 !important;
+}
+
+.tweet-modal .input-wrap {
+    width: 100%;
+    min-height: 150px;
+}
+
+.tweet-modal .audience,
+.tweet-modal .reply {
+    display: flex;
+    width: auto;
+}
+
+.tweet-modal .tweet-actions {
+    border-top: 1px solid var(--border);
+    padding: 0.75rem 0 0.2rem 0;
 }

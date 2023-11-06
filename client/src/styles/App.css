@@ -307,7 +307,8 @@ select {
     justify-content: flex-start;
     align-items: center;
     height: 55px;
-    padding: 0.2rem 1rem 0.2rem 1rem;
+    /* padding: 0.2rem 1rem 0.2rem 1rem; */
+    padding: 1rem;
     background-color: rgba(0, 0, 0, 0.65);
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(12px);
@@ -321,7 +322,7 @@ select {
     border-bottom: 0 !important;
 }
 
-#general .tweet-input {
+#general .tweet-form {
     border-bottom: 1px solid var(--border);
 }
 
@@ -329,19 +330,31 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 35px;
-    height: 35px;
+    width: auto;
+    height: auto;
     border-radius: 50%;
-    margin-right: 1rem;
-    transition: background-color 0.2s linear;
+    margin-right: 1.5rem;
+    transition: background-color 0.1s linear;
 }
 
-.header-btn:hover {
+.header-btn::after {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border-radius: 99999rem;
+    transition: all 0.2s ease-out;
+}
+
+.header-btn:hover::after {
     background-color: rgba(239, 243, 244, 0.1);
 }
 
 .header-btn_icon {
     position: block;
+    width: 20px !important;
+    height: 20px;
+    stroke-width: 0px;
 }
 
 .column#general {
@@ -643,6 +656,30 @@ img.pfp {
     margin: 0.1rem 0;
 }
 
+/* Placeholder styles */
+
+.basic-placeholder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+}
+
+.missing-header {
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.3rem;
+}
+
+.missing-description {
+    color: var(--grey);
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+}
+
 /* Utils */
 
 .container {
@@ -724,19 +761,13 @@ img.pfp {
     align-items: flex-start !important;
     height: auto !important;
     padding: 0 !important;
+    border: 0 !important;
 }
 
 .home-column-header h1 {
     padding: 0.9rem 1rem;
 }
 
-.not-found-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-}
-
 .tweet-text .highlighted-text {
-    color: var(--primary-colour);
+    color: var(--primary-colour) !important;
 }

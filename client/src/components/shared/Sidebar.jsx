@@ -27,20 +27,20 @@ import { FloatOptions, TweetModal } from "../index";
 import { useLazySignOutQuery } from "../../store/api/authApi";
 import { useGetUserInfoQuery } from "../../store/api/userApi";
 
-const Sidebar = ({ minimal, currentUsername }) => {
+const Sidebar = ({ userLoggedIn = null }) => {
     const [tweetModal, setTweetModal] = useState(false);
     const [accountFloat, setAccountFloat] = useState(false);
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const { username, displayName, profileImageURL } = useGetUserInfoQuery(currentUsername, {
+    const { username, displayName, profileImageURL } = useGetUserInfoQuery(userLoggedIn, {
         selectFromResult: ({ data }) => ({
             username: data?.username,
             displayName: data?.displayName,
             profileImageURL: data?.profileImageURL,
         }),
-        skip: !currentUsername,
+        skip: !userLoggedIn,
     });
 
     const [signOut] = useLazySignOutQuery();
@@ -65,10 +65,12 @@ const Sidebar = ({ minimal, currentUsername }) => {
             className="column"
             id="navbar"
         >
-            <TweetModal
-                isOpen={tweetModal}
-                onClose={closeTweetModal}
-            />
+            {userLoggedIn && (
+                <TweetModal
+                    isOpen={tweetModal}
+                    onClose={closeTweetModal}
+                />
+            )}
 
             <div className="sticky-wrapper">
                 <NavLink
@@ -81,7 +83,7 @@ const Sidebar = ({ minimal, currentUsername }) => {
                     />
                 </NavLink>
 
-                {minimal && (
+                {!userLoggedIn && (
                     <IconContext.Provider value={{ className: "navbar_icon explore" }}>
                         <nav className="navbar">
                             <NavLink
@@ -104,7 +106,7 @@ const Sidebar = ({ minimal, currentUsername }) => {
                     </IconContext.Provider>
                 )}
 
-                {!minimal && (
+                {userLoggedIn && (
                     <IconContext.Provider value={{ className: "navbar_icon" }}>
                         <nav className="navbar">
                             <NavLink
@@ -223,7 +225,7 @@ const Sidebar = ({ minimal, currentUsername }) => {
                     </IconContext.Provider>
                 )}
 
-                {!minimal && (
+                {userLoggedIn && (
                     <>
                         {accountFloat && (
                             <FloatOptions
