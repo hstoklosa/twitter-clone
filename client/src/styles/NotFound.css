@@ -6,17 +6,17 @@
     align-items: center;
 }
 
-.header {
+#not-found h1 {
     font-size: 72px;
     color: var(--white);
 }
 
-.message {
+#not-found p {
     color: var(--white);
     font-size: 20px;
 }
 
-.home-link {
+#not-found .home-link {
     display: inline-block;
     margin-top: 20px;
     color: #0088cc;
