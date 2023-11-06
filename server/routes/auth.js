@@ -27,11 +27,11 @@ router.get(
     })
 );
 
-// General
-router.get("/check-identifier/:identifier", authController.checkIdentifier);
-
+// General routes
 router.get("/me", authController.isAuth);
 
 router.get("/logout", authController.logout);
+
+router.get("/check-identifier/:identifier", authController.checkIdentifier);
 
 module.exports = router;

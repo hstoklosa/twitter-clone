@@ -4,15 +4,15 @@ export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         checkAuth: builder.query({
             async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-                const auth = await fetchWithBQ({ url: "/auth/me" });
+                const response = await fetchWithBQ({ url: "/auth/me" });
 
-                if (auth.error) {
-                    return auth.error?.status === 401
+                if (response.error) {
+                    return response.error?.status === 401
                         ? { data: { isAuthenticated: false } }
-                        : { error: auth.error };
+                        : { error: response.error };
                 }
 
-                return { data: auth.data };
+                return { data: response.data };
             },
             providesTags: () => [{ type: "Auth" }],
         }),
@@ -53,7 +53,7 @@ export const authApi = baseApi.injectEndpoints({
             async queryFn(_arg, { dispatch }, _extraOptions, fetchWithBQ) {
                 const signOut = await fetchWithBQ({ url: "/auth/logout" });
 
-                if (signOut?.data.success) {
+                if (!signOut?.data.isAuthenticated) {
                     dispatch(baseApi.util.resetApiState());
                 }
             },

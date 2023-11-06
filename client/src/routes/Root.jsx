@@ -1,6 +1,5 @@
 import "../styles/Login.css";
 
-import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import { Loading, Sidebar } from "../components/";
@@ -11,20 +10,20 @@ import { useGetUserInfoQuery } from "../store/api/userApi";
 const Root = () => {
     const { data: auth, isLoading: authLoading, isFetching: authFetching } = useCheckAuthQuery();
 
-    const { isLoading: userLoading } = useGetUserInfoQuery(auth?.info?.username, {
-        skip: !auth?.isAuthenticated,
-    });
+    const {
+        data: user,
+        isLoading: userLoading,
+        isFetching: userFetching,
+        isSuccess: userSuccess,
+    } = useGetUserInfoQuery(auth?.data?.username, { skip: !auth?.data?.username });
 
-    if (authLoading || userLoading || authFetching) {
+    if (authLoading || userLoading) {
         return <Loading />;
     }
 
     return (
         <div className="container">
-            <Sidebar
-                minimal={!auth.isAuthenticated}
-                currentUsername={auth?.info?.username}
-            />
+            <Sidebar userLoggedIn={auth?.data?.username} />
             <Outlet />
         </div>
     );

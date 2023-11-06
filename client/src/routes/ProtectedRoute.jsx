@@ -4,7 +4,7 @@ import { useCheckAuthQuery } from "../store/api/authApi";
 const ProtectedRoute = ({ children }) => {
     const { data: auth, isFetching: authFetching, isLoading: authLoading } = useCheckAuthQuery();
 
-    if (!auth.isAuthenticated && !authFetching && !authLoading) {
+    if (!auth.isAuthenticated || authFetching) {
         return (
             <Navigate
                 to="/"

@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const passport = require("../config/passportConfig");
-const { transporter } = require("../config/nodemailerConfig");
+const { transporter } = require("../config/nodemailer");
 
 const User = require("../models/User.model");
 const asyncHandler = require("../middlewares/asyncHandler");
@@ -10,7 +10,7 @@ const {
     ConflictError,
     InternalServerError,
     UnauthenticatedError,
-} = require("../config/ApplicationError");
+} = require("../utils/errors");
 
 const checkIdentifier = asyncHandler(async (req, res, next) => {
     const { identifier } = req.params;
@@ -37,11 +37,12 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
 
     const response = await transporter.sendMail(options);
 
-    if (response.accepted.includes(targetEmail)) {
-        return res.status(200).json({
-            code,
-        });
-    }
+    if (response.accepted.includes(targetEmail))
+        return next(new InternalServerError("Something went wrong!"));
+
+    return res.status(200).json({
+        code,
+    });
 });
 
 const signUp = asyncHandler(async (req, res, next) => {
@@ -60,7 +61,6 @@ const signUp = asyncHandler(async (req, res, next) => {
             username,
             email,
             password: hashedPassword,
-            provider: "local",
             profileImageURL: "http://localhost:8080/uploads/default_pfp.png",
         });
 
@@ -71,35 +71,31 @@ const signUp = asyncHandler(async (req, res, next) => {
 
             return res.json({
                 isAuthenticated: true,
-                info: {
+                data: {
                     id: newUser._id,
                     username: newUser.username,
                 },
             });
         });
     } catch (err) {
-        if (err.code === 11000)
-            next(new ConflictError("User with the provided username/email already exists!"));
+        if (err.code === 11000) {
+            return next(new ConflictError("User with the provided username/email already exists!"));
+        }
     }
 });
 
 const signIn = (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
-        if (err) next(new InternalServerError());
+        if (err) next(new InternalServerError()); // local strategy error
 
-        console.log(user, info);
-        if (!user) {
-            // error message from the local strategy
-            return next(new BadRequestError(info.message));
-        }
+        if (!user) next(new BadRequestError(info.message)); // no user error
 
         req.logIn(user, (err) => {
-            if (err) next(new InternalServerError());
+            if (err) next(new InternalServerError()); // error while establishing session
 
-            // Successful authentication
             return res.status(200).json({
                 isAuthenticated: true,
-                info: {
+                data: {
                     id: user._id,
                     username: user.username,
                 },
@@ -113,7 +109,7 @@ const logout = (req, res) => {
         if (err) next(new InternalServerError());
 
         return res.json({
-            success: true,
+            isAuthenticated: false,
         });
     });
 };
@@ -122,7 +118,7 @@ const isAuth = (req, res, next) => {
     if (req.isAuthenticated()) {
         return res.status(200).json({
             isAuthenticated: true,
-            info: {
+            data: {
                 id: req.user._id,
                 username: req.user.username,
             },
