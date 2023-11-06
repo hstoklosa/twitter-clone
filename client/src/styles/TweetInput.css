@@ -1,75 +1,15 @@
-.tweet-input {
-    display: flex;
-    padding: 0.5rem 1rem 0 1rem;
-    /* height: 100%; */
-    width: 100% !important;
-}
-
-.tweet-form_container {
-    /* padding: 0.75rem 0; */
-    height: auto;
-}
-
-.tweet-input.force-expand {
-    min-height: 100%;
-}
-
 .tweet-input-wrapper {
-    margin: 0.75rem 0;
+    margin: 1rem 0;
     position: relative;
     overflow: hidden;
-    min-height: 28px !important;
-}
-
-.tweet-input.force-expand {
-    flex-grow: 1;
-}
-
-.tweet-input.force-expand .tweet-form_input {
     width: 100%;
 }
 
-.tweet-input .pfp-container {
-    padding-top: 0.3rem;
-    margin-right: 0.75rem !important;
+.tweet-input-wrapper .tweet-text span {
+    color: var(--white);
 }
 
-.tweet-input .pfp-container .pfp {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-.tweet-form {
-    /* width: 88%; */
-    width: 100%;
-}
-
-.tweet-form_container.expanded {
-    border-bottom: 1px solid var(--border);
-    /* height: 100%; */
-}
-
-.tweet-form_container.expanded .tweet-text {
-    display: block;
-}
-
-.tweet-form_container.expanded .tweet-action {
-    padding: 0.75rem 0;
-}
-
-.tweet-form_container.expanded .audience,
-.tweet-form_container.expanded .reply {
-    display: flex;
-}
-
-.tweet-form_container .tweet-form_input {
-    position: relative;
-    overflow: hidden;
-    height: 24px;
-}
-
-.tweet-form_container textarea {
+.tweet-input-wrapper textarea {
     position: absolute;
     top: 0;
     left: 0;
@@ -88,8 +28,8 @@
     resize: none;
 }
 
-.tweet-form_container .tweet-text {
-    display: none;
+.tweet-input-wrapper .tweet-text {
+    /* display: none; */
     position: absolute;
     top: 0;
     left: 0;
@@ -100,140 +40,9 @@
     width: 100%;
 }
 
-.tweet-form_container textarea::placeholder {
-    color: var(--input-placeholder);
-    letter-spacing: 0.3px;
-}
-
-.media-preview {
-    position: relative;
-}
-
-.media-preview .dark-round-btn {
-    position: absolute;
-    right: 8px;
-    top: 8px;
-}
-
-.media-preview img {
-    border-radius: 1rem;
-    width: 100%;
-}
-
 .post-btn {
     border-radius: 99999rem;
     background-color: var(--primary-colour);
     padding: 0.4rem 1rem;
     transition: all 0.2s linear;
-}
-
-.tweet-input .tweet-actions {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0.75rem 0;
-    margin: 0;
-}
-
-.tweet-actions .attachments {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    margin-left: -6px;
-}
-
-.tweet-attachments_icon {
-    color: var(--primary-colour);
-    /* width: 100%;
-    height: 30px; */
-    width: 18px;
-    height: 100%;
-}
-
-.tweet-attachments_button {
-    cursor: pointer;
-    /* padding: 0.5rem; */
-    width: 33px;
-    height: 33px;
-    margin-right: 0.4rem;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.1s linear;
-}
-
-.tweet-attachments_button:hover {
-    background-color: rgba(29, 155, 240, 0.2);
-}
-
-.tweet-attachments_button:disabled:hover {
-    background-color: rgba(29, 155, 240, 0.1);
-}
-
-.tweet-attachments_button:disabled .tweet-attachments_icon {
-    opacity: 0.5;
-}
-
-.tweet-input.force-expand .reply,
-.tweet-input.force-expand .audience {
-    width: auto;
-}
-
-.tweet-input.force-expand .reply {
-    margin-top: auto;
-}
-
-.audience,
-.reply {
-    width: auto;
-}
-
-.reply {
-    display: none;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0.2rem 0.65rem;
-    margin-bottom: 0.6rem;
-    border-radius: 99rem;
-    color: var(--primary-colour);
-}
-
-.reply:hover {
-    background-color: var(--borderless-hover);
-}
-
-.reply-option {
-    font-size: 0.9rem;
-    margin-left: 0.5rem;
-}
-
-.audience {
-    display: none;
-    font-size: 0.9rem;
-    color: var(--primary-colour);
-    width: auto;
-    border: 1px solid var(--primary-colour);
-    border-radius: 99rem;
-    padding: 0.15rem 0.8rem;
-    margin: 0.5rem 0;
-}
-
-.audience:hover {
-    background-color: var(--borderless-hover);
-}
-
-.tweet-submit {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.tweet-submit .separator {
-    height: 30px;
-    width: 2px;
-    background-color: rgb(62, 65, 68);
-    border-radius: 99999rem;
-    margin: 0 0.7rem;
 }
