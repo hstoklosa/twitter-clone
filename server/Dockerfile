@@ -1,16 +1,17 @@
 FROM node:18-alpine
 
+ARG DOCKER_PORT
+
+# Create App Directory
 WORKDIR /app
 
+# Install Dependencies
 COPY package*.json ./
 
 RUN npm install --silent
 
-# RUN npm install --global nodemon
-
+# Copy app source code
 COPY . .
-
-ARG DOCKER_PORT
 
 EXPOSE $DOCKER_PORT
 
