@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const passport = require("../config/passportConfig");
+const passport = require("../config/passport");
 const { transporter } = require("../config/nodemailer");
 
 const User = require("../models/User.model");

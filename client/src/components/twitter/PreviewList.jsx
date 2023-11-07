@@ -11,6 +11,7 @@ import {
 } from "react-virtualized";
 
 import { Spinner } from "../index";
+import { isObjEmpty } from "../../utils/object";
 
 const cache = new CellMeasurerCache({
     fixedWidth: true,
@@ -34,12 +35,10 @@ const SpinnerWrapper = ({ children }) => {
     );
 };
 
-const isObjectEmpty = (obj) => Object.keys(obj).length === 0;
-
 const PreviewList = (props) => {
     const outletParams = useOutletContext() || {};
 
-    if (!isObjectEmpty(outletParams) && isObjectEmpty(props)) {
+    if (!isObjEmpty(outletParams) && isObjEmpty(props)) {
         props = outletParams;
     }
 

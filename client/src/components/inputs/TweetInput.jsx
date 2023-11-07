@@ -3,6 +3,7 @@ import "../../styles/TweetInput.css";
 import { useEffect, useRef } from "react";
 import { IconContext } from "react-icons";
 import { IoMdClose } from "react-icons/io";
+
 import { TweetText } from "../index";
 
 const TweetInput = ({

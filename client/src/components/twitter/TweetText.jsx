@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
-const hashtagRegex = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
-const mentionRegex = /\B@\w+/g;
+const hashtag = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
+const mention = /\B@\w+/g;
 
 const TweetText = ({ text, textRef, highlight = " " }) => {
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
@@ -12,29 +12,23 @@ const TweetText = ({ text, textRef, highlight = " " }) => {
             ref={textRef}
         >
             {parts.map((part, idx) => {
-                if (hashtagRegex.test(part)) {
-                    return (
-                        <Link
-                            to={`/hashtag/${part}`}
-                            className="highlighted-text"
-                            key={idx}
-                        >
-                            {part}
-                        </Link>
-                    );
-                }
+                if (hashtag.test(part))
+                    <Link
+                        key={idx}
+                        to={`/hashtag/${part}`}
+                        className="highlighted-text"
+                    >
+                        {part}
+                    </Link>;
 
-                if (mentionRegex.test(part)) {
-                    return (
-                        <Link
-                            to={`/${part}`}
-                            className="highlighted-text"
-                            key={idx}
-                        >
-                            {part}
-                        </Link>
-                    );
-                }
+                if (mention.test(part))
+                    <Link
+                        key={idx}
+                        to={`/${part}`}
+                        className="highlighted-text"
+                    >
+                        {part}
+                    </Link>;
 
                 return <span key={idx}>{part}</span>;
             })}
