@@ -1,26 +1,7 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../../models/User.model");
 
-/**
- * Generate username based on email, or name
- *
- * @param {string} email
- * @param {string} firstName
- * @param {string} lastName
- *
- * @returns {string} the username
- */
-const generateUsername = (email, firstName, lastName, id) => {
-    let username = "";
-    if (email) {
-        username = email.split("@")[0];
-    } else if (firstName && lastName) {
-        username = `${firstName}${lastName}${generateRandomNumber()}`;
-    } else if (id) {
-        username = id;
-    }
-    return username.toLowerCase();
-};
+const generateUsername = require("../../helpers/generateUsername");
 
 module.exports = new GoogleStrategy(
     {
@@ -41,19 +22,15 @@ module.exports = new GoogleStrategy(
                     _json: { picture: profileImageURL, locale: location },
                 } = profile;
 
-                const data = {
-                    displayName: profile.displayName,
-                    provider: profile.provider,
-                    providerId: profile.id,
-                };
+                const generatedUsername = generateUsername(email);
+                const customDob = new Date("1997-01-01").toISOString().split("T")[0];
 
                 const newUser = await User.addUser({
-                    username: generateUsername(email),
+                    provider: { provider, providerId },
+                    dob: customDob,
+                    username: generatedUsername,
                     displayName,
                     email,
-                    provider,
-                    providerId,
-                    dob: new Date("1997-01-01").toISOString().split("T")[0],
                     profileImageURL,
                     location,
                 });
@@ -61,13 +38,14 @@ module.exports = new GoogleStrategy(
                 return cb(null, newUser);
             }
 
+            // users exists with a different provider
             if (user.provider != "google") {
                 return cb(null, false, {
-                    message: `You have previously signed up with a different signin method`,
+                    message: `You have previously signed up with a different sign-in method`,
                 });
             }
 
-            // Sending back existing google user
+            // sending back existing google user
             return cb(null, user);
         } catch (err) {
             cb(err);
