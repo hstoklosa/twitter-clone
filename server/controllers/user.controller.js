@@ -1,53 +1,39 @@
+const fs = require("fs");
+const path = require("path");
+
 const User = require("../models/User.model");
 const Tweet = require("../models/Tweet.model");
 
 const asyncHandler = require("../middlewares/asyncHandler");
-const paginate = require("../middlewares/paginate");
-const { NotFoundError, UnauthorizedError } = require("../config/ApplicationError");
+const paginate = require("../helpers/paginatePlugin");
+const { NotFoundError, UnauthorizedError } = require("../utils/errors");
 
 const getUser = asyncHandler(async (req, res, next) => {
-    const { username } = req.params;
-
-    const user = await User.findOne({
-        username,
-    });
+    const user = await User.findOne({ username: req.params.username });
 
     if (!user) {
         return next(new NotFoundError(`User with the username ${username} was not found!`));
     }
 
-    const tweetsCount = await Tweet.countDocuments({
-        author: user._id,
+    const parsedUrl = new URL(user.profileImageURL);
+    const localFilePath = path.join(__dirname, "./uploads", parsedUrl.pathname);
+
+    // check if static file exists w/ non-blocking I/O access
+    fs.access(localFilePath, fs.constants.F_OK, async (err) => {
+        if (err) {
+            user.profileImageURL = `${process.env.SERVER_URL}/uploads/default_profile.png`;
+            await user.save();
+        }
     });
 
-    const likesCount = await Tweet.countDocuments({
-        likes: {
-            $in: [user._id],
-        },
-    });
-
-    const mediaCount = await Tweet.countDocuments({
-        author: user._id,
-        media: {
-            $ne: [],
-        },
-    });
-
-    return res.status(200).json({
-        user: {
-            ...user._doc,
-            tweetsCount,
-            likesCount,
-            mediaCount,
-        },
-    });
+    return res.status(200).json(user._doc);
 });
 
 const updateUser = asyncHandler(async (req, res, next) => {
-    const { _id: currUserId } = req.user;
     const { userId } = req.params;
+    const currentUser = req.user;
 
-    if (currUserId.toString() !== userId) {
+    if (currentUser._id.toString() !== userId) {
         return next(new UnauthorizedError("You are not allowed to edit this user!"));
     }
 
@@ -60,61 +46,56 @@ const updateUser = asyncHandler(async (req, res, next) => {
         website,
     };
 
-    if (req.files[`profileImage`]) {
+    if (req.files["profileImage"])
         updateData.profileImageURL = `http://localhost:8080/${req.files.profileImage[0].path}`;
-    }
 
-    if (req.files[`bannerImage`]) {
+    if (req.files["bannerImage"])
         updateData.bannerURL = `http://localhost:8080/${req.files.bannerImage[0].path}`;
-    }
 
-    console.log("UPDATE_DATA: ", updateData);
-    console.log("FILES: ", req.files);
-
-    const user = await User.findOneAndUpdate({ _id: userId }, updateData, {
-        new: true,
-    });
+    await User.findByIdAndUpdate(userId, updateData);
 
     return res.status(200).json({
-        user: user,
+        isUpdated: true,
     });
 });
 
 const followUser = asyncHandler(async (req, res, next) => {
-    const sourceUser = await User.findById(req.params.userId);
-    const targetUser = await User.findById(req.body.targetUserId);
+    const { targetUserId } = req.body;
+    const sourceUserId = req.params.userId;
 
-    console.log(sourceUser, targetUser, req.body.targetUserId);
+    if (!(await User.exists({ _id: sourceUserId })))
+        return next(new NotFoundError("Source user not found!"));
 
-    if (!sourceUser || !targetUser) {
-        return next(new NotFoundError("User/s not found!"));
-    }
+    if (!(await User.exists({ _id: targetUserId })))
+        return next(new NotFoundError("Target user not found!"));
 
-    await User.updateOne({ _id: targetUser }, { $push: { followers: sourceUser._id } });
-    await User.updateOne({ _id: sourceUser }, { $push: { following: targetUser._id } });
+    await Promise.all([
+        User.updateOne({ _id: targetUserId }, { $pull: { followers: sourceUserId } }),
+        User.updateOne({ _id: sourceUserId }, { $pull: { following: targetUserId } }),
+    ]);
 
     return res.status(200).json({
-        data: {
-            isFollowing: true,
-        },
+        isFollowing: true,
     });
 });
 
 const unfollowUser = asyncHandler(async (req, res, next) => {
-    const sourceUser = await User.findById(req.params.userId);
-    const targetUser = await User.findById(req.body.targetUserId);
+    const { targetUserId } = req.body;
+    const sourceUserId = req.params.userId;
 
-    if (!sourceUser || !targetUser) {
-        return next(new NotFoundError("User/s not found!"));
-    }
+    if (!(await User.exists({ _id: sourceUserId })))
+        return next(new NotFoundError("Source user not found!"));
 
-    await User.updateOne({ _id: targetUser }, { $pull: { followers: sourceUser._id } });
-    await User.updateOne({ _id: sourceUser }, { $pull: { following: targetUser._id } });
+    if (!(await User.exists({ _id: targetUserId })))
+        return next(new NotFoundError("Target user not found!"));
+
+    await Promise.all([
+        User.updateOne({ _id: targetUserId }, { $pull: { followers: sourceUserId } }),
+        User.updateOne({ _id: sourceUserId }, { $pull: { following: targetUserId } }),
+    ]);
 
     return res.status(200).json({
-        data: {
-            isFollowing: false,
-        },
+        isFollowing: false,
     });
 });
 
@@ -147,9 +128,6 @@ const getLikedTweets = asyncHandler(async (req, res, next) => {
         .sort({
             createdAt: -1,
         });
-
-    // TODO: Trim the liked tweets?
-    console.log(likedTweets);
 
     return res.status(200).json({
         data: {

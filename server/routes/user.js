@@ -1,25 +1,27 @@
 const express = require("express");
-const userController = require("../controllers/user.controller");
-const paginate = require("../middlewares/paginate");
-const upload = require("../config/multerConfig");
 
+const userController = require("../controllers/user.controller");
+const bookmarkController = require("../controllers/bookmark.controller");
+
+const paginate = require("../middlewares/paginateMiddleware");
+const upload = require("../config/multer");
+
+// Multer fields
+const updateUserFields = [
+    { name: "profileImage", maxCount: 1 },
+    { name: "bannerImage", maxCount: 1 },
+];
+
+// Routes
 const router = express.Router();
 
-// User information
+router.use(isAuthenticated);
+
 router.get("/:username", userController.getUser);
 
-router.get("/:username/tweets", paginate, userController.getTweets);
+router.get("/:userId/timeline", paginate, userController.getTweets);
 
-router.get("/:userId/liked_tweets", userController.getLikedTweets);
-
-router.put(
-    "/:userId",
-    upload.fields([
-        { name: "profileImage", maxCount: 1 },
-        { name: "bannerImage", maxCount: 1 },
-    ]),
-    userController.updateUser
-);
+router.put("/:userId", upload.fields(updateUserFields), userController.updateUser);
 
 router.put("/:userId/following", userController.followUser);
 
