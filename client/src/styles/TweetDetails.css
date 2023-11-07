@@ -1,0 +1,31 @@
+.tweet-details {
+    display: flex;
+    justify-content: flex-start;
+    /* align-items: center; */
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+
+.tweet-details .display_name {
+    margin-right: 0.3rem;
+}
+
+.tweet-details .display_name:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.tweet-details .username,
+.tweet-details .date {
+    font-weight: 500;
+    color: var(--grey);
+}
+
+.tweet-details .icon-container {
+    margin: 0;
+}
+
+.separator {
+    margin: 0 0.3rem;
+    color: var(--grey);
+}
