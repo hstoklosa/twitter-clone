@@ -10,13 +10,11 @@ const getTweet = asyncHandler(async (req, res, next) => {
     const tweet = await Tweet.findById(tweetId).populate("author");
 
     if (!tweet) {
-        return next(new NotFoundError("Tweet not found!"));
+        return next(new NotFoundError("The requested tweet couldn't be found!"));
     }
 
     return res.status(200).json({
-        data: {
-            tweet: tweet || [],
-        },
+        tweet: tweet || [],
     });
 });
 
@@ -35,6 +33,10 @@ const createTweet = asyncHandler(async (req, res, next) => {
         quoteTo,
     });
 
+    // check for a particular type of tweet
+    if (quoteTo && !(await Tweet.exists({ _id: quoteTo })))
+        return next(new NotFoundError("Tweet being quoted is not found!"));
+
     if (replyTo) {
         const originalTweet = await Tweet.findById(replyTo);
 
@@ -45,20 +47,13 @@ const createTweet = asyncHandler(async (req, res, next) => {
         await originalTweet.updateRepliesCount();
     }
 
-    if (quoteTo) {
-        const originalTweet = await Tweet.findById(quoteTo);
-
-        if (!originalTweet) {
-            return next(new NotFoundError("Tweet being retweeted is not found!"));
-        }
-    }
-
-    // attach media if available
-    if (req.file)
+    // attach any incoming files
+    if (req.file) {
         tweet.media = {
             url: `http://localhost:8080/${req.file.path}`,
             mediaType: req.file.mimetype.split("/")[0],
         };
+    }
 
     const newTweet = await tweet.save();
 
@@ -80,7 +75,7 @@ const deleteTweet = asyncHandler(async (req, res, next) => {
         return next(new ForbiddenError("You are not authorized to delete this tweet!"));
     }
 
-    await tweet.remove();
+    await tweet.deleteOne();
 
     return res.status(200).json({
         message: "Tweet deleted successfully!",
@@ -89,7 +84,6 @@ const deleteTweet = asyncHandler(async (req, res, next) => {
 
 const createRepost = asyncHandler(async (req, res, next) => {
     const { _id: userId } = req.user;
-
     const { tweetId } = req.params;
 
     const tweet = await Tweet.findById(tweetId);
@@ -130,15 +124,11 @@ const likeTweet = asyncHandler(async (req, res, next) => {
     const userId = req.user._id;
     const tweetId = req.params.tweetId;
 
-    // addToSet will only add if it doesn't exist yet
-    const tweet = await Tweet.findByIdAndUpdate(
-        tweetId,
-        { $addToSet: { likes: userId } },
-        { new: true }
-    );
+    // addToSet: update the array only if the value doesn't exist yet
+    const tweet = await Tweet.findByIdAndUpdate(tweetId, { $addToSet: { likes: userId } });
 
     if (!tweet) {
-        return next(new NotFoundError("Tweet not found!"));
+        return next(new NotFoundError("The tweet to be liked was not found!"));
     }
 
     return res.status(200).json({
@@ -150,14 +140,10 @@ const unlikeTweet = asyncHandler(async (req, res, next) => {
     const userId = req.user._id;
     const tweetId = req.params.tweetId;
 
-    const tweet = await Tweet.findByIdAndUpdate(
-        tweetId,
-        { $pull: { likes: userId } },
-        { new: true }
-    );
+    const tweet = await Tweet.findByIdAndUpdate(tweetId, { $pull: { likes: userId } });
 
     if (!tweet) {
-        return next(new NotFoundError("Tweet not found!"));
+        return next(new NotFoundError("The tweet to be unliked was not found!"));
     }
 
     return res.status(200).json({

@@ -18,7 +18,7 @@ router.post("/:tweetId/repost", tweetController.createRepost);
 
 router.post("/:tweetId/like", tweetController.likeTweet);
 
-router.delete("/:id", tweetController.deleteTweet);
+router.delete("/:tweetId", tweetController.deleteTweet);
 
 router.delete("/:tweetId/repost", tweetController.deleteRepost);
 
