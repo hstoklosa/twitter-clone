@@ -106,9 +106,30 @@ const unlikeTweet = asyncHandler(async (req, res, next) => {
     });
 });
 
+const deleteTweet = asyncHandler(async (req, res, next) => {
+    const { tweetId } = req.params;
+
+    const tweet = await Tweet.findById(tweetId);
+
+    if (!tweet) {
+        return next(new NotFoundError("Tweet not found!"));
+    }
+
+    if (tweet.author._id.toString() !== req.user._id.toString()) {
+        return next(new ForbiddenError("You are not authorized to delete this tweet!"));
+    }
+
+    await tweet.remove();
+
+    return res.status(200).json({
+        message: "Tweet deleted successfully!",
+    });
+});
+
 module.exports = {
     getTweet,
     createTweet,
     likeTweet,
     unlikeTweet,
+    deleteTweet,
 };
