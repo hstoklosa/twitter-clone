@@ -14,9 +14,13 @@ router.get("/:tweetId", tweetController.getTweet);
 
 router.post("/", upload.single("media"), tweetController.createTweet);
 
+router.post("/:tweetId/repost", tweetController.createRepost);
+
 router.post("/:tweetId/like", tweetController.likeTweet);
 
 router.delete("/:id", tweetController.deleteTweet);
+
+router.delete("/:tweetId/repost", tweetController.deleteRepost);
 
 router.delete("/:tweetId/like", tweetController.unlikeTweet);
 

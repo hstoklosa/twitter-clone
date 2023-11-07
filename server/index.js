@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
-const passport = require("./config/passportConfig");
+const passport = require("./config/passport");
 const corsOptions = require("./config/corsOptions");
 const sessionOptions = require("./config/sessionOptions");
 

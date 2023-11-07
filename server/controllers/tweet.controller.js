@@ -67,6 +67,65 @@ const createTweet = asyncHandler(async (req, res, next) => {
     });
 });
 
+const deleteTweet = asyncHandler(async (req, res, next) => {
+    const { tweetId } = req.params;
+
+    const tweet = await Tweet.findById(tweetId);
+
+    if (!tweet) {
+        return next(new NotFoundError("Tweet not found!"));
+    }
+
+    if (tweet.author._id.toString() !== req.user._id.toString()) {
+        return next(new ForbiddenError("You are not authorized to delete this tweet!"));
+    }
+
+    await tweet.remove();
+
+    return res.status(200).json({
+        message: "Tweet deleted successfully!",
+    });
+});
+
+const createRepost = asyncHandler(async (req, res, next) => {
+    const { _id: userId } = req.user;
+
+    const { tweetId } = req.params;
+
+    const tweet = await Tweet.findById(tweetId);
+
+    if (!tweet) {
+        return next(new NotFoundError("Tweet not found!"));
+    }
+
+    const user = await User.findById(userId);
+
+    await Promise.all([tweet.addRetweet(userId), user.addRetweet(tweetId)]);
+
+    return res.status(200).json({
+        isReposted: true,
+    });
+});
+
+const deleteRepost = asyncHandler(async (req, res, next) => {
+    const { _id: userId } = req.user;
+    const { tweetId } = req.params;
+
+    const tweet = await Tweet.findById(tweetId);
+
+    if (!tweet) {
+        return next(new NotFoundError("Tweet not found!"));
+    }
+
+    const user = await User.findById(userId);
+
+    await Promise.all([tweet.deleteRetweet(userId), user.deleteRetweet(tweetId)]);
+
+    return res.status(200).json({
+        isReposted: false,
+    });
+});
+
 const likeTweet = asyncHandler(async (req, res, next) => {
     const userId = req.user._id;
     const tweetId = req.params.tweetId;
@@ -106,30 +165,12 @@ const unlikeTweet = asyncHandler(async (req, res, next) => {
     });
 });
 
-const deleteTweet = asyncHandler(async (req, res, next) => {
-    const { tweetId } = req.params;
-
-    const tweet = await Tweet.findById(tweetId);
-
-    if (!tweet) {
-        return next(new NotFoundError("Tweet not found!"));
-    }
-
-    if (tweet.author._id.toString() !== req.user._id.toString()) {
-        return next(new ForbiddenError("You are not authorized to delete this tweet!"));
-    }
-
-    await tweet.remove();
-
-    return res.status(200).json({
-        message: "Tweet deleted successfully!",
-    });
-});
-
 module.exports = {
     getTweet,
     createTweet,
+    createRepost,
     likeTweet,
-    unlikeTweet,
     deleteTweet,
+    deleteRepost,
+    unlikeTweet,
 };

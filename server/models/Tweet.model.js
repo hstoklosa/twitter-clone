@@ -7,10 +7,11 @@ const tweetSchema = new Schema(
     {
         content: {
             type: String,
-            required: false,
+            required: true,
+            trim: true,
             maxLength: [280, "The tweet can't be longer than 280 characters."],
             validate: {
-                validator: (c) => {
+                validator: function (c) {
                     return c.trim().length > 0;
                 },
                 message: "The tweet can't be empty.",
@@ -37,8 +38,7 @@ const tweetSchema = new Schema(
         ],
         mentions: [
             {
-                type: ObjectId,
-                ref: "User",
+                type: String,
                 set: (m) => m.toLowerCase().replaceAll("@", ""),
             },
         ],
@@ -53,37 +53,65 @@ const tweetSchema = new Schema(
             enum: ["EVERYONE", "FOLLOWED", "MENTIONED"],
             default: "EVERYONE",
         },
-        retweetId: {
+        replyTo: {
             type: ObjectId,
             ref: "Tweet",
+            default: null,
         },
-        inReplyTo: {
+        quoteTo: {
             type: ObjectId,
             ref: "Tweet",
+            default: null,
         },
-        likes: [
-            {
-                type: ObjectId,
-                ref: "User",
-            },
-        ],
-        retweets: [
-            {
-                type: ObjectId,
-                ref: "User",
-            },
-        ],
-        replies: [
-            {
-                type: ObjectId,
-                ref: "Tweet",
-            },
-        ],
+        repliesCount: {
+            type: Number,
+            default: 0,
+        },
+        likes: {
+            type: [ObjectId],
+            ref: "User",
+            default: [],
+        },
+        retweets: {
+            type: [ObjectId],
+            ref: "User",
+            default: [],
+        },
     },
     { timestamps: true }
 );
 
 // tweetSchema.index({author: 1, hashtags: 1});
+
+tweetSchema.methods.updateRepliesCount = async function () {
+    this.repliesCount = await mongoose.model("Tweet").countDocuments({
+        replyTo: this._id,
+    });
+
+    return this.save();
+};
+
+tweetSchema.methods.addRetweet = function (userId) {
+    const isRetweeted = this.retweets.some((id) => id === userId);
+
+    if (!isRetweeted) {
+        this.retweets.push(userId);
+        return this.save();
+    }
+
+    return Promise.resolve(this);
+};
+
+tweetSchema.methods.deleteRetweet = function (userId) {
+    const isRetweeted = this.retweets.some((id) => id.equals(userId));
+
+    if (isRetweeted) {
+        this.retweets.remove(userId);
+        return this.save();
+    }
+
+    return Promise.resolve(this);
+};
 
 const Tweet = mongoose.model("Tweet", tweetSchema);
 
