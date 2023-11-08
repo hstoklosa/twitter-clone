@@ -1,4 +1,5 @@
 import { baseApi } from "./baseApi";
+import providesList from "../../helpers/providesList";
 
 export const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -15,50 +16,6 @@ export const userApi = baseApi.injectEndpoints({
                           },
                       ]
                     : ["User"],
-            transformResponse: (response) => response.user,
-        }),
-        getTweet: builder.query({
-            query: (id) => {
-                return {
-                    url: `/tweets/${id}`,
-                };
-            },
-            providesTags: (result, err, id) => [{ type: "Post", id }],
-        }),
-        getUserTweets: builder.query({
-            query: ({ identifier, page, limit }) => {
-                return {
-                    url: `/users/${identifier}/tweets?page=${page}&limit=${limit}`,
-                };
-            },
-            transformResponse: (response) => response.tweets,
-            providesTags: (result) =>
-                result
-                    ? [
-                          ...result.map(({ _id: id }) => ({
-                              type: "Post",
-                              id,
-                          })),
-                          { type: "Post", id: "LIST" },
-                      ]
-                    : [{ type: "Post", id: "LIST" }],
-        }),
-        getUserLikes: builder.query({
-            query: (id) => ({
-                url: `/users/${id}/liked_tweets`,
-            }),
-            transformResponse: (response) => response.data.likedTweets,
-        }),
-
-        createTweet: builder.mutation({
-            query: (data) => {
-                return {
-                    url: "/tweets",
-                    method: "POST",
-                    body: data,
-                };
-            },
-            invalidatesTags: [{ type: "Post", id: "LIST" }],
         }),
         updateUser: builder.mutation({
             query: ({ id, data }) => ({
@@ -73,16 +30,40 @@ export const userApi = baseApi.injectEndpoints({
                 },
             ],
         }),
+
+        getUserTweets: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/users/${id}/timeline?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post"),
+        }),
+        getUserReplies: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/users/${id}/replies?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post"),
+        }),
+        getUserLikes: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/users/${id}/likes?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post"),
+        }),
+        getUserMedia: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/users/${id}/media?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post"),
+        }),
+
         followUser: builder.mutation({
-            query: ({ id, targetUserId }) => {
-                return {
-                    url: `/users/${id}/following`,
-                    method: "PUT",
-                    body: {
-                        targetUserId,
-                    },
-                };
-            },
+            query: ({ id, targetUserId }) => ({
+                url: `/users/${id}/following`,
+                method: "PUT",
+                body: {
+                    targetUserId,
+                },
+            }),
             invalidatesTags: (result, error, { id, targetUserId }) => [
                 { type: "User", id },
                 { type: "User", id: targetUserId },
@@ -101,23 +82,51 @@ export const userApi = baseApi.injectEndpoints({
                 { type: "User", id: targetUserId },
             ],
         }),
+
+        createRepost: builder.mutation({
+            query: ({ tweetId }) => ({
+                url: `/tweets/${tweetId}/repost`,
+                method: "POST",
+            }),
+        }),
+        deleteRepost: builder.mutation({
+            query: ({ tweetId }) => ({
+                url: `/tweets/${tweetId}/repost`,
+                method: "DELETE",
+            }),
+        }),
+
         likeTweet: builder.mutation({
-            query: ({ id }) => {
-                return {
-                    url: `/tweets/${id}/like`,
-                    method: "POST",
-                };
-            },
-            invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
+            query: ({ id }) => ({
+                url: `/tweets/${id}/like`,
+                method: "POST",
+            }),
+            invalidatesTags: (result, error, { id }) => [
+                {
+                    type: "Post",
+                    id,
+                },
+                {
+                    type: "Post",
+                    id: "LIST",
+                },
+            ],
         }),
         unlikeTweet: builder.mutation({
-            query: ({ id }) => {
-                return {
-                    url: `/tweets/${id}/like`,
-                    method: "DELETE",
-                };
-            },
-            invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
+            query: ({ id }) => ({
+                url: `/tweets/${id}/like`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, { id }) => [
+                {
+                    type: "Post",
+                    id,
+                },
+                {
+                    type: "Post",
+                    id: "LIST",
+                },
+            ],
         }),
     }),
 });
@@ -125,13 +134,14 @@ export const userApi = baseApi.injectEndpoints({
 export const {
     useGetUserInfoQuery,
     useGetUserTweetsQuery,
-    useGetUserFollowersQuery,
-    useGetUserFollowingQuery,
     useUpdateUserMutation,
     useFollowUserMutation,
     useUnfollowUserMutation,
     useLikeTweetMutation,
     useUnlikeTweetMutation,
-    useCreateTweetMutation,
     useGetUserLikesQuery,
+    useGetUserRepliesQuery,
+    useGetUserMediaQuery,
+    useCreateRepostMutation,
+    useDeleteRepostMutation,
 } = userApi;

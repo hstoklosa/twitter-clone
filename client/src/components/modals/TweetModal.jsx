@@ -6,16 +6,10 @@ import { useState, useRef } from "react";
 import { IconContext } from "react-icons";
 import { IoEarth } from "react-icons/io5";
 
-import {
-    ColumnHeader,
-    TweetForm,
-    BaseModal,
-    TweetActions,
-    TweetInput,
-    QuotePreview,
-} from "../index";
+import { ColumnHeader, BaseModal, TweetActions, TweetInput, QuotePreview } from "../index";
 import { useCheckAuthQuery } from "../../store/api/authApi";
-import { useGetUserInfoQuery, useCreateTweetMutation } from "../../store/api/userApi";
+import { useGetUserInfoQuery } from "../../store/api/userApi";
+import { useCreateTweetMutation } from "../../store/api/tweetApi";
 
 const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
     const [tweet, setTweet] = useState("");

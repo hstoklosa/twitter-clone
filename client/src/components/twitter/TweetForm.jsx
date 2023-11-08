@@ -10,7 +10,8 @@ import useOutsideClick from "../../hooks/useOutsideClick";
 
 import { TweetInput, TweetActions } from "../index";
 import { useCheckAuthQuery } from "../../store/api/authApi";
-import { useGetUserInfoQuery, useCreateTweetMutation } from "../../store/api/userApi";
+import { useGetUserInfoQuery } from "../../store/api/userApi";
+import { useCreateTweetMutation } from "../../store/api/tweetApi";
 
 const TweetForm = ({ forceExpand, maxLength = 280 }) => {
     const [tweet, setTweet] = useState("");
