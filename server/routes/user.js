@@ -19,7 +19,13 @@ router.use(isAuthenticated);
 
 router.get("/:username", userController.getUser);
 
-router.get("/:userId/timeline", paginate, userController.getTweets);
+router.get("/:userId/timeline", paginate, userController.getProfileTimeline);
+
+router.get("/:userId/replies", paginate, userController.getRepliesTimeline);
+
+router.get("/:userId/media", paginate, userController.getMediaTimeline);
+
+router.get("/:userId/likes", paginate, userController.getLikesTimeline);
 
 router.put("/:userId", upload.fields(updateUserFields), userController.updateUser);
 
