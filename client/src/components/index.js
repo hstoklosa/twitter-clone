@@ -23,3 +23,4 @@ export { default as TweetDetails } from "./shared/TweetDetails";
 export { default as QuotePreview } from "./twitter/QuotePreview";
 export { default as ConditionalLink } from "./inputs/ConditionalLink";
 export { default as LinkButton } from "./inputs/LinkButton";
+export { default as ReplyModal } from "./modals/ReplyModal";

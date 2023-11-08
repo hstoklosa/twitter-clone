@@ -302,7 +302,7 @@ select {
 #general header {
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 999999999;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -352,8 +352,8 @@ select {
 
 .header-btn_icon {
     position: block;
-    width: 20px !important;
-    height: 20px;
+    width: 23px !important;
+    height: 23px;
     stroke-width: 0px;
 }
 

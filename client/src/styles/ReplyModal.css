@@ -1,0 +1,123 @@
+.reply-modal .modal-content {
+    display: block;
+    position: absolute !important;
+    top: 45px;
+    height: auto;
+    max-height: 800px !important;
+    padding: 0;
+    overflow: auto;
+}
+
+.reply-modal header {
+    width: 100%;
+    padding: 1rem 1.2rem !important;
+    border: 0 !important;
+    /* height: 30px !important; */
+    /* margin-bottom: 0.7rem; */
+}
+
+.reply-modal .recipient-tweet,
+.reply-modal .tweet-input {
+    padding: 0 1rem !important;
+}
+
+.reply-modal .tweet-actions {
+    padding: 0.5rem 1rem;
+}
+
+.reply-modal .pfp-container {
+    position: relative;
+    z-index: 1111111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0.3rem;
+    margin-right: 0.75rem !important;
+    height: 100% !important;
+}
+
+.reply-modal .recipient-tweet > .pfp-container::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    width: 2px;
+    height: 100vh;
+    z-index: -11;
+    background-color: var(--black);
+}
+
+.reply-modal .pfp-container .pfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.recipient-tweet {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.reply-modal .tweet-input {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.reply-modal .tweet-info {
+    justify-content: flex-start;
+    margin: 0;
+}
+
+.reply-modal .replyingTo {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--grey);
+    padding: 0.5rem 0 1rem 0;
+}
+
+.reply-modal .replyingTo a {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.reply-modal .tweet-container {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reply-modal .tweet-input .tweet-input-wrapper {
+    margin: 0.5rem 0 1rem 0;
+}
+
+.reply-modal .input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: auto;
+    min-height: 150px;
+}
+
+.reply-modal .input-container .media-preview {
+    height: auto;
+}
+
+.reply-modal .input-container .media-preview img {
+    height: 100%;
+}
+
+.modal-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.reply-modal .quote-preview {
+    margin-top: 0.75rem;
+}
