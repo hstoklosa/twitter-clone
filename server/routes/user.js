@@ -27,6 +27,10 @@ router.get("/:userId/media", paginate, userController.getMediaTimeline);
 
 router.get("/:userId/likes", paginate, userController.getLikesTimeline);
 
+router.get("/:username/followers", paginate, userController.getFollowers);
+
+router.get("/:username/following", paginate, userController.getFollowing);
+
 router.put("/:userId", upload.fields(updateUserFields), userController.updateUser);
 
 router.put("/:userId/following", userController.followUser);

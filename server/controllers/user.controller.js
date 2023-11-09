@@ -7,7 +7,12 @@ const Tweet = require("../models/Tweet.model");
 
 const asyncHandler = require("../middlewares/asyncHandler");
 const paginate = require("../helpers/paginatePlugin");
-const { userTweetSelector, postAuthorSelector, quoteSelector } = require("../helpers/selectors");
+const {
+    userTweetSelector,
+    postAuthorSelector,
+    quoteSelector,
+    followsSelector,
+} = require("../helpers/selectors");
 const { userLookup, quoteLookup, replyLookup } = require("../helpers/aggregation");
 const { NotFoundError, UnauthorizedError } = require("../utils/errors");
 
@@ -30,6 +35,82 @@ const getUser = asyncHandler(async (req, res, next) => {
     });
 
     return res.status(200).json(user._doc);
+});
+
+const getFollowers = asyncHandler(async (req, res, next) => {
+    const relevantUser = await User.findOne({ username: req.params.username });
+
+    if (!relevantUser) return next(new NotFoundError("User not found!"));
+
+    const pipeline = [
+        {
+            $match: {
+                _id: relevantUser._id,
+            },
+        },
+
+        {
+            $lookup: {
+                from: "users",
+                localField: "followers",
+                foreignField: "_id",
+                as: "populatedFollowers",
+            },
+        },
+
+        {
+            $unwind: {
+                path: "$populatedFollowers",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+
+        { $project: { document: "$populatedFollowers" } },
+        { $replaceRoot: { newRoot: "$document" } },
+        { $project: followsSelector },
+    ];
+
+    const response = await paginate(User, pipeline, req.pagination);
+
+    return res.status(200).json(response);
+});
+
+const getFollowing = asyncHandler(async (req, res, next) => {
+    const relevantUser = await User.findOne({ username: req.params.username });
+
+    if (!relevantUser) return next(new NotFoundError("User not found!"));
+
+    const pipeline = [
+        {
+            $match: {
+                _id: relevantUser._id,
+            },
+        },
+
+        {
+            $lookup: {
+                from: "users",
+                localField: "following",
+                foreignField: "_id",
+                as: "populatedFollowings",
+            },
+        },
+
+        {
+            $unwind: {
+                path: "$populatedFollowings",
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+
+        { $project: { document: "$populatedFollowings" } },
+        { $replaceRoot: { newRoot: "$document" } },
+        { $project: followsSelector },
+    ];
+
+    const response = await paginate(User, pipeline, req.pagination);
+
+    return res.status(200).json(response);
 });
 
 const getProfileTimeline = asyncHandler(async (req, res, next) => {
@@ -182,8 +263,8 @@ const followUser = asyncHandler(async (req, res, next) => {
         return next(new NotFoundError("Target user not found!"));
 
     await Promise.all([
-        User.updateOne({ _id: targetUserId }, { $pull: { followers: sourceUserId } }),
-        User.updateOne({ _id: sourceUserId }, { $pull: { following: targetUserId } }),
+        User.updateOne({ _id: targetUserId }, { $push: { followers: sourceUserId } }),
+        User.updateOne({ _id: sourceUserId }, { $push: { following: targetUserId } }),
     ]);
 
     return res.status(200).json({
@@ -243,6 +324,8 @@ const updateUser = asyncHandler(async (req, res, next) => {
 
 module.exports = {
     getUser,
+    getFollowing,
+    getFollowers,
     getProfileTimeline,
     getRepliesTimeline,
     getMediaTimeline,
