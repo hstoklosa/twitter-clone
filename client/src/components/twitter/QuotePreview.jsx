@@ -9,8 +9,6 @@ const QuotePreview = ({ tweet }) => {
     const isReply = tweet.replyTo && !isObjEmpty(tweet.replyTo);
     const media = tweet.media?.[0];
 
-    console.log(tweet);
-
     return (
         <Link
             to={`/${tweet.author.username}/status/${tweet._id}`}

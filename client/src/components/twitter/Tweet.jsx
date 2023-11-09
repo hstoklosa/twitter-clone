@@ -1,119 +1,302 @@
 import "../../styles/Tweet.css";
 
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { IconContext } from "react-icons";
-import { FaRegComment, FaComment } from "react-icons/fa";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { BiRepost } from "react-icons/bi";
+import { PiPencilSimpleLine } from "react-icons/pi";
+import { LuRepeat2 } from "react-icons/lu";
+import { TbMessageCircle2, TbShare2, TbTrash, TbPinned } from "react-icons/tb";
 import { IoMdStats } from "react-icons/io";
-import { TbShare2 } from "react-icons/tb";
 import { IoEllipsisHorizontal } from "react-icons/io5";
+import { RiUserFollowLine, RiUserUnfollowLine } from "react-icons/ri";
+import { MdBlock } from "react-icons/md";
 
-import { TweetText } from "../index";
+import {
+    TweetText,
+    FloatOptions,
+    TweetModal,
+    ReplyModal,
+    TweetDetails,
+    QuotePreview,
+    LinkButton,
+    ConditionalLink,
+} from "../index";
+
 import { useCheckAuthQuery } from "../../store/api/authApi";
-import { useLikeTweetMutation, useUnlikeTweetMutation } from "../../store/api/userApi";
-import { getTimeDifference } from "../../helpers/date";
+import { useDeleteTweetMutation } from "../../store/api/tweetApi";
+import {
+    useLikeTweetMutation,
+    useUnlikeTweetMutation,
+    useCreateRepostMutation,
+    useDeleteRepostMutation,
+    useFollowUserMutation,
+    useUnfollowUserMutation,
+} from "../../store/api/userApi";
 
-const Tweet = ({ tweet, lastElementRef }) => {
+import { isObjEmpty } from "../../utils/object";
+
+const Tweet = ({ tweet }) => {
+    const [replyModal, setReplyModal] = useState(false);
+    const [quoteModal, setQuoteModal] = useState(false);
+    const [retweetFloat, setRetweetFloat] = useState(false);
+    const [moreFloat, setMoreFloat] = useState(false);
+
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+
     const {
-        data: {
-            isAuthenticated,
-            info: { id },
-        },
+        data: { isAuthenticated, data: currentUser },
     } = useCheckAuthQuery();
 
+    const [deleteTweet] = useDeleteTweetMutation();
+    const [createRepost] = useCreateRepostMutation();
+    const [deleteRepost] = useDeleteRepostMutation();
     const [likeTweet] = useLikeTweetMutation();
     const [unlikeTweet] = useUnlikeTweetMutation();
 
-    const handleLinkClick = (e) => {
-        if (!isAuthenticated) {
-            e.preventDefault();
+    const [followUser, followResult] = useFollowUserMutation();
+    const [unfollowUser, unfollowResult] = useUnfollowUserMutation();
+
+    const isReposted = tweet.retweets.includes(currentUser.id);
+    const isLiked = tweet.likes.includes(currentUser.id);
+    const isFollowingAuthor = tweet.author.followers.includes(currentUser.id);
+
+    const isReply = tweet.replyTo && !isObjEmpty(tweet.replyTo);
+    const isQuote = tweet.quoteTo && !isObjEmpty(tweet.quoteTo);
+
+    const media = tweet.media?.[0];
+
+    const handlePostClick = (e) => {
+        return isAuthenticated && navigate(`/${tweet.author.username}/status/${tweet._id}`);
+    };
+
+    const handleTweetDelete = async () => {
+        const result = await deleteTweet(tweet._id).unwrap();
+
+        if (!result?.error) {
+            closeMoreFloat();
         }
     };
 
+    const handleRetweet = async (e) => {
+        const retweetResult = isReposted
+            ? await deleteRepost({ tweetId: tweet._id })
+            : await createRepost({ tweetId: tweet._id });
+
+        if (retweetResult?.error) return;
+
+        if (
+            (isReposted && !retweetResult.data?.isReposted) ||
+            (!isReposted && retweetResult.data?.isReposted)
+        )
+            closeRetweetFloat();
+    };
+
     const handleLike = async (e) => {
-        e.preventDefault();
-
-        const isLiked = tweet.likes.includes(id);
-
         isLiked ? await unlikeTweet({ id: tweet._id }) : await likeTweet({ id: tweet._id });
     };
 
-    const handleReply = (e) => {
-        e.preventDefault();
+    const handleFollow = async () => {
+        const followData = {
+            id: currentUser.id,
+            targetUserId: tweet.author._id,
+        };
+
+        isFollowingAuthor ? await unfollowUser(followData) : await followUser(followData);
     };
 
-    const handleRetweet = (e) => {
-        e.preventDefault();
-    };
+    const openReplyModal = () => setReplyModal(true);
+    const closeReplyModal = () => setReplyModal(false);
 
-    const handleShare = (e) => {
-        e.preventDefault();
+    const openQuoteModal = () => {
+        setQuoteModal(true);
+        setRetweetFloat(false);
     };
+    const closeQuoteModal = () => setQuoteModal(false);
 
-    const handleMore = (e) => {
-        e.preventDefault();
-    };
+    const openRetweetFloat = () => setRetweetFloat(true);
+    const closeRetweetFloat = () => setRetweetFloat(false);
+
+    const openMoreFloat = () => setMoreFloat(true);
+    const closeMoreFloat = () => setMoreFloat(false);
 
     return (
         <IconContext.Provider value={{ className: "tweet_icon" }}>
-            <Link
+            {replyModal && (
+                <ReplyModal
+                    isOpen={replyModal}
+                    onClose={closeReplyModal}
+                    replyingTo={tweet}
+                />
+            )}
+
+            {quoteModal && (
+                <TweetModal
+                    isOpen={quoteModal}
+                    onClose={closeQuoteModal}
+                    quote={tweet}
+                />
+            )}
+
+            <ConditionalLink
                 className="tweet"
                 to={`/${tweet.author.username}/status/${tweet._id}`}
-                onClick={handleLinkClick}
-                ref={lastElementRef}
+                state={{ previousPath: pathname }}
+                condition={isAuthenticated}
             >
+                {moreFloat && (
+                    <IconContext.Provider value={{ className: "float-icon" }}>
+                        {tweet.author._id === currentUser.id && (
+                            <FloatOptions
+                                isOpen={moreFloat}
+                                onClose={closeMoreFloat}
+                                className="more-options"
+                            >
+                                <LinkButton
+                                    type="button"
+                                    className="more-btn delete"
+                                    onClick={handleTweetDelete}
+                                >
+                                    <div className="float-icon-container">
+                                        <TbTrash />
+                                    </div>
+                                    Delete
+                                </LinkButton>
+
+                                <LinkButton
+                                    type="button"
+                                    className="more-btn"
+                                    disabled
+                                >
+                                    <div className="float-icon-container">
+                                        <TbPinned />
+                                    </div>
+                                    Pin to your profile
+                                </LinkButton>
+
+                                <LinkButton
+                                    type="button"
+                                    className="more-btn"
+                                    disabled
+                                >
+                                    <div className="float-icon-container">
+                                        <TbMessageCircle2 />
+                                    </div>
+                                    Change who can reply
+                                </LinkButton>
+                                <LinkButton
+                                    className="more-btn"
+                                    to={`/${tweet.author.username}/status/${tweet._id}/quotes`}
+                                    state={{ previousPath: pathname }}
+                                >
+                                    <div className="float-icon-container">
+                                        <IoMdStats />
+                                    </div>
+                                    View post engagements
+                                </LinkButton>
+                            </FloatOptions>
+                        )}
+
+                        {tweet.author._id !== currentUser.id && (
+                            <FloatOptions
+                                isOpen={moreFloat}
+                                onClose={closeMoreFloat}
+                                className="more-options"
+                            >
+                                <LinkButton
+                                    type="button"
+                                    className="more-btn"
+                                    onClick={handleFollow}
+                                >
+                                    <div className="float-icon-container">
+                                        {isFollowingAuthor ? (
+                                            <RiUserUnfollowLine style={{ strokeWidth: 0 }} />
+                                        ) : (
+                                            <RiUserFollowLine style={{ strokeWidth: 0 }} />
+                                        )}
+                                    </div>
+                                    {isFollowingAuthor ? "Unfollow" : "Follow"} @
+                                    {tweet.author.username}
+                                </LinkButton>
+
+                                <LinkButton
+                                    type="button"
+                                    className="more-btn"
+                                    disabled
+                                >
+                                    <div className="float-icon-container">
+                                        <MdBlock style={{ strokeWidth: 0 }} />
+                                    </div>
+                                    Block @{tweet.author.username}
+                                </LinkButton>
+
+                                <Link
+                                    to={`/${tweet.author.username}/status/${tweet._id}/quotes`}
+                                    state={{ previousPath: pathname }}
+                                    className="more-btn"
+                                >
+                                    <div className="float-icon-container">
+                                        <IoMdStats />
+                                    </div>
+                                    View post engagements
+                                </Link>
+                            </FloatOptions>
+                        )}
+                    </IconContext.Provider>
+                )}
+
                 <div className="img-container">
                     <Link
                         to={`/${tweet.author.username}`}
+                        state={{ previousPath: pathname }}
+                        onClick={handlePostClick}
                         className="pfp-container"
-                        onClick={handleLinkClick}
                     >
                         <img
                             src={tweet.author.profileImageURL}
                             className="pfp"
-                            alt="User PFP"
+                            alt="User Pfp"
                         />
                     </Link>
                 </div>
 
                 <div className="tweet-container">
-                    <div className="tweet-info">
-                        <Link
-                            to={`/${tweet.author.username}`}
-                            className="display_name"
-                            onClick={handleLinkClick}
-                        >
-                            {tweet.author.displayName}
-                        </Link>
+                    {/* {username} retweeted */}
+                    {tweet.author._id !== currentUser.id && <p>{}</p>}
 
-                        <p className="username">@{tweet.author.username}</p>
-                        <span className="separator">·</span>
-                        <p className="date">{getTimeDifference(tweet.createdAt)}</p>
-
-                        <button
+                    <TweetDetails tweet={tweet}>
+                        <LinkButton
                             className="tweet-btn more"
-                            onClick={handleMore}
-                            disabled={!isAuthenticated}
+                            onClick={openMoreFloat}
                         >
                             <div className="icon-container">
                                 <IoEllipsisHorizontal size="16" />
                             </div>
-                        </button>
-                    </div>
+                        </LinkButton>
+                    </TweetDetails>
+
+                    {isReply && (
+                        <span className="replyingTo">
+                            Replying to{" "}
+                            <Link
+                                to={`/${tweet.replyTo.author.username}`}
+                                state={{ previousPath: pathname }}
+                                className="link-blue"
+                            >
+                                @{tweet.replyTo.author.username}
+                            </Link>
+                        </span>
+                    )}
 
                     <div className="tweet-content">
-                        <TweetText
-                            text={tweet.content}
-                            highlight=" "
-                        />
+                        <TweetText text={tweet.content} />
 
-                        {tweet.media?.[0] && (
+                        {media && (
                             <div className="media-container">
                                 <img
-                                    src={tweet.media[0].url}
+                                    src={media.url}
                                     className="tweet_media"
                                     alt="Tweet Media"
                                 />
@@ -121,76 +304,107 @@ const Tweet = ({ tweet, lastElementRef }) => {
                         )}
                     </div>
 
+                    {isQuote && <QuotePreview tweet={tweet.quoteTo} />}
+
                     <div className="tweet-actions">
-                        <button
-                            className={`tweet-btn comment ${
-                                tweet.replies.includes(id) && "applied"
-                            }`}
-                            onClick={handleReply}
-                            disabled={!isAuthenticated}
+                        <LinkButton
+                            className={`tweet-btn comment`}
+                            onClick={openReplyModal}
                         >
                             <div className="icon-container">
-                                {tweet.replies.includes(id) ? (
-                                    <FaComment size="15.5" />
-                                ) : (
-                                    <FaRegComment size="15.5" />
-                                )}
+                                <TbMessageCircle2 />
                             </div>
-                            <p>{tweet.replies.length}</p>
-                        </button>
 
-                        <button
-                            className={`tweet-btn retweet ${
-                                tweet.retweets.includes(id) && "applied"
-                            }`}
-                            disabled={!isAuthenticated}
-                            onClick={handleRetweet}
+                            <div className="count-container">
+                                <span>{tweet.repliesCount}</span>
+                            </div>
+                        </LinkButton>
+
+                        <LinkButton
+                            className={`tweet-btn retweet ${isReposted && "applied"}`}
+                            onClick={openRetweetFloat}
                         >
                             <div className="icon-container">
-                                <BiRepost size="21" />
+                                <LuRepeat2 />
                             </div>
-                            <p>{tweet.retweets.length}</p>
-                        </button>
 
-                        <button
+                            <div className="count-container">
+                                <span>{tweet.retweets.length}</span>
+                            </div>
+
+                            {retweetFloat && (
+                                <IconContext.Provider value={{ className: "float-icon" }}>
+                                    <FloatOptions
+                                        isOpen={retweetFloat}
+                                        onClose={closeRetweetFloat}
+                                        className="retweet-options"
+                                    >
+                                        <LinkButton
+                                            type="button"
+                                            className="more-btn"
+                                            onClick={handleRetweet}
+                                        >
+                                            <div className="float-icon-container">
+                                                <LuRepeat2 />
+                                            </div>
+
+                                            {isReposted ? "Undo Repost" : "Repost"}
+                                        </LinkButton>
+
+                                        <LinkButton
+                                            type="button"
+                                            className="more-btn"
+                                            onClick={openQuoteModal}
+                                        >
+                                            <div className="float-icon-container">
+                                                <PiPencilSimpleLine size="21" />
+                                            </div>
+                                            Quote
+                                        </LinkButton>
+                                    </FloatOptions>
+                                </IconContext.Provider>
+                            )}
+                        </LinkButton>
+
+                        <LinkButton
                             type="button"
-                            className={`tweet-btn like ${tweet.likes.includes(id) && "applied"}`}
-                            onClick={(e) => handleLike(e, tweet._id)}
-                            disabled={!isAuthenticated}
+                            className={`tweet-btn like ${isLiked && "applied"}`}
+                            data-type="inner-button"
+                            onClick={handleLike}
                         >
-                            <div className="icon-container like-animation">
-                                {tweet.likes.includes(id) ? (
-                                    <AiFillHeart size="17" />
-                                ) : (
-                                    <AiOutlineHeart size="17" />
-                                )}
+                            <div className="icon-container">
+                                {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
                             </div>
-                            <p>{tweet.likes.length}</p>
-                        </button>
 
-                        <button
+                            <div className="count-container">
+                                <span>{tweet.likes.length}</span>
+                            </div>
+                        </LinkButton>
+
+                        <LinkButton
                             className="tweet-btn view"
-                            onClick={handleShare}
-                            disabled={!isAuthenticated}
+                            disabled
                         >
                             <div className="icon-container">
-                                <IoMdStats size="18" />
+                                <IoMdStats />
                             </div>
-                            <p>0</p>
-                        </button>
 
-                        <button
+                            <div className="count-container">
+                                <span>0</span>
+                            </div>
+                        </LinkButton>
+
+                        <LinkButton
                             className="tweet-btn share"
-                            onClick={handleShare}
-                            disabled={!isAuthenticated}
+                            disabled
                         >
                             <div className="icon-container">
-                                <TbShare2 size="19" />
+                                <TbShare2 />
                             </div>
-                        </button>
+                        </LinkButton>
                     </div>
                 </div>
-            </Link>
+            </ConditionalLink>
         </IconContext.Provider>
     );
 };

@@ -14,13 +14,14 @@ export const tweetApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
-            invalidatesTags: [{ type: "Post", id: "LIST" }],
+            invalidatesTags: [{ type: "Post" }],
         }),
         deleteTweet: builder.mutation({
             query: (tweetId) => ({
                 url: `/tweets/${tweetId}`,
                 method: "DELETE",
             }),
+            invalidatesTags: (result, error, tweetId) => [{ type: "Post", id: tweetId }],
         }),
     }),
 });

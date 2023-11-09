@@ -17,6 +17,8 @@ import { useCheckAuthQuery } from "../../store/api/authApi";
 import { useGetUserInfoQuery } from "../../store/api/userApi";
 import { useCreateTweetMutation } from "../../store/api/tweetApi";
 
+import { isObjEmpty } from "../../utils/object";
+
 const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
     const [tweet, setTweet] = useState("");
     const [media, setMedia] = useState(null);
@@ -36,6 +38,8 @@ const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
     });
 
     const [createTweet] = useCreateTweetMutation();
+
+    const isQuote = replyingTo.quoteTo && !isObjEmpty(replyingTo.quoteTo);
 
     const handleReply = async () => {
         const formData = new FormData();
@@ -87,7 +91,7 @@ const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
                         <TweetText text={replyingTo.content} />
                     </div>
 
-                    {replyingTo.quoteTo && <QuotePreview tweet={replyingTo.quoteTo} />}
+                    {isQuote && <QuotePreview tweet={replyingTo.quoteTo} />}
 
                     <p className="replyingTo">
                         Replying to{" "}

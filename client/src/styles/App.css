@@ -302,7 +302,7 @@ select {
 #general header {
     position: sticky;
     top: 0;
-    z-index: 999999999;
+    z-index: 99999999;
     display: flex;
     justify-content: flex-start;
     align-items: center;

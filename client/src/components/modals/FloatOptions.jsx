@@ -10,7 +10,10 @@ const FloatOptions = ({ isOpen, onClose, children }) => {
             className={`float-options ${isOpen && "open"}`}
             ref={ref}
         >
-            <div className="float-options-overlay"></div>
+            <div
+                className="float-options-overlay"
+                onClick={(e) => e.preventDefault()}
+            ></div>
             {children}
         </div>
     );

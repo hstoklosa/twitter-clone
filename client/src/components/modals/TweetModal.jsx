@@ -37,7 +37,7 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
         formData.append("content", tweet);
         formData.append("author", id);
         formData.append("media", media);
-        formData.append("retweetId", quote?._id || null);
+        !!quote?._id && formData.append("quoteTo", quote._id);
 
         const result = await createTweet(formData).unwrap();
 

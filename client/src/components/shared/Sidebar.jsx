@@ -86,22 +86,18 @@ const Sidebar = ({ userLoggedIn = null }) => {
                 {!userLoggedIn && (
                     <IconContext.Provider value={{ className: "navbar_icon explore" }}>
                         <nav className="navbar">
-                            <NavLink
-                                to={`/explore`}
-                                className="navbar-link current"
-                                style={{ cursor: "not-allowed" }}
-                            >
+                            <button className="navbar-link current">
                                 <BiSearch size="25" />
                                 <span className="text">Explore</span>
-                            </NavLink>
+                            </button>
 
-                            <NavLink
-                                to={`/settings`}
+                            <button
                                 className="navbar-link"
+                                style={{ cursor: "not-allowed" }}
                             >
                                 <BiCog size="25" />
                                 <span className="text">Settings</span>
-                            </NavLink>
+                            </button>
                         </nav>
                     </IconContext.Provider>
                 )}
