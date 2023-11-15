@@ -1,11 +1,15 @@
-const paginate = async (model, pipeline = [], options = {}) => {
+const mongoose = require("mongoose");
+
+const paginate = async (modelName = null, pipeline = [], options = {}) => {
+    const Model = mongoose.model(modelName);
     const { skip, limit } = options;
 
-    const result = await model.aggregate([
+    const result = await Model.aggregate([
         ...pipeline,
         {
             $sort: { createdAt: -1 },
         },
+
         {
             $facet: {
                 data: [{ $skip: skip }, { $limit: limit }],
@@ -14,12 +18,24 @@ const paginate = async (model, pipeline = [], options = {}) => {
         },
     ]);
 
-    const totalCount = result[0]?.totalCount.length ? result[0]?.totalCount[0]?.count : 0;
+    console.log(result[0]);
 
-    result[0].totalCount = totalCount;
-    result[0].totalPages = totalCount ? Math.ceil(totalCount / limit) : 0;
+    // correct the data array if it contains only an empty object
+    if (result[0].data.length === 1 && Object.keys(result[0].data[0]).length === 0)
+        return { data: [], totalCount: 0, totalPages: 0 };
 
-    return result[0];
+    const {
+        data,
+        totalCount: [{ count: totalCount }],
+    } = result[0];
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return {
+        data,
+        totalCount,
+        totalPages,
+    };
 };
 
 module.exports = paginate;
