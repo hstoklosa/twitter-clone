@@ -39,6 +39,11 @@
     border-radius: 50%;
 }
 
+.profile .follow {
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
 .profile .follow.applied:hover {
     color: rgb(244, 33, 46);
     border: 1px solid rgb(103, 7, 15);
@@ -73,7 +78,7 @@
     align-items: center;
 }
 
-.options-container .btn-empty {
+.options-container button {
     width: auto;
     margin-left: 0.5rem;
 }

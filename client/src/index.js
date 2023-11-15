@@ -3,7 +3,7 @@ import "./styles/App.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 import Root from "./routes/Root";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -11,6 +11,8 @@ import Login from "./routes/Login";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
 import Profile from "./routes/Profile";
+
+import { ProfileTimelineList, RepliesList, MediaList, LikesList } from "./components/index";
 
 import store from "./store/index";
 
@@ -40,7 +42,26 @@ const router = createBrowserRouter([
                         <Profile />
                     </ProtectedRoute>
                 ),
+                children: [
+                    {
+                        path: "",
+                        element: <ProfileTimelineList />,
+                    },
+                    {
+                        path: "replies",
+                        element: <RepliesList />,
+                    },
+                    {
+                        path: "media",
+                        element: <MediaList />,
+                    },
+                    {
+                        path: "likes",
+                        element: <LikesList />,
+                    },
+                ],
             },
+
             {
                 path: "/explore",
                 element: (

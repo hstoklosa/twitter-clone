@@ -9,7 +9,24 @@ import {
     CellMeasurerCache,
 } from "react-virtualized";
 
+import {
+    useGetUserTweetsQuery,
+    useGetUserRepliesQuery,
+    useGetUserLikesQuery,
+    useGetUserMediaQuery,
+} from "../../../store/api/userApi";
+
+import withQuery from "./withQuery";
+import Tweet from "../../twitter/Tweet";
+
 import { Spinner, Placeholder } from "../../index";
+
+import {
+    profileTimelineText,
+    repliesText,
+    mediaText,
+    likesText,
+} from "../../../config/placeholder";
 
 const cache = new CellMeasurerCache({
     fixedWidth: true,
@@ -96,5 +113,18 @@ const PreviewList = ({
         </section>
     );
 };
+
+const withTweetQuery = (query, placeholder, paramSelector) => () =>
+    withQuery(query, Tweet, placeholder, paramSelector)(PreviewList);
+
+const ProfileTimelineList = withTweetQuery(useGetUserTweetsQuery, profileTimelineText)();
+
+const RepliesList = withTweetQuery(useGetUserRepliesQuery, repliesText)();
+
+const MediaList = withTweetQuery(useGetUserMediaQuery, mediaText)();
+
+const LikesList = withTweetQuery(useGetUserLikesQuery, likesText)();
+
+export { ProfileTimelineList, RepliesList, MediaList, LikesList };
 
 export default PreviewList;

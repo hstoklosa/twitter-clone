@@ -1,7 +1,7 @@
 import "../styles/Profile.css";
 
-import { useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, Link, useParams, useLocation } from "react-router-dom";
 
 import { IconContext } from "react-icons";
 import { BiCalendar, BiEnvelope, BiLink } from "react-icons/bi";
@@ -10,37 +10,34 @@ import { AiOutlineLink } from "react-icons/ai";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { TbBellPlus, TbBellCheck } from "react-icons/tb";
 
+import { useCheckAuthQuery } from "../store/api/authApi";
+import { useGetUserInfoQuery } from "../store/api/userApi";
+
 import {
     ColumnHeader,
     Links,
-    Spinner,
     EditProfile,
+    FollowButton,
     TabList,
-    Feed,
     ProfileNotFound,
 } from "../components";
 
-import { useCheckAuthQuery } from "../store/api/authApi";
-import { useGetUserInfoQuery, useGetUserTweetsQuery } from "../store/api/userApi";
-
-import usePagination from "../hooks/usePagination";
 import { formatDate } from "../helpers/date";
 
+const profileTablist = {
+    tabs: ["tweets", "replies", "media", "likes"],
+    options: { indexTab: "tweets" },
+};
+
 const Profile = () => {
-    const [tab, setTab] = useState("Tweets");
+    const [tabData, setTabData] = useState({ length: 0 });
     const [editModal, setEditModal] = useState(false);
 
     const { username } = useParams();
     const { pathname } = useLocation();
 
     const {
-        data: tweets,
-        isLoading: tweetsLoading,
-        lastElementRef,
-    } = usePagination(useGetUserTweetsQuery, { identifier: username });
-
-    const {
-        data: { info: currentUser },
+        data: { data: currentUser },
     } = useCheckAuthQuery();
 
     const { isCurrentUser, profileUser } = useGetUserInfoQuery(username, {
@@ -49,6 +46,16 @@ const Profile = () => {
             profileUser: data,
         }),
     });
+
+    const isFollowing = !isCurrentUser && profileUser?.followers.includes(currentUser.id);
+    const joinedDate = formatDate(profileUser?.createdAt, {
+        year: "numeric",
+        month: "long",
+    });
+
+    const handleTabData = (data) => {
+        setTabData({ length: data.length });
+    };
 
     const openEditModal = () => setEditModal(true);
     const closeEditModal = () => setEditModal(false);
@@ -73,10 +80,11 @@ const Profile = () => {
                             <div className="profile-summary">
                                 <h1>{profileUser.displayName}</h1>
 
-                                {tab === "Tweets" && <p>{profileUser.tweetsCount} Tweets</p>}
-                                {tab === "Replies" && <p>{profileUser.tweetsCount} Tweets</p>}
-                                {tab === "Media" && <p>{profileUser.mediaCount} Photos & videos</p>}
-                                {tab === "Likes" && <p>{profileUser.likesCount} Likes</p>}
+                                {!!tabData?.length && <p>{tabData.length} Tweets</p>}
+                                {/* {currentTab === "tweets" && <p>{tweets.length} Tweets</p>}
+                                {currentTab === "replies" && <p>{replies.length} Tweets</p>}
+                                {currentTab === "media" && <p>{media.length} Photos & videos</p>}
+                                {currentTab === "likes" && <p>{likes.length} Likes</p>} */}
                             </div>
                         </ColumnHeader>
 
@@ -94,7 +102,7 @@ const Profile = () => {
                                     <img
                                         src={profileUser.profileImageURL}
                                         className="pfp"
-                                        alt="User Profile Picture"
+                                        alt="User PFP"
                                     />
                                 </div>
                             </div>
@@ -111,21 +119,31 @@ const Profile = () => {
                             ) : (
                                 <IconContext.Provider value={{ className: "reply_icon" }}>
                                     <div className="options-container">
-                                        <button className="more btn-empty">
+                                        <button
+                                            className="btn-empty more"
+                                            disabled
+                                        >
                                             <IoEllipsisHorizontal size="16" />
                                         </button>
-                                        <button className="message btn-empty">
+
+                                        <button
+                                            className="btn-empty message"
+                                            disabled
+                                        >
                                             <BiEnvelope size="16" />
                                         </button>
-                                        <button className="notify btn-empty">
+
+                                        <button
+                                            className="btn-empty notify"
+                                            disabled
+                                        >
                                             <TbBellPlus size="16" />
                                         </button>
-                                        <button
-                                            type="button"
-                                            className={`btn-empty follow`}
-                                        >
-                                            <span>Follow</span>
-                                        </button>
+
+                                        <FollowButton
+                                            isFollowing={isFollowing}
+                                            targetUserId={profileUser._id}
+                                        />
                                     </div>
                                 </IconContext.Provider>
                             )}
@@ -160,13 +178,7 @@ const Profile = () => {
                                         {profileUser.createdAt && (
                                             <div className="icon-info_item">
                                                 <BiCalendar size="18" />
-                                                <p>
-                                                    Joined&nbsp;
-                                                    {formatDate(profileUser.createdAt, {
-                                                        year: "numeric",
-                                                        month: "long",
-                                                    })}
-                                                </p>
+                                                <p>Joined {joinedDate}</p>
                                             </div>
                                         )}
                                     </div>
@@ -174,18 +186,18 @@ const Profile = () => {
 
                                 <div className="counts">
                                     <Link
-                                        to={`/${profileUser.username}/follows`}
+                                        to={`/${profileUser.username}/following`}
+                                        state={{ previousPath: pathname }}
                                         className="count"
-                                        state={{ tab: "following", previousPath: pathname }}
                                     >
                                         <span>{profileUser.following.length}</span>
                                         Following
                                     </Link>
 
                                     <Link
-                                        to={`/${profileUser.username}/follows`}
+                                        to={`/${profileUser.username}/followers`}
+                                        state={{ previousPath: pathname }}
                                         className="count"
-                                        state={{ tab: "followers", previousPath: pathname }}
                                     >
                                         <span>{profileUser.followers.length}</span>
                                         Followers
@@ -196,18 +208,20 @@ const Profile = () => {
 
                         <section className="tweets">
                             <TabList
-                                tabs={["Tweets", "Replies", "Media", "Likes"]}
-                                currentTab={tab}
-                                setCurrentTab={setTab}
+                                tabs={profileTablist.tabs}
+                                options={{
+                                    ...profileTablist.options,
+                                    index: `/${profileUser.username}`,
+                                }}
                             />
 
-                            {tab === "Tweets" && (
-                                <Feed
-                                    tweets={tweets}
-                                    isTweetsLoading={tweetsLoading}
-                                    lastElementRef={lastElementRef}
-                                />
-                            )}
+                            <Outlet
+                                context={{
+                                    args: { id: profileUser?._id },
+                                    options: { skip: !profileUser },
+                                }}
+                                handleChange={handleTabData}
+                            />
                         </section>
                     </>
                 ) : (
