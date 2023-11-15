@@ -1,14 +1,16 @@
 export { default as Sidebar } from "./shared/Sidebar";
 export { default as Links } from "./widgets/Links";
 export { default as Signup } from "./widgets/Signup";
-export { default as PreviewList } from "./twitter/PreviewList";
+export { default as PreviewList } from "./shared/PreviewList";
 export { default as BaseModal } from "./modals/BaseModal";
 export { default as SignupModal } from "./modals/SignupModal";
 export { default as LoginModal } from "./modals/LoginModal";
 export { default as Loading } from "./shared/Loading";
 export { default as TextInput } from "./inputs/TextInput";
 export { default as SelectInput } from "./inputs/SelectInput";
+
 export { default as ColumnHeader } from "./shared/ColumnHeader";
+
 export { default as TabList } from "./shared/TabList";
 export { default as Spinner } from "./placeholders/Spinner";
 export { default as TweetForm } from "./twitter/TweetForm";
@@ -19,8 +21,11 @@ export { default as Tweet } from "./twitter/Tweet";
 export { default as EditProfile } from "./modals/EditProfile";
 export { default as TweetInput } from "./inputs/TweetInput";
 export { default as TweetActions } from "./twitter/TweetActions";
-export { default as TweetDetails } from "./shared/TweetDetails";
+export { default as TweetDetails } from "./twitter/TweetDetails";
 export { default as QuotePreview } from "./twitter/QuotePreview";
 export { default as ConditionalLink } from "./inputs/ConditionalLink";
 export { default as LinkButton } from "./inputs/LinkButton";
 export { default as ReplyModal } from "./modals/ReplyModal";
+
+export { default as FollowButton } from "./inputs/FollowButton";
+export { default as Placeholder } from "./placeholders/Placeholder";

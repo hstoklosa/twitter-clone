@@ -1,6 +1,6 @@
 #preview-list {
     width: 100%;
-    min-height: 100vh;
+    /* min-height: 100vh; */
 }
 
 .first-element,
@@ -15,4 +15,6 @@
 
 #preview-list .ReactVirtualized__List .ReactVirtualized__Grid__innerScrollContainer {
     overflow: visible !important;
+    height: auto !important;
+    max-height: unset !important;
 }
