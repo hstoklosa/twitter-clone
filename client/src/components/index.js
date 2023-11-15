@@ -7,6 +7,8 @@ export { ProfileTimelineList } from "./shared/PreviewList";
 export { RepliesList } from "./shared/PreviewList";
 export { MediaList } from "./shared/PreviewList";
 export { LikeUsersList } from "./shared/PreviewList";
+export { FollowersList } from "./shared/PreviewList";
+export { FollowingList } from "./shared/PreviewList";
 
 export { default as BaseModal } from "./modals/BaseModal";
 export { default as SignupModal } from "./modals/SignupModal";
@@ -16,6 +18,8 @@ export { default as TextInput } from "./inputs/TextInput";
 export { default as SelectInput } from "./inputs/SelectInput";
 
 export { default as ColumnHeader } from "./shared/ColumnHeader";
+export { MiddleColumn } from "./shared/Column";
+export { LeftColumn } from "./shared/Column";
 
 export { default as TabList } from "./shared/TabList";
 export { default as Spinner } from "./placeholders/Spinner";

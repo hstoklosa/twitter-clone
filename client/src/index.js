@@ -11,8 +11,16 @@ import Login from "./routes/Login";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
 import Profile from "./routes/Profile";
+import TabRoute from "./routes/TabRoute";
 
-import { ProfileTimelineList, RepliesList, MediaList, LikesList } from "./components/index";
+import {
+    ProfileTimelineList,
+    RepliesList,
+    MediaList,
+    LikesList,
+    FollowingList,
+    FollowersList,
+} from "./components/index";
 
 import store from "./store/index";
 
@@ -58,6 +66,28 @@ const router = createBrowserRouter([
                     {
                         path: "likes",
                         element: <LikesList />,
+                    },
+                ],
+            },
+
+            {
+                path: "/:username/followers",
+                element: <TabRoute tabs={["followers", "following"]} />,
+                children: [
+                    {
+                        path: "",
+                        element: <FollowersList />,
+                    },
+                ],
+            },
+
+            {
+                path: "/:username/following",
+                element: <TabRoute tabs={["followers", "following"]} />,
+                children: [
+                    {
+                        path: "",
+                        element: <FollowingList />,
                     },
                 ],
             },

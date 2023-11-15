@@ -18,4 +18,22 @@ const likesText = {
     subheader: "When they do, those posts will show up here.",
 };
 
-export { profileTimelineText, repliesText, mediaText, likesText };
+const followersListText = {
+    header: "Looking for followers?",
+    subheader:
+        "When someone follows this account, they'll show up here. Tweeting and interacting with others helps boost followers.",
+};
+
+const followingListText = {
+    header: "The user isn't following anyone",
+    subheader: "Once they follow accounts, they'll show up here.",
+};
+
+export {
+    profileTimelineText,
+    repliesText,
+    mediaText,
+    likesText,
+    followersListText,
+    followingListText,
+};
