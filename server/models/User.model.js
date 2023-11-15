@@ -93,6 +93,11 @@ const userSchema = new Schema(
             ref: "Tweet",
             default: [],
         },
+        bookmarks: {
+            type: [ObjectId],
+            ref: "Tweet",
+            default: [],
+        },
     },
     { timestamps: true }
 );

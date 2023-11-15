@@ -66,6 +66,21 @@
     margin-top: 0.75rem !important;
 }
 
+.tweet-actions-container {
+    display: flex;
+    align-items: center;
+}
+
+.tweet-actions-container .bookmark .icon-container {
+    margin-right: 1rem;
+    stroke-width: unset !important;
+}
+
+.tweet-actions-container .bookmark .icon-container .tweet_icon {
+    font-size: 0.5rem !important;
+    stroke-width: unset !important;
+}
+
 .tweet-btn {
     position: relative;
     display: flex;
@@ -196,6 +211,7 @@
 
 .tweet-btn.comment:hover,
 .tweet-btn.share:hover,
+.tweet-btn.bookmark:hover,
 .tweet-btn.more:hover,
 .tweet-btn.view:hover {
     color: var(--primary-colour);
@@ -203,6 +219,7 @@
 
 .tweet-btn.comment:hover .tweet_icon,
 .tweet-btn.share:hover .tweet_icon,
+.tweet-btn.bookmark:hover .tweet_icon,
 .tweet-btn.more:hover .tweet_icon,
 .tweet-btn.view:hover .tweet_icon {
     color: var(--primary-colour);
@@ -219,6 +236,7 @@
 
 .tweet-btn.comment:hover .icon-container::after,
 .tweet-btn.share:hover .icon-container::after,
+.tweet-btn.bookmark:hover .icon-container::after,
 .tweet-btn.more:hover .icon-container::after,
 .tweet-btn.view:hover .icon-container::after {
     background-color: rgba(29, 155, 240, 0.1);

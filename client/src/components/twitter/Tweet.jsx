@@ -12,6 +12,7 @@ import { IoMdStats } from "react-icons/io";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { RiUserFollowLine, RiUserUnfollowLine } from "react-icons/ri";
 import { MdBlock } from "react-icons/md";
+import { BiBookmark, BiSolidBookmark } from "react-icons/bi";
 
 import {
     TweetText,
@@ -27,12 +28,15 @@ import {
 import { useCheckAuthQuery } from "../../store/api/authApi";
 import { useDeleteTweetMutation } from "../../store/api/tweetApi";
 import {
+    useGetUserInfoQuery,
     useLikeTweetMutation,
     useUnlikeTweetMutation,
     useCreateRepostMutation,
     useDeleteRepostMutation,
     useFollowUserMutation,
     useUnfollowUserMutation,
+    useCreateBookmarkMutation,
+    useDeleteBookmarkMutation,
 } from "../../store/api/userApi";
 
 import { isObjEmpty } from "../../utils/object";
@@ -50,6 +54,10 @@ const Tweet = ({ tweet }) => {
         data: { isAuthenticated, data: currentUser },
     } = useCheckAuthQuery();
 
+    const { data: currentUserInfo } = useGetUserInfoQuery(currentUser?.username, {
+        skip: !currentUser?.username,
+    });
+
     const [deleteTweet] = useDeleteTweetMutation();
     const [createRepost] = useCreateRepostMutation();
     const [deleteRepost] = useDeleteRepostMutation();
@@ -58,7 +66,12 @@ const Tweet = ({ tweet }) => {
 
     const [followUser, followResult] = useFollowUserMutation();
     const [unfollowUser, unfollowResult] = useUnfollowUserMutation();
+    const [createBookmark, createBookmarkResult] = useCreateBookmarkMutation();
+    const [deleteBookmark, deleteBookmarkResult] = useDeleteBookmarkMutation();
 
+    // console.log(currentUserInfo);
+    // console.log(tweet);
+    const isBookmarked = currentUserInfo.bookmarks.includes(tweet._id);
     const isReposted = tweet.retweets.includes(currentUser.id);
     const isLiked = tweet.likes.includes(currentUser.id);
     const isFollowingAuthor = tweet.author.followers.includes(currentUser.id);
@@ -96,6 +109,15 @@ const Tweet = ({ tweet }) => {
 
     const handleLike = async (e) => {
         isLiked ? await unlikeTweet({ id: tweet._id }) : await likeTweet({ id: tweet._id });
+    };
+
+    const handleBookmark = async () => {
+        const bookmarkData = {
+            tweetId: tweet._id,
+            userId: currentUser.id,
+        };
+
+        isBookmarked ? await deleteBookmark(bookmarkData) : await createBookmark(bookmarkData);
     };
 
     const handleFollow = async () => {
@@ -394,14 +416,26 @@ const Tweet = ({ tweet }) => {
                             </div>
                         </LinkButton>
 
-                        <LinkButton
-                            className="tweet-btn share"
-                            disabled
-                        >
-                            <div className="icon-container">
-                                <TbShare2 />
-                            </div>
-                        </LinkButton>
+                        <div className="tweet-actions-container">
+                            <LinkButton
+                                type="button"
+                                className="tweet-btn bookmark"
+                                onClick={handleBookmark}
+                            >
+                                <div className="icon-container">
+                                    {isBookmarked ? <BiSolidBookmark /> : <BiBookmark />}
+                                </div>
+                            </LinkButton>
+
+                            <LinkButton
+                                className="tweet-btn share"
+                                disabled
+                            >
+                                <div className="icon-container">
+                                    <TbShare2 />
+                                </div>
+                            </LinkButton>
+                        </div>
                     </div>
                 </div>
             </ConditionalLink>

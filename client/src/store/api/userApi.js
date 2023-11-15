@@ -31,6 +31,43 @@ export const userApi = baseApi.injectEndpoints({
             ],
         }),
 
+        getBookmarks: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/users/${id}/bookmarks?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post", "BOOKMARKS"),
+        }),
+        createBookmark: builder.mutation({
+            query: ({ userId, tweetId }) => ({
+                url: `/users/${userId}/bookmarks`,
+                method: "POST",
+                body: {
+                    tweetId,
+                },
+            }),
+            invalidatesTags: (result, error, { userId }) => [
+                { type: "Post", id: "BOOKMARKS" },
+                { type: "User", id: userId },
+            ],
+        }),
+        deleteBookmark: builder.mutation({
+            query: ({ userId, tweetId }) => ({
+                url: `/users/${userId}/bookmarks/${tweetId}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, { userId }) => [
+                { type: "Post", id: "BOOKMARKS" },
+                { type: "User", id: userId },
+            ],
+        }),
+        clearBookmarks: builder.mutation({
+            query: ({ userId }) => ({
+                url: `/users/${userId}/bookmarks`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, { userId }) => [{ type: "User", id: userId }],
+        }),
+
         getUserFollowers: builder.query({
             query: ({ username, page, limit }) => ({
                 url: `/users/${username}/followers?page=${page}&limit=${limit}`,
@@ -145,4 +182,8 @@ export const {
     useGetUserMediaQuery,
     useCreateRepostMutation,
     useDeleteRepostMutation,
+    useClearBookmarksMutation,
+    useGetBookmarksQuery,
+    useCreateBookmarkMutation,
+    useDeleteBookmarkMutation,
 } = userApi;
