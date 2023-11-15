@@ -7,8 +7,8 @@ const ColumnHeader = ({ close, modalBack, routerBack, className, children }) => 
     const { state } = useLocation();
 
     return (
-        <header className={className}>
-            <IconContext.Provider value={{ className: "header-btn_icon" }}>
+        <IconContext.Provider value={{ className: "header-btn_icon" }}>
+            <header className={className}>
                 {close && (
                     <button
                         className="header-btn"
@@ -34,8 +34,8 @@ const ColumnHeader = ({ close, modalBack, routerBack, className, children }) => 
                 )}
 
                 {children}
-            </IconContext.Provider>
-        </header>
+            </header>
+        </IconContext.Provider>
     );
 };
 

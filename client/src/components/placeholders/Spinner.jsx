@@ -3,12 +3,23 @@ import "../../styles/Spinner.css";
 const Spinner = ({ width = "30px", height = "30px" }) => {
     return (
         <div
-            className="spinner"
+            className="spinner-wrapper"
             style={{
-                width,
-                height,
+                width: "100%",
+                height: "200px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
             }}
-        ></div>
+        >
+            <div
+                className="spinner"
+                style={{
+                    width,
+                    height,
+                }}
+            ></div>
+        </div>
     );
 };
 
