@@ -35,3 +35,4 @@ export { default as ReplyModal } from "./modals/ReplyModal";
 export { default as FollowButton } from "./inputs/FollowButton";
 export { default as Placeholder } from "./placeholders/Placeholder";
 export { default as ProfileNotFound } from "./placeholders/ProfileNotFound";
+export { default as UserPreview } from "./shared/UserPreview";
