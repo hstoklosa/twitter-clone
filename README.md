@@ -1,7 +1,6 @@
 # <p align="center"> X Clone</p>
 
-<p align="center"><img src="https://static.dezeen.com/uploads/2023/07/x-logo-twitter-elon-musk_dezeen_2364_col_0.jpg" width=150 /></p>
-<p align="center">A simplified version of X (previously Twitter). </p>
+<p align="center"><img src="https://github.com/imexotic/imexotic/blob/main/assets/x-readme-banner.jpg?raw=true" style="width: 80%" /></p>
 
 ## Roadmap 🎉
 
@@ -10,28 +9,6 @@ The goal of this side-project is to create a fully functional full-stack Twitter
 The project is currently in the beginning phases of development, and in order to keep track of the progress, the following README will contain series of information (stack, features, specific todos).
 
 Over the summer of 2023, I will be working on this project until it will be of a satisfactory standard to be deployed and included as my resume project.
-
-### Progess Update: 04/07/2023
-
-In the first week of the project commencing, I have managed to implement an authentication system that somewhat resembles the one used by Twitter by combining `passport.js` and `MongoDB`.
-
-1. The application now supports local authentication as well as OAuth2.0 (Google), and it works alongside MongoDB to store user data and the sessions from `express-session` to maintain a persistant authentication for the user across the application. I have constructed appropriate pages on the client-side of the application to accomodate the backend authentication system, including Login (local & OAuth2.0) and Home pages.
-
-2. Lastly, in order to allow the user to navigate through the application (either auth/not auth), I familiarised myself with the newly released `react-router-dom v6.14` library and applied the `RouterProvider` with some basic routes - Login & ProtectedRoute (Home, Profile...).
-
-### Progess Update: 18/07/2023
-
-**PERSONAL NOTE:** Lately I've been diving into new technologies that I will be using to build the Twitter clone. It's been somewhat time-consuming (thus the lack of updates), but I still managed to become familiar with their usage and how they can be combined to build a fully functional app.
-
-1. I've learnt `Docker` and `docker-compose` to create a multi-container application. The architecture splits the full-stack application into 3 containers (client, server, database), which run and communicate with each other in parallel. The technology will save me a lot of time in the future, because it allows for **faster deployements and migrations**.
-
-2. I've opted to use `@redux/toolkit` and `react-redux` instead of the `useContext` hook for maintaining a consistent global state. Although `redux` is a verbose and requires much more boilerplate code, the `toolkit` offers a more efficient implementation of the same store functionality.
-
-3. The backend error-handling has been upgraded with a `CustomHttpError` object and re-implemented error-handling middleware that decides upon the content of the error response based on the current environment. It responds with either detailed or generic error messages, which can be caught by the `asyncThunk` function and displayed to the user.
-
-### Progess Update: 05/08/2023
-
-...
 
 ### 🔍 Features
 
