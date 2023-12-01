@@ -36,18 +36,22 @@ const tweetSchema = new Schema(
                 },
             },
         ],
-        mentions: [
-            {
-                type: String,
-                set: (m) => m.toLowerCase().replaceAll("@", ""),
+        mentions: {
+            type: [String],
+            default: [],
+            set: (mentions) => {
+                return mentions.map((m) => m.toLowerCase().replace("@", ""));
             },
-        ],
-        hashtags: [
-            {
-                type: String,
-                set: (h) => h.toLowerCase().replaceAll("#", ""),
+        },
+
+        hashtags: {
+            type: [String],
+            default: [],
+            set: (hashtags) => {
+                return hashtags.map((h) => h.toLowerCase().replace("#", ""));
             },
-        ],
+        },
+
         visibility: {
             type: String,
             enum: ["EVERYONE", "FOLLOWED", "MENTIONED"],

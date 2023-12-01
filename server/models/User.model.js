@@ -25,7 +25,6 @@ const userSchema = new Schema(
             lowercase: true,
             validate: {
                 validator: (username) => {
-                    // return !username.match(/^[0-9a-zA-Z_.-]+$/);
                     return /^[0-9a-zA-Z_.-]+$/.test(username);
                 },
                 message: (props) =>
@@ -67,7 +66,6 @@ const userSchema = new Schema(
             maxLength: 100,
             validate: {
                 validator: (url) => {
-                    // return /^(ftp|http|https):\/\/[^ "]+$/.test(url);
                     return /^((http|https):\/\/)?[^ "]+$/.test(url);
                 },
                 message: (props) => `${props.value} is not a valid URL!`,
