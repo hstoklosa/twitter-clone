@@ -17,7 +17,7 @@
     overflow: hidden;
 }
 
-.float-options .more-btn {
+.float-options .float-btn {
     text-align: start;
     padding: 0.75rem 1rem;
     transition-property: background-color, box-shadow 0.2s;
@@ -33,6 +33,6 @@
     z-index: -1;
 }
 
-.float-options .more-btn:hover {
+.float-options .float-btn:hover {
     background-color: var(--tweet-hover);
 }

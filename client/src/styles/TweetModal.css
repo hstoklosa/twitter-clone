@@ -43,6 +43,7 @@
 }
 
 .tweet-modal .pfp-container {
+    align-items: flex-start;
     padding-top: 0.3rem;
     margin-right: 0.75rem !important;
 }
@@ -50,7 +51,6 @@
 .tweet-modal .pfp-container .pfp {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
 }
 
 .tweet-modal .tweet-input-wrapper .tweet-text {

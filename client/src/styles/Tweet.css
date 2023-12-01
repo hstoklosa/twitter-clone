@@ -19,7 +19,6 @@
 .tweet .pfp-container .pfp {
     width: 45px;
     height: 45px;
-    border-radius: 50%;
 }
 
 .tweet .tweet-container {
@@ -106,12 +105,6 @@
     width: 200px;
 }
 
-.tweet-btn .more-btn {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
 .tweet-btn .count-container span {
     padding: 0 0.75rem;
 }
@@ -170,13 +163,13 @@
     width: 250px;
 }
 
-.tweet .more-btn {
+.tweet .float-btn {
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
 
-.tweet .more-btn.delete {
+.tweet .float-btn.delete {
     color: red;
 }
 

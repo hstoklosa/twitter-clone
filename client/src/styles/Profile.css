@@ -31,12 +31,6 @@
     height: 140px;
     background-color: #16181c;
     border: 4px solid #000;
-    border-radius: 50%;
-}
-
-.profile .pfp-container .pfp {
-    width: 100%;
-    border-radius: 50%;
 }
 
 .profile .follow {

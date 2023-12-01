@@ -223,26 +223,40 @@ const Sidebar = ({ userLoggedIn = null }) => {
 
                 {userLoggedIn && (
                     <>
-                        {accountFloat && (
-                            <FloatOptions
-                                isOpen={accountFloat}
-                                onClose={closeAccountFloat}
-                                className="account-settings"
-                            >
-                                <button
-                                    type="button"
-                                    className="more-btn"
-                                    onClick={handleSignOut}
-                                >
-                                    Log out @{username}
-                                </button>
-                            </FloatOptions>
-                        )}
-
                         <button
                             className="navbar-account"
                             onClick={openAccountFloat}
                         >
+                            {accountFloat && (
+                                <FloatOptions
+                                    isOpen={accountFloat}
+                                    onClose={closeAccountFloat}
+                                    className="account-settings"
+                                >
+                                    <section className="account-details">
+                                        <div className="pfp-container">
+                                            <img
+                                                src={profileImageURL}
+                                                className="pfp"
+                                                alt="User PFP"
+                                            />
+                                        </div>
+
+                                        <div className="navbar-account_names">
+                                            <p className="display_name">{displayName}</p>
+                                            <p className="username">@{username}</p>
+                                        </div>
+                                    </section>
+                                    <button
+                                        type="button"
+                                        className="float-btn"
+                                        onClick={handleSignOut}
+                                    >
+                                        Log out @{username}
+                                    </button>
+                                </FloatOptions>
+                            )}
+
                             <div className="pfp-container">
                                 <img
                                     src={profileImageURL}
