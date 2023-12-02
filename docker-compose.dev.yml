@@ -1,26 +1,22 @@
-version: "1.5"
+version: "3"
 
 services:
     mongo:
-        image: mongo
         container_name: mongodb
-        env_file: ./.env
-        ports:
-            - "27017:27017"
+        image: mongo
+        env_file: .env
         volumes:
             - data-volume:/data/db
 
     server:
         container_name: backend
         image: xclone-backend
-        env_file: ./.env
+        env_file: .env
         build:
-            context: ./server
+            context: server
             dockerfile: Dockerfile
-            args:
-                - DOCKER_PORT=$SERVER_DOCKER_PORT
         ports:
-            - $SERVER_LOCAL_PORT:$SERVER_DOCKER_PORT
+            - $SERVER_PORT:$SERVER_PORT
         volumes:
             - ./server/:/app
             - /app/node_modules
@@ -30,15 +26,14 @@ services:
     client:
         container_name: frontend
         image: xclone-frontend
-        env_file: ./.env
+        env_file: .env
         build:
-            context: ./client
+            context: client
             dockerfile: Dockerfile
             args:
                 - SERVER_ORIGIN=$SERVER_ORIGIN
-                - DOCKER_PORT=$CLIENT_DOCKER_PORT
         ports:
-            - $CLIENT_LOCAL_PORT:$CLIENT_DOCKER_PORT
+            - $CLIENT_PORT:$CLIENT_PORT
         volumes:
             - ./client/:/app
             - /app/node_modules
