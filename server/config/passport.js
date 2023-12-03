@@ -1,8 +1,8 @@
 const passport = require("passport");
 
 const User = require("../models/User.model");
-const localStrategy = require("./strategies/local");
-const googleStrategy = require("./strategies/google");
+const localStrategy = require("./passport/local");
+const googleStrategy = require("./passport/google");
 
 const { userInfoSelector } = require("../helpers/selectors");
 

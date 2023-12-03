@@ -1,6 +1,6 @@
 const { UnauthenticatedError } = require("../utils/errors");
 
-const isAuthenticated = (req, res, next) => {
+const authenticate = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
@@ -8,4 +8,4 @@ const isAuthenticated = (req, res, next) => {
     next(new UnauthenticatedError("You are not authenticated!"));
 };
 
-module.exports = isAuthenticated;
+module.exports = authenticate;

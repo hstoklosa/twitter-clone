@@ -4,7 +4,7 @@ const path = require("path");
 const getMetadata = require("../helpers/metadata");
 const { BadRequestError } = require("../utils/errors");
 
-// Handle file uploads
+// handle file uploads
 const generateFileName = (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const fileName = uniqueSuffix + path.extname(file.originalname);
@@ -22,7 +22,7 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
 };
 
-// Multer setup with 5MB file size constraint
+// setup with 5MB file size constraint
 const storage = multer.diskStorage({
     destination: "uploads/",
     filename: generateFileName,
