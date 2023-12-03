@@ -100,13 +100,18 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-// Static methods
+// hide password field
+userSchema.set("toJSON", {
+    transform: (doc, { __v, password, ...rest }, options) => rest,
+});
+
+// static methods
 userSchema.statics.addUser = (data) => {
     const user = new this(data);
     return user.save();
 };
 
-// Instance methods
+// instance methods
 userSchema.methods.addRetweet = function (tweetId) {
     const isRetweeted = this.retweets.some((id) => id === tweetId);
 

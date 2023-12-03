@@ -11,7 +11,7 @@ const tweetSchema = new Schema(
             trim: true,
             maxLength: [280, "The tweet can't be longer than 280 characters."],
             validate: {
-                validator: function (c) {
+                validator: (c) => {
                     return c.trim().length > 0;
                 },
                 message: "The tweet can't be empty.",
@@ -39,19 +39,13 @@ const tweetSchema = new Schema(
         mentions: {
             type: [String],
             default: [],
-            set: (mentions) => {
-                return mentions.map((m) => m.toLowerCase().replace("@", ""));
-            },
+            set: (mentions) => mentions.map((m) => m.toLowerCase().replace("@", "")),
         },
-
         hashtags: {
             type: [String],
             default: [],
-            set: (hashtags) => {
-                return hashtags.map((h) => h.toLowerCase().replace("#", ""));
-            },
+            set: (hashtags) => hashtags.map((h) => h.toLowerCase().replace("#", "")),
         },
-
         visibility: {
             type: String,
             enum: ["EVERYONE", "FOLLOWED", "MENTIONED"],

@@ -115,7 +115,7 @@ const logout = (req, res) => {
 };
 
 const isAuth = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (req.user)
         return res.status(200).json({
             isAuthenticated: true,
             data: {
@@ -123,7 +123,6 @@ const isAuth = (req, res, next) => {
                 username: req.user.username,
             },
         });
-    }
 
     return next(new UnauthenticatedError("You are not authenticated!"));
 };
