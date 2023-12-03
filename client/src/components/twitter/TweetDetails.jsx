@@ -4,18 +4,20 @@ import { Link } from "react-router-dom";
 import { getTimeDifference } from "../../helpers/date";
 
 const TweetDetails = ({ tweet, children }) => {
+    const timeDifference = getTimeDifference(tweet.createdAt);
+
     return (
         <div className="tweet-details">
             <Link
-                to={`/${tweet.author.username}`}
                 className="display_name"
+                to={`/${tweet.author.username}`}
             >
                 {tweet.author.displayName}
             </Link>
 
             <p className="username">@{tweet.author.username}</p>
             <span className="separator">·</span>
-            <p className="date">{getTimeDifference(tweet.createdAt)}</p>
+            <p className="date">{timeDifference}</p>
 
             {children}
         </div>

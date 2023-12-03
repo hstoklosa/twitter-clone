@@ -1,7 +1,7 @@
-export const MiddleColumn = ({ children }) => {
+export const MiddleColumn = ({ children, ...rest }) => {
     return (
         <div
-            className="column"
+            {...rest}
             id="general"
         >
             {children}
@@ -9,10 +9,10 @@ export const MiddleColumn = ({ children }) => {
     );
 };
 
-export const LeftColumn = ({ children }) => {
+export const LeftColumn = ({ children, ...rest }) => {
     return (
         <div
-            className="column"
+            {...rest}
             id="widgets"
         >
             {children}

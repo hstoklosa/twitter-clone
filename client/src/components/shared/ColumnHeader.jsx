@@ -12,7 +12,7 @@ const ColumnHeader = ({ close, modalBack, routerBack, className, children }) => 
             <header className={className}>
                 {close && (
                     <button
-                        className="header-btn round-btn"
+                        className="header-btn dark_round-btn"
                         onClick={close}
                     >
                         <div className="icon-container">
@@ -25,7 +25,7 @@ const ColumnHeader = ({ close, modalBack, routerBack, className, children }) => 
                 )}
 
                 {modalBack && (
-                    <button className="header-btn round-btn">
+                    <button className="header-btn dark_round-btn">
                         <div className="icon-container">
                             <BiArrowBack
                                 className="icon"
@@ -38,7 +38,7 @@ const ColumnHeader = ({ close, modalBack, routerBack, className, children }) => 
                 {routerBack && (
                     <Link
                         to={state?.previousPath || "/home"}
-                        className="header-btn round-btn"
+                        className="header-btn dark_round-btn"
                     >
                         <div className="icon-container">
                             <BiArrowBack

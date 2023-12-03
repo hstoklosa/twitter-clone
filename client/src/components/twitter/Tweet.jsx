@@ -69,8 +69,6 @@ const Tweet = ({ tweet }) => {
     const [createBookmark, createBookmarkResult] = useCreateBookmarkMutation();
     const [deleteBookmark, deleteBookmarkResult] = useDeleteBookmarkMutation();
 
-    // console.log(currentUserInfo);
-    // console.log(tweet);
     const isBookmarked = currentUserInfo.bookmarks.includes(tweet._id);
     const isReposted = tweet.retweets.includes(currentUser.id);
     const isLiked = tweet.likes.includes(currentUser.id);

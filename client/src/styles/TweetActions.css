@@ -16,10 +16,6 @@
 
 .tweet-attachments_icon {
     color: var(--primary-colour);
-    /* width: 100%;
-    height: 30px; */
-    width: 18px;
-    height: 100%;
 }
 
 .tweet-attachments_button {
@@ -27,19 +23,28 @@
     /* padding: 0.5rem; */
     width: 33px;
     height: 33px;
-    margin-right: 0.4rem;
-    border-radius: 50%;
+    /* border-radius: 50%; */
+    /* margin-right: 0.4rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear; */
 }
-
+/* 
 .tweet-attachments_button:hover {
     background-color: rgba(29, 155, 240, 0.2);
+} */
+
+.tweet-attachments_button .icon-container {
+    width: 18px;
+    height: 18px;
 }
 
-.tweet-attachments_button:disabled:hover {
+.tweet-attachments_button .tweet-attachments_icon {
+    color: var(--primary-colour);
+}
+
+.tweet-attachments_button:disabled:hover .icon-container::after {
     background-color: rgba(29, 155, 240, 0.1);
 }
 

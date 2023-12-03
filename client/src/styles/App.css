@@ -41,6 +41,7 @@
     --empty-hover: rgba(239, 243, 244, 0.1);
     --empty-hover2: rgba(231, 233, 234, 0.1);
     --borderless-hover: rgba(29, 155, 240, 0.1);
+    --chat-hover: rgb(22, 24, 28);
 
     --white: rgb(231, 233, 234);
     --grey: rgb(113, 118, 123);
@@ -159,9 +160,25 @@ select {
     border-radius: 50%;
 }
 
+.pfp-container .icon-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
 .pfp-container .pfp {
     width: 100%;
     border-radius: 50%;
+}
+
+.username {
+    font-size: 0.937rem;
+    font-weight: 500;
+    color: var(--grey);
+}
+
+.displayName {
+    font-size: 1.25rem;
 }
 
 /* FIRST COLUMN: Sidebar */
@@ -172,7 +189,7 @@ select {
     width: 275px;
 }
 
-.column#navbar .sticky-wrapper {
+#navbar .sticky-wrapper {
     min-height: 100vh;
     position: sticky;
     top: 0;
@@ -302,12 +319,6 @@ select {
     margin-bottom: 0.1rem;
 }
 
-.navbar-account_names .username {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--grey);
-}
-
 .navbar-account_icon {
     margin-left: auto;
 }
@@ -351,8 +362,8 @@ select {
     border-bottom: 1px solid var(--border);
 }
 
-#general header a.round-btn .icon-container::after,
-#general header button.round-btn .icon-container::after {
+#general header a.dark_round-btn .icon-container::after,
+#general header button.dark_round-btn .icon-container::after {
     width: 35px !important;
     height: 35px !important;
 }
@@ -367,7 +378,7 @@ select {
     stroke-width: 0px;
 }
 
-.column#general {
+#general {
     border-right: 1px solid var(--border);
     border-left: 1px solid var(--border);
     width: 600px !important;
@@ -386,11 +397,11 @@ img.pfp {
 
 /* THIRD COLUMN: Widgets */
 
-.column#widgets {
+#widgets {
     width: 350px;
 }
 
-.column#widgets .sticky-wrapper {
+#widgets .sticky-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -443,21 +454,6 @@ img.pfp {
     filter: brightness(0.8);
 }
 
-.dark-round-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: rgba(15, 20, 25, 0.75);
-    transition: background-color 0.2s linear;
-}
-
-.dark-round-btn:hover {
-    background-color: rgba(39, 44, 48, 0.75);
-}
-
 /* .round-btn {
     display: flex;
     justify-content: center;
@@ -472,7 +468,8 @@ img.pfp {
     background-color: rgba(39, 44, 48, 0.75);
 } */
 
-.round-btn {
+.blue_round-btn,
+.dark_round-btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -484,7 +481,8 @@ img.pfp {
     transition: all 0.2s ease-out;
 }
 
-.round-btn .icon-container {
+.blue_round-btn .icon-container,
+.dark_round-btn .icon-container {
     position: relative;
     display: inline-flex;
     justify-content: center;
@@ -496,24 +494,41 @@ img.pfp {
     transition: all 0.2s ease-out;
 }
 
-.round-btn .icon-container::after {
+.blue_round-btn .icon-container::after,
+.dark_round-btn .icon-container::after {
     content: "";
     position: absolute;
-    width: 15px;
-    height: 15px;
+    width: 30px;
+    height: 30px;
     border-radius: 99999rem;
     transition: all 0.2s ease-out;
 }
 
-.round-btn:hover .icon-container::after {
+.blue_round-btn .icon,
+.dark_round-btn .icon {
+    width: 100%;
+    height: 100%;
+    transition: all 0.2s ease-out;
+}
+
+.dark_round-btn .icon {
+    color: var(--white);
+}
+
+.dark_round-btn:hover .icon-container::after {
     background-color: rgba(239, 243, 244, 0.1);
 }
 
-.round-btn .icon {
-    width: 100%;
-    height: 100%;
-    color: var(--white) !important;
-    transition: all 0.2s ease-out;
+.blue_round-btn .icon {
+    color: var(--grey);
+}
+
+.blue_round-btn:hover .icon-container::after {
+    background-color: rgba(29, 155, 240, 0.1);
+}
+
+.blue_round-btn:hover .icon {
+    color: var(--primary-colour);
 }
 
 .more-btn {
@@ -847,17 +862,17 @@ img.pfp {
         padding: 0 !important;
     }
 
-    .column#navbar .sticky-wrapper {
+    #navbar .sticky-wrapper {
         padding: 0.2rem 1rem;
         align-items: center;
     }
 }
 
 @media screen and (max-width: 1040px) {
-    .column#navbar {
+    #navbar {
         align-items: flex-end;
     }
-    .column#widgets {
+    #widgets {
         display: none;
     }
     .container main {
