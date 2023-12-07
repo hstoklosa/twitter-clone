@@ -15,9 +15,9 @@ module.exports = new GoogleStrategy(
 
             if (!user) {
                 const {
-                    displayName,
+                    id,
                     provider,
-                    id: providerId,
+                    displayName,
                     emails: [{ value: email }],
                     _json: { picture: profileImageURL, locale: location },
                 } = profile;
@@ -26,10 +26,13 @@ module.exports = new GoogleStrategy(
                 const customDob = new Date("1997-01-01").toISOString().split("T")[0];
 
                 const newUser = await User.addUser({
-                    provider: { provider, providerId },
-                    dob: customDob,
+                    provider: {
+                        providerName: provider,
+                        providerId: id,
+                    },
                     username: generatedUsername,
                     displayName,
+                    dob: customDob,
                     email,
                     profileImageURL,
                     location,

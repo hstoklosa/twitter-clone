@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async (listener) => {
     mongoose.connection
-        .on("error", () => console.error("Couldn't establish a MongoDB connection! ❌"))
+        .on("error", console.error)
         .on("disconnected", connectDB)
         .once("open", listener);
 
