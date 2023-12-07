@@ -3,9 +3,10 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 const usePagination = (queryHook, queryArgs, queryOptions, limit = 10) => {
     const [currentPage, setCurrentPage] = useState(1);
 
+    // don't fetch pages before 0 in last result
     const lastResult = queryHook(
         { ...queryArgs, page: currentPage - 1, limit },
-        { skip: currentPage === 1 } // don't fetch pages before 0
+        { skip: currentPage === 1 || queryOptions?.skip }
     );
     const currentResult = queryHook({ ...queryArgs, page: currentPage, limit }, queryOptions);
     const nextResult = queryHook({ ...queryArgs, page: currentPage + 1, limit }, queryOptions);

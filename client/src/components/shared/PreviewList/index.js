@@ -18,7 +18,7 @@ import {
     useGetUserFollowingQuery,
 } from "../../../store/api/userApi";
 
-import withQuery from "./withQuery";
+import withQuery from "../../../hoc/withQuery";
 import Tweet from "../../twitter/Tweet";
 import UserPreview from "../UserPreview";
 
@@ -37,8 +37,6 @@ const cache = new CellMeasurerCache({
     fixedWidth: true,
     defaultHeight: 100,
 });
-
-// const defaultQueryResult = { data: [], isLoading: true };
 
 const PreviewList = ({
     queryResult,
@@ -62,12 +60,11 @@ const PreviewList = ({
                 columnIndex={0}
             >
                 {({ registerChild }) => (
-                    <div>
+                    <div ref={registerChild}>
                         {data[index] && (
                             <PreviewComponent
                                 key={index}
                                 tweet={data[index]}
-                                ref={registerChild}
                                 style={style}
                             />
                         )}
@@ -84,6 +81,8 @@ const PreviewList = ({
         />
     );
 
+    if (isLoading) return <Spinner />;
+
     return (
         <section
             className="preview-list"
@@ -92,26 +91,22 @@ const PreviewList = ({
             <AutoSizer style={{ width: "100%", height: "unset" }}>
                 {({ width }) => (
                     <WindowScroller>
-                        {({ height, isScrolling, onChildScroll, scrollTop }) =>
-                            isLoading ? (
-                                <Spinner />
-                            ) : (
-                                <List
-                                    autoHeight
-                                    width={width}
-                                    height={height}
-                                    isScrolling={isScrolling}
-                                    scrollTop={scrollTop}
-                                    deferredMeasurementCache={cache}
-                                    rowRenderer={renderPreview}
-                                    noRowsRenderer={renderEmptyPreview}
-                                    rowCount={data.length}
-                                    rowHeight={cache.rowHeight}
-                                    onScroll={handleScroll}
-                                    onChildScroll={onChildScroll}
-                                />
-                            )
-                        }
+                        {({ height, isScrolling, onChildScroll, scrollTop }) => (
+                            <List
+                                autoHeight
+                                width={width}
+                                height={height}
+                                isScrolling={isScrolling}
+                                scrollTop={scrollTop}
+                                deferredMeasurementCache={cache}
+                                rowRenderer={renderPreview}
+                                noRowsRenderer={renderEmptyPreview}
+                                rowCount={data.length}
+                                rowHeight={cache.rowHeight}
+                                onScroll={handleScroll}
+                                onChildScroll={onChildScroll}
+                            />
+                        )}
                     </WindowScroller>
                 )}
             </AutoSizer>
@@ -119,13 +114,11 @@ const PreviewList = ({
     );
 };
 
-const selectUsername = (params) => ({ username: params.username });
+const withTweetQuery = (query, placeholder) => () =>
+    withQuery(query, Tweet, placeholder)(PreviewList);
 
-const withTweetQuery = (query, placeholder, paramSelector) => () =>
-    withQuery(query, Tweet, placeholder, paramSelector)(PreviewList);
-
-const withUserQuery = (query, placeholder, paramSelector) => () =>
-    withQuery(query, UserPreview, placeholder, paramSelector)(PreviewList);
+const withUserQuery = (query, placeholder) => () =>
+    withQuery(query, UserPreview, placeholder)(PreviewList);
 
 const ProfileTimelineList = withTweetQuery(useGetUserTweetsQuery, profileTimelineText)();
 
@@ -135,9 +128,9 @@ const MediaList = withTweetQuery(useGetUserMediaQuery, mediaText)();
 
 const LikesList = withTweetQuery(useGetUserLikesQuery, likesText)();
 
-const FollowersList = withUserQuery(useGetUserFollowersQuery, followersListText, selectUsername)();
+const FollowersList = withUserQuery(useGetUserFollowersQuery, followersListText)();
 
-const FollowingList = withUserQuery(useGetUserFollowingQuery, followingListText, selectUsername)();
+const FollowingList = withUserQuery(useGetUserFollowingQuery, followingListText)();
 
 export { ProfileTimelineList, RepliesList, MediaList, LikesList, FollowersList, FollowingList };
 
