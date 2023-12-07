@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 const customBaseQuery =
-    ({ baseUrl } = { baseUrl: "" }) =>
+    ({ baseUrl } = { baseUrl: process.env.REACT_APP_API_URL }) =>
     async ({ url, method = "GET", headers = {}, body = null }, api, extraOptions) => {
         const options = {
             method,
@@ -9,6 +9,7 @@ const customBaseQuery =
             credentials: "include",
         };
 
+        // adjust headers and body based on the request
         if (body && method !== "GET" && method !== "HEAD") {
             if (body instanceof FormData) {
                 options.body = body;
@@ -18,12 +19,17 @@ const customBaseQuery =
             }
         }
 
-        // fetches and parses JSON response to object
+        // fetches and parses JSON response to an object
         const response = await fetch(baseUrl + url, options);
         const result = await response.json();
 
-        // errors received from backend
+        // backend error
         if (result.error) {
+            // user not authenticated
+            if (result.error.status === 401) {
+                return { data: { isAuthenticated: false } };
+            }
+
             return {
                 error: {
                     status: result.error.status,
@@ -38,9 +44,7 @@ const customBaseQuery =
     };
 
 export const baseApi = createApi({
-    baseQuery: customBaseQuery({
-        baseUrl: process.env.REACT_APP_API_URL,
-    }),
+    baseQuery: customBaseQuery(),
     reducerPath: "baseApi",
     tagTypes: ["Auth", "User", "Post"],
     endpoints: (builder) => ({}),

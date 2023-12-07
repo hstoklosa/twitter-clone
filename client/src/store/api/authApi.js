@@ -3,30 +3,20 @@ import { baseApi } from "./baseApi";
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         checkAuth: builder.query({
-            async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-                const response = await fetchWithBQ({ url: "/auth/me" });
-
-                if (response.error) {
-                    return response.error?.status === 401
-                        ? { data: { isAuthenticated: false } }
-                        : { error: response.error };
-                }
-
-                return { data: response.data };
-            },
+            query: () => ({
+                url: "/auth/me",
+            }),
             providesTags: () => [{ type: "Auth" }],
         }),
         signIn: builder.mutation({
-            query: ({ identifier, password }) => {
-                return {
-                    url: "/auth/signin",
-                    method: "POST",
-                    body: {
-                        identifier,
-                        password,
-                    },
-                };
-            },
+            query: ({ identifier, password }) => ({
+                url: "/auth/signin",
+                method: "POST",
+                body: {
+                    identifier,
+                    password,
+                },
+            }),
             invalidatesTags: () => [{ type: "Auth" }],
         }),
         signUp: builder.mutation({

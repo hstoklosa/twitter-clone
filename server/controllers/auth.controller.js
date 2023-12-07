@@ -5,6 +5,7 @@ const { transporter } = require("../config/nodemailer");
 
 const User = require("../models/User.model");
 const asyncHandler = require("../middlewares/asyncHandler");
+
 const {
     BadRequestError,
     ConflictError,
@@ -86,12 +87,12 @@ const signUp = asyncHandler(async (req, res, next) => {
 
 const signIn = (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
-        if (err) next(new InternalServerError()); // local strategy error
+        if (err) return next(new InternalServerError()); // local strategy error
 
-        if (!user) next(new BadRequestError(info.message)); // no user error
+        if (!user) return next(new BadRequestError(info.message)); // no user error
 
         req.logIn(user, (err) => {
-            if (err) next(new InternalServerError()); // error while establishing session
+            if (err) return next(new InternalServerError()); // error while establishing session
 
             return res.status(200).json({
                 isAuthenticated: true,
