@@ -1,7 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { MiddleColumn, LeftColumn, ColumnHeader, TabList, Links } from "../components";
 
-const TabRoute = ({ tabs, children, context = {} }) => {
+const TabRoute = ({ tabs, context = {}, children }) => {
+    const params = useParams();
+
+    if (context.hasOwnProperty("selector"))
+        context.args = {
+            [context.selector.arg]: params[context.selector.param],
+        };
+
     return (
         <main>
             <MiddleColumn>
@@ -13,8 +20,6 @@ const TabRoute = ({ tabs, children, context = {} }) => {
                 </ColumnHeader>
 
                 <TabList tabs={tabs} />
-
-                {/* <PreviewList {...queryResult} /> */}
                 <Outlet context={context} />
             </MiddleColumn>
 

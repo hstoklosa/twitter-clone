@@ -18,6 +18,7 @@ export { default as TextInput } from "./inputs/TextInput";
 export { default as SelectInput } from "./inputs/SelectInput";
 
 export { default as ColumnHeader } from "./shared/ColumnHeader";
+
 export { MiddleColumn } from "./shared/Column";
 export { LeftColumn } from "./shared/Column";
 
@@ -40,3 +41,4 @@ export { default as FollowButton } from "./inputs/FollowButton";
 export { default as Placeholder } from "./placeholders/Placeholder";
 export { default as ProfileNotFound } from "./placeholders/ProfileNotFound";
 export { default as UserPreview } from "./shared/UserPreview";
+export { default as ErrorPlaceholder } from "./placeholders/ErrorPlaceholder";

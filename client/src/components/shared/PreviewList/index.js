@@ -22,7 +22,7 @@ import withQuery from "../../../hoc/withQuery";
 import Tweet from "../../twitter/Tweet";
 import UserPreview from "../UserPreview";
 
-import { Spinner, Placeholder } from "../../index";
+import { Spinner, Placeholder, ErrorPlaceholder } from "../../index";
 
 import {
     profileTimelineText,
@@ -44,7 +44,7 @@ const PreviewList = ({
     PreviewComponent = null,
     emptyPreviewText = {},
 }) => {
-    const { data, isLoading, handleScroll } = queryResult;
+    const { data, isLoading, isError, handleScroll } = queryResult;
 
     useEffect(() => {
         handleChange && handleChange(data);
@@ -82,6 +82,7 @@ const PreviewList = ({
     );
 
     if (isLoading) return <Spinner />;
+    if (isError) return <ErrorPlaceholder />;
 
     return (
         <section
