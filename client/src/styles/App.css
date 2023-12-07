@@ -333,6 +333,14 @@ select {
     border-bottom: 1px solid var(--border);
 }
 
+#navbar .float-btn {
+    display: flex;
+    align-items: center;
+}
+
+#navbar .more-options {
+}
+
 /* SECOND COLUMN: General */
 
 #general header {
@@ -410,6 +418,10 @@ img.pfp {
     padding-top: 0.3rem;
 }
 
+#widgets .searchbar {
+    margin: 0.5rem 0 1rem 0;
+}
+
 /* Buttons */
 
 .btn-empty {
@@ -454,20 +466,7 @@ img.pfp {
     filter: brightness(0.8);
 }
 
-/* .round-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    transition: background-color 0.2s linear;
-}
-
-.round-btn:hover {
-    background-color: rgba(39, 44, 48, 0.75);
-} */
-
+.light_round-btn,
 .blue_round-btn,
 .dark_round-btn {
     display: flex;
@@ -476,11 +475,11 @@ img.pfp {
     /* margin-left: auto;
     margin-right: 0; */
     padding: 0 !important;
-    color: var(--white);
     border-radius: 50%;
     transition: all 0.2s ease-out;
 }
 
+.light_round-btn .icon-container,
 .blue_round-btn .icon-container,
 .dark_round-btn .icon-container {
     position: relative;
@@ -494,6 +493,7 @@ img.pfp {
     transition: all 0.2s ease-out;
 }
 
+.light_round-btn .icon-container::after,
 .blue_round-btn .icon-container::after,
 .dark_round-btn .icon-container::after {
     content: "";
@@ -504,6 +504,7 @@ img.pfp {
     transition: all 0.2s ease-out;
 }
 
+.light_round-btn .icon,
 .blue_round-btn .icon,
 .dark_round-btn .icon {
     width: 100%;
@@ -529,6 +530,18 @@ img.pfp {
 
 .blue_round-btn:hover .icon {
     color: var(--primary-colour);
+}
+
+.light_round-btn .icon {
+    color: var(--white) !important;
+}
+
+.light_round-btn .icon-container::after {
+    background-color: rgba(15, 20, 25, 0.75);
+}
+
+.light_round-btn:hover .icon-container::after {
+    background-color: rgba(239, 243, 244, 0.1);
 }
 
 .more-btn {
@@ -591,12 +604,22 @@ img.pfp {
     background-color: rgba(91, 112, 131, 0.4);
 }
 
-.modal-content {
+.modal-content_wrapper {
     width: 600px;
     height: 650px;
+    border-radius: 1rem;
+
+    overflow: hidden !important;
+}
+
+.modal-content {
+    width: 600px;
+    /* height: 650px; */
+    max-height: 100%; /* Ensures it doesn't grow beyond the wrapper */
     padding: 1rem;
     background-color: #000;
     border-radius: 1rem;
+    overflow-y: auto !important;
 }
 
 /* Inputs */

@@ -3,7 +3,7 @@ import "../../styles/EditProfile.css";
 import { useState } from "react";
 
 import { IconContext } from "react-icons";
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose, IoIosArrowForward } from "react-icons/io";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
 import { BaseModal, TextInput } from "../index";
@@ -29,6 +29,8 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
     });
 
     const [updateUser, updateResult] = useUpdateUserMutation();
+
+    const dob = formatDate(user.dob, { year: "numeric", month: "long", day: "numeric" });
 
     const handleFileChange = ({ target }) => {
         const files = target.files;
@@ -210,16 +212,12 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
                 </div>
 
                 <div className="dob">
-                    <p>Birth date</p>
-                    {(() => (
-                        <h2>
-                            {formatDate(user.dob, {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                            })}
-                        </h2>
-                    ))()}
+                    <div className="dob-header">
+                        <p>
+                            Birth date · <span className="link-blue">Edit</span>
+                        </p>
+                    </div>
+                    <h2>{dob}</h2>
                 </div>
 
                 <button
@@ -228,6 +226,7 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
                     disabled
                 >
                     Switch to professional
+                    <IoIosArrowForward className="full-btn_icon"/>
                 </button>
             </form>
         </BaseModal>

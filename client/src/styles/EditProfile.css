@@ -45,9 +45,6 @@
     position: absolute;
     bottom: -55px;
     left: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .edit-modal_header h1 {
@@ -79,7 +76,6 @@
 }
 
 .edit-profile .pfp-container > .pfp {
-    border-radius: 50%;
     border: 4px solid #000;
 }
 
@@ -119,7 +115,8 @@
     margin: 1rem 0;
 }
 
-.dob p {
+.dob-header p,
+.dob-header span {
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--grey);
@@ -132,6 +129,9 @@
 }
 
 .full-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 1.25rem;
     font-weight: 500;
     height: 50px !important;
@@ -144,4 +144,8 @@
 
 .full-btn:hover {
     background-color: rgb(22, 24, 28);
+}
+
+.full-btn .full-btn_icon {
+    color: var(--grey);
 }

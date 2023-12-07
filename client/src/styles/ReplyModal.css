@@ -1,9 +1,11 @@
-.reply-modal .modal-content {
-    display: block;
+.reply-modal .modal-content_wrapper {
+    height: 800px !important;
     position: absolute !important;
     top: 45px;
-    height: auto;
-    max-height: 800px !important;
+}
+
+.reply-modal .modal-content {
+    display: block;
     padding: 0;
     overflow: auto;
 }
@@ -12,8 +14,6 @@
     width: 100%;
     padding: 1rem 1.2rem !important;
     border: 0 !important;
-    /* height: 30px !important; */
-    /* margin-bottom: 0.7rem; */
 }
 
 .reply-modal .recipient-tweet,

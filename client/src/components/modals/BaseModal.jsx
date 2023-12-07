@@ -18,11 +18,13 @@ const BaseModal = ({ isOpen, onClose, className, children }) => {
 
     return (
         <div className={`modal ${isOpen && "open"} ${className}`}>
-            <div
-                className="modal-content"
-                ref={ref}
-            >
-                {children}
+            <div className="modal-content_wrapper">
+                <div
+                    className="modal-content"
+                    ref={ref}
+                >
+                    {children}
+                </div>
             </div>
         </div>
     );

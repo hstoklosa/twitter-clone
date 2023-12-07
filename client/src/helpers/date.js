@@ -42,8 +42,11 @@ export const days = generateOptions(1, 31);
 export const years = generateOptions(1900, new Date().getFullYear());
 
 export const formatDate = (date, options) => {
-    const formDate = new Date(date);
-    return formDate.toLocaleDateString("en-US", options);
+    return new Date(date).toLocaleDateString("en-US", options);
+};
+
+export const formatTime = (date, options) => {
+    return new Date(date).toLocaleTimeString("en-US", options);
 };
 
 export const getTimeDifference = (start) => {
