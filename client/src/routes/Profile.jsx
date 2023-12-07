@@ -1,6 +1,6 @@
 import "../styles/Profile.css";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Outlet, Link, useParams, useLocation } from "react-router-dom";
 
 import { IconContext } from "react-icons";
@@ -47,11 +47,8 @@ const Profile = () => {
         }),
     });
 
-    const isFollowing = !isCurrentUser && profileUser?.followers.includes(currentUser.id);
-    const joinedDate = formatDate(profileUser?.createdAt, {
-        year: "numeric",
-        month: "long",
-    });
+    const createdAt = formatDate(profileUser?.createdAt, { year: "numeric", month: "long" });
+    const isFollowed = !isCurrentUser && profileUser?.followers.includes(currentUser.id);
 
     const handleTabData = (data) => {
         setTabData({ length: data.length });
@@ -141,7 +138,7 @@ const Profile = () => {
                                         </button>
 
                                         <FollowButton
-                                            isFollowing={isFollowing}
+                                            isFollowing={isFollowed}
                                             targetUserId={profileUser._id}
                                         />
                                     </div>
@@ -178,7 +175,7 @@ const Profile = () => {
                                         {profileUser.createdAt && (
                                             <div className="icon-info_item">
                                                 <BiCalendar size="18" />
-                                                <p>Joined {joinedDate}</p>
+                                                <p>Joined {createdAt}</p>
                                             </div>
                                         )}
                                     </div>
