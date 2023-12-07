@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import { useState } from "react";
+
+import classNames from "classnames";
 import { IconContext } from "react-icons";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
@@ -19,8 +20,6 @@ const TextInput = ({
 }) => {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [isFocus, setFocus] = useState(false);
-
-    console.log(error);
 
     const toggleVisibility = () => {
         setPasswordVisible(!isPasswordVisible);

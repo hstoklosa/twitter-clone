@@ -46,3 +46,20 @@
     padding: 0.4rem 1rem;
     transition: all 0.2s linear;
 }
+
+.media-preview {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+}
+
+.media-preview .media-preview_close {
+    position: absolute;
+    right: 15px;
+    top: 30px;
+}
+
+.media-preview img {
+    border-radius: 1rem;
+    width: 100%;
+}
