@@ -20,7 +20,6 @@ const Signup = ({ openModal }) => {
             </a>
 
             <button
-                type="button"
                 className="white-btn signup-btn"
                 onClick={openModal}
             >
@@ -28,15 +27,15 @@ const Signup = ({ openModal }) => {
             </button>
 
             <p className="agreement-text">
-                By signing up, you agree to the{" "}
+                <span>By signing up, you agree to the </span>
                 <a
                     href="https://twitter.com/"
                     target="__blank"
                     className="link-blue"
                 >
                     Terms of Service
-                </a>{" "}
-                and{" "}
+                </a>
+                <span> and </span>
                 <a
                     href="https://twitter.com/"
                     target="__blank"
@@ -44,7 +43,7 @@ const Signup = ({ openModal }) => {
                 >
                     Privacy Policy
                 </a>
-                , including{" "}
+                <span> including </span>
                 <a
                     href="https://twitter.com/"
                     target="__blank"
