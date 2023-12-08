@@ -226,7 +226,7 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
                     disabled
                 >
                     Switch to professional
-                    <IoIosArrowForward className="full-btn_icon"/>
+                    <IoIosArrowForward className="full-btn_icon" />
                 </button>
             </form>
         </BaseModal>

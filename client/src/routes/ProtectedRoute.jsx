@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useCheckAuthQuery } from "../store/api/authApi";
 
 const ProtectedRoute = ({ children }) => {
-    const { data: auth, isFetching: authFetching, isLoading: authLoading } = useCheckAuthQuery();
+    const { data: auth, isFetching: authFetching } = useCheckAuthQuery();
 
     if (!auth.isAuthenticated || authFetching) {
         return (
