@@ -29,6 +29,19 @@ const placeholders = {
         subheader:
             "Don't let the good ones fly away! Bookmark Tweets to easily find them again in the future.",
     },
+    quoteEngagements: {
+        header: "No Quotes yet",
+        subheader: "You will find a list of everyone who quoted this post here.",
+    },
+    repostEngagements: {
+        header: "No Reposts yet",
+        subheader:
+            "Share someone else's post on your timeline by reposting it. When you do, it'll show up here.",
+    },
+    likeEngagements: {
+        header: "No likes yet",
+        subheader: "When someone taps the heart to Like this post, it'll show up here.",
+    },
 };
 
 export default placeholders;

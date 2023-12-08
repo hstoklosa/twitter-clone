@@ -2,8 +2,8 @@ import "./styles/App.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
 
 import Root from "./routes/Root";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -20,6 +20,9 @@ import {
     LikesTimeline,
     UserFollowers,
     UserFollowings,
+    QuoteEngagements,
+    RepostEngagments,
+    LikeEngagements,
 } from "./components/index";
 
 import store from "./store/index";
@@ -88,6 +91,37 @@ const router = createBrowserRouter([
                     />
                 ),
                 children: [{ path: "", element: <UserFollowings /> }],
+            },
+
+            {
+                path: "/:username/status/:tweetId/quotes",
+                element: (
+                    <TabRoute
+                        tabs={["quotes", "retweets", "likes"]}
+                        context={{ selector: { arg: "id", param: "tweetId" } }}
+                    />
+                ),
+                children: [{ path: "", element: <QuoteEngagements /> }],
+            },
+            {
+                path: "/:username/status/:tweetId/retweets",
+                element: (
+                    <TabRoute
+                        tabs={["quotes", "retweets", "likes"]}
+                        context={{ selector: { arg: "id", param: "tweetId" } }}
+                    />
+                ),
+                children: [{ path: "", element: <RepostEngagments /> }],
+            },
+            {
+                path: "/:username/status/:tweetId/likes",
+                element: (
+                    <TabRoute
+                        tabs={["quotes", "retweets", "likes"]}
+                        context={{ selector: { arg: "id", param: "tweetId" } }}
+                    />
+                ),
+                children: [{ path: "", element: <LikeEngagements /> }],
             },
         ],
     },
