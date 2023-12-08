@@ -24,14 +24,7 @@ import UserPreview from "../UserPreview";
 
 import { Spinner, Placeholder, ErrorPlaceholder } from "../../index";
 
-import {
-    profileTimelineText,
-    repliesText,
-    mediaText,
-    likesText,
-    followersListText,
-    followingListText,
-} from "../../../config/placeholder";
+import placeholders from "../../../config/placeholders";
 
 const cache = new CellMeasurerCache({
     fixedWidth: true,
@@ -121,18 +114,25 @@ const withTweetQuery = (query, placeholder) => () =>
 const withUserQuery = (query, placeholder) => () =>
     withQuery(query, UserPreview, placeholder)(PreviewList);
 
-const ProfileTimelineList = withTweetQuery(useGetUserTweetsQuery, profileTimelineText)();
+const ProfileTimeline = withTweetQuery(useGetUserTweetsQuery, placeholders.profileTimeline)();
 
-const RepliesList = withTweetQuery(useGetUserRepliesQuery, repliesText)();
+const RepliesTimeline = withTweetQuery(useGetUserRepliesQuery, placeholders.repliesTimeline)();
 
-const MediaList = withTweetQuery(useGetUserMediaQuery, mediaText)();
+const MediaTimeline = withTweetQuery(useGetUserMediaQuery, placeholders.mediaTimeline)();
 
-const LikesList = withTweetQuery(useGetUserLikesQuery, likesText)();
+const LikesTimeline = withTweetQuery(useGetUserLikesQuery, placeholders.likesTimeline)();
 
-const FollowersList = withUserQuery(useGetUserFollowersQuery, followersListText)();
+const UserFollowers = withUserQuery(useGetUserFollowersQuery, placeholders.followers)();
 
-const FollowingList = withUserQuery(useGetUserFollowingQuery, followingListText)();
+const UserFollowings = withUserQuery(useGetUserFollowingQuery, placeholders.followings)();
 
-export { ProfileTimelineList, RepliesList, MediaList, LikesList, FollowersList, FollowingList };
+export {
+    ProfileTimeline,
+    RepliesTimeline,
+    MediaTimeline,
+    LikesTimeline,
+    UserFollowers,
+    UserFollowings,
+};
 
 export default PreviewList;

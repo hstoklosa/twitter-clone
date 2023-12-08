@@ -3,7 +3,7 @@ import "./styles/App.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/Root";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -14,12 +14,12 @@ import Profile from "./routes/Profile";
 import TabRoute from "./routes/TabRoute";
 
 import {
-    ProfileTimelineList,
-    RepliesList,
-    MediaList,
-    LikesList,
-    FollowingList,
-    FollowersList,
+    ProfileTimeline,
+    RepliesTimeline,
+    MediaTimeline,
+    LikesTimeline,
+    UserFollowers,
+    UserFollowings,
 } from "./components/index";
 
 import store from "./store/index";
@@ -53,76 +53,41 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "",
-                        element: <ProfileTimelineList />,
+                        element: <ProfileTimeline />,
                     },
                     {
                         path: "replies",
-                        element: <RepliesList />,
+                        element: <RepliesTimeline />,
                     },
                     {
                         path: "media",
-                        element: <MediaList />,
+                        element: <MediaTimeline />,
                     },
                     {
                         path: "likes",
-                        element: <LikesList />,
+                        element: <LikesTimeline />,
                     },
                 ],
             },
-
             {
                 path: "/:username/followers",
-                element: <TabRoute tabs={["followers", "following"]} />,
-                children: [
-                    {
-                        path: "",
-                        element: <FollowersList />,
-                    },
-                ],
+                element: (
+                    <TabRoute
+                        tabs={["followers", "following"]}
+                        context={{ selector: { arg: "username", param: "username" } }}
+                    />
+                ),
+                children: [{ path: "", element: <UserFollowers /> }],
             },
-
             {
                 path: "/:username/following",
-                element: <TabRoute tabs={["followers", "following"]} />,
-                children: [
-                    {
-                        path: "",
-                        element: <FollowingList />,
-                    },
-                ],
-            },
-
-            {
-                path: "/explore",
                 element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
+                    <TabRoute
+                        tabs={["followers", "following"]}
+                        context={{ selector: { arg: "username", param: "username" } }}
+                    />
                 ),
-            },
-            {
-                path: "/notifications",
-                element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "/messages",
-                element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
-                ),
-            },
-            {
-                path: "/bookmarks",
-                element: (
-                    <ProtectedRoute>
-                        <Home />
-                    </ProtectedRoute>
-                ),
+                children: [{ path: "", element: <UserFollowings /> }],
             },
         ],
     },

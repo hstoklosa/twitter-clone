@@ -20,9 +20,14 @@ const placeholders = {
         subheader:
             "When someone follows this account, they'll show up here. Tweeting and interacting with others helps boost followers.",
     },
-    following: {
+    followings: {
         header: "The user isn't following anyone",
         subheader: "Once they follow accounts, they'll show up here.",
+    },
+    bookmarks: {
+        header: "Save Tweets for later",
+        subheader:
+            "Don't let the good ones fly away! Bookmark Tweets to easily find them again in the future.",
     },
 };
 

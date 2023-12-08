@@ -3,12 +3,12 @@ export { default as Links } from "./widgets/Links";
 export { default as Signup } from "./widgets/Signup";
 
 export { default as PreviewList } from "./shared/PreviewList";
-export { ProfileTimelineList } from "./shared/PreviewList";
-export { RepliesList } from "./shared/PreviewList";
-export { MediaList } from "./shared/PreviewList";
-export { LikeUsersList } from "./shared/PreviewList";
-export { FollowersList } from "./shared/PreviewList";
-export { FollowingList } from "./shared/PreviewList";
+export { ProfileTimeline } from "./shared/PreviewList";
+export { RepliesTimeline } from "./shared/PreviewList";
+export { MediaTimeline } from "./shared/PreviewList";
+export { LikesTimeline } from "./shared/PreviewList";
+export { UserFollowers } from "./shared/PreviewList";
+export { UserFollowings } from "./shared/PreviewList";
 
 export { default as BaseModal } from "./modals/BaseModal";
 export { default as SignupModal } from "./modals/SignupModal";
