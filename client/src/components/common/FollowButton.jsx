@@ -1,19 +1,14 @@
-import { LinkButton } from "./index";
-
 import { useCheckAuthQuery } from "../../features/api/authApi";
-import {
-    useGetUserInfoQuery,
-    useFollowUserMutation,
-    useUnfollowUserMutation,
-} from "../../features/api/userApi";
+import { useFollowUserMutation, useUnfollowUserMutation } from "../../features/api/userApi";
+import { LinkButton } from "./index";
 
 const FollowButton = ({ targetUserId, isFollowing }) => {
     const {
         data: { data: currentUser },
     } = useCheckAuthQuery();
 
-    const [followUser, followResult] = useFollowUserMutation();
-    const [unfollowUser, unfollowResult] = useUnfollowUserMutation();
+    const [followUser] = useFollowUserMutation();
+    const [unfollowUser] = useUnfollowUserMutation();
 
     const handleFollow = async () => {
         const followData = {
@@ -21,7 +16,7 @@ const FollowButton = ({ targetUserId, isFollowing }) => {
             targetUserId: targetUserId,
         };
 
-        isFollowing ? await unfollowUser(followData) : await followUser(followData);
+        return isFollowing ? await unfollowUser(followData) : await followUser(followData);
     };
 
     return (

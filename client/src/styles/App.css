@@ -148,11 +148,6 @@ select {
     text-decoration: underline;
 }
 
-.container main {
-    display: flex;
-    gap: 2rem !important;
-}
-
 .pfp-container {
     display: flex;
     justify-content: center;
@@ -835,7 +830,7 @@ img.pfp {
 
 /* Utils */
 
-.container {
+.app-container {
     width: 75%;
     width: 100%;
     max-width: 1270px;
@@ -843,6 +838,11 @@ img.pfp {
     margin: 0 auto;
     display: flex;
     justify-content: center;
+}
+
+.app-container main {
+    display: flex;
+    gap: 2rem !important;
 }
 
 @media screen and (max-width: 1287px) {
@@ -898,13 +898,13 @@ img.pfp {
     #widgets {
         display: none;
     }
-    .container main {
+    .app-container main {
         width: auto;
     }
 }
 
 @media screen and (max-width: 678px) {
-    .container {
+    .app-container {
         grid-template-columns: 70px calc(100% - 70px);
     }
 }

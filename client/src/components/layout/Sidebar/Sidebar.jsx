@@ -1,7 +1,7 @@
-import logo from "../../assets/logo-white.png";
+import logo from "../../../assets/logo-white.png";
 
 import { useState } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 
 import { IconContext } from "react-icons";
 import {
@@ -21,33 +21,39 @@ import {
 import { FaFeatherAlt } from "react-icons/fa";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { PiDotsThreeCircle } from "react-icons/pi";
+import { IoMdCheckmark } from "react-icons/io";
 
-import { FloatOptions, TweetModal } from "../index";
+import { FloatOptions, TweetModal } from "../../index";
 
-import { useLazySignOutQuery } from "../../store/api/authApi";
-import { useGetUserInfoQuery } from "../../store/api/userApi";
+import { useCheckAuthQuery, useLazySignOutQuery } from "../../../features/api/authApi";
+import { useGetUserInfoQuery } from "../../../features/api/userApi";
 
-const Sidebar = ({ userLoggedIn = null }) => {
+const Sidebar = () => {
     const [tweetModal, setTweetModal] = useState(false);
     const [accountFloat, setAccountFloat] = useState(false);
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
-    const { username, displayName, profileImageURL } = useGetUserInfoQuery(userLoggedIn, {
+    const { currentUser } = useCheckAuthQuery(null, {
+        selectFromResult: ({ data, isLoading }) => ({
+            currentUser: data?.data?.username,
+        }),
+    });
+
+    const { username, displayName, profileImageURL } = useGetUserInfoQuery(currentUser, {
         selectFromResult: ({ data }) => ({
             username: data?.username,
             displayName: data?.displayName,
             profileImageURL: data?.profileImageURL,
         }),
-        skip: !userLoggedIn,
+        skip: !currentUser,
     });
 
     const [signOut] = useLazySignOutQuery();
 
     const openTweetModal = () => setTweetModal(true);
     const closeTweetModal = () => setTweetModal(false);
-
     const openAccountFloat = () => setAccountFloat(true);
     const closeAccountFloat = () => setAccountFloat(false);
 
@@ -65,12 +71,12 @@ const Sidebar = ({ userLoggedIn = null }) => {
             className="column"
             id="navbar"
         >
-            {userLoggedIn && (
+            {/* {currentUser && (
                 <TweetModal
                     isOpen={tweetModal}
                     onClose={closeTweetModal}
                 />
-            )}
+            )} */}
 
             <div className="sticky-wrapper">
                 <NavLink
@@ -83,17 +89,20 @@ const Sidebar = ({ userLoggedIn = null }) => {
                     />
                 </NavLink>
 
-                {!userLoggedIn && (
+                {!currentUser && (
                     <IconContext.Provider value={{ className: "navbar_icon explore" }}>
                         <nav className="navbar">
-                            <button className="navbar-link current">
-                                <BiSearch size="25" />
+                            <button className="navbar-link">
+                                <BiSearch
+                                    size="25"
+                                    style={{ strokeWidth: "0.75px" }}
+                                />
                                 <span className="text">Explore</span>
                             </button>
 
                             <button
                                 className="navbar-link"
-                                style={{ cursor: "not-allowed" }}
+                                disabled
                             >
                                 <BiCog size="25" />
                                 <span className="text">Settings</span>
@@ -102,7 +111,7 @@ const Sidebar = ({ userLoggedIn = null }) => {
                     </IconContext.Provider>
                 )}
 
-                {userLoggedIn && (
+                {currentUser && (
                     <IconContext.Provider value={{ className: "navbar_icon" }}>
                         <nav className="navbar">
                             <NavLink
@@ -199,16 +208,6 @@ const Sidebar = ({ userLoggedIn = null }) => {
 
                             <button
                                 type="button"
-                                className="navbar-link"
-                            >
-                                <IconContext.Provider value={{ className: "navbar_icon settings" }}>
-                                    <PiDotsThreeCircle size="25" />
-                                </IconContext.Provider>
-                                <span className="text">More</span>
-                            </button>
-
-                            <button
-                                type="button"
                                 className="blue-btn navbar-btn"
                                 onClick={openTweetModal}
                             >
@@ -221,7 +220,7 @@ const Sidebar = ({ userLoggedIn = null }) => {
                     </IconContext.Provider>
                 )}
 
-                {userLoggedIn && (
+                {currentUser && (
                     <>
                         <button
                             className="navbar-account"
@@ -246,6 +245,7 @@ const Sidebar = ({ userLoggedIn = null }) => {
                                             <p className="display_name">{displayName}</p>
                                             <p className="username">@{username}</p>
                                         </div>
+                                        <IoMdCheckmark />
                                     </section>
                                     <button
                                         type="button"
