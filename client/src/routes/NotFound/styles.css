@@ -1,4 +1,4 @@
-#not-found .container {
+#not-found .app-container {
     min-height: 100vh;
     display: flex !important;
     flex-direction: column;
