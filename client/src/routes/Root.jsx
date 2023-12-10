@@ -21,7 +21,7 @@ const Root = () => {
     });
 
     return (
-        <AppLayout isLoading={isAuthLoading || isUserLoading}>
+        <AppLayout isAuthLoading={isAuthLoading || isUserLoading}>
             <Outlet />
         </AppLayout>
     );

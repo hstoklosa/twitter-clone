@@ -1,10 +1,8 @@
 import Sidebar from "./Sidebar";
 import { Loading } from "../index";
 
-const AppLayout = ({ isLoading, children }) => {
-    console.log(isLoading);
-
-    if (isLoading) {
+const AppLayout = ({ isAuthLoading, children }) => {
+    if (isAuthLoading) {
         return <Loading />;
     }
 
