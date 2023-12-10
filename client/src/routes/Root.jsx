@@ -9,14 +9,14 @@ const Root = () => {
     const { auth, isAuthLoading } = useCheckAuthQuery(null, {
         selectFromResult: ({ data, isLoading, isFetching, isUninitialized }) => ({
             auth: data,
-            isAuthLoading: !isUninitialized && (isLoading || isFetching),
+            isAuthLoading: !isUninitialized && isLoading,
         }),
     });
 
     const { isUserLoading } = useGetUserInfoQuery(auth?.data?.username, {
         skip: !auth?.data?.username,
         selectFromResult: ({ isLoading, isFetching, isUninitialized }) => ({
-            isUserLoading: !isUninitialized && (isLoading || isFetching),
+            isUserLoading: !isUninitialized && isLoading,
         }),
     });
 

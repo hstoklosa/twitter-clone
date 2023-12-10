@@ -6,7 +6,13 @@ import { useState, useRef } from "react";
 import { IconContext } from "react-icons";
 import { IoEarth } from "react-icons/io5";
 
-import { ColumnHeader, BaseModal, TweetActions, TweetInput, QuotePreview } from "../../index";
+import {
+    ColumnHeader,
+    BaseModal,
+    TweetActions,
+    TweetInput,
+    QuotePreview,
+} from "../../index";
 import { useCheckAuthQuery } from "../../../features/api/authApi";
 import { useGetUserInfoQuery } from "../../../features/api/userApi";
 import { useCreateTweetMutation } from "../../../features/api/tweetApi";

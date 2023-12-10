@@ -6,12 +6,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import Root from "./routes/Root";
-import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./routes/Login";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
 import Profile from "./routes/Profile";
 import TabRoute from "./routes/TabRoute";
+
+import PrivateRoute from "./routes/PrivateRoute";
+import PublicRoute from "./routes/PublicRoute";
 
 import {
     ProfileTimeline,
@@ -25,7 +27,7 @@ import {
     LikeEngagements,
 } from "./components/index";
 
-import store from "./store/index";
+import store from "./app/store";
 
 const router = createBrowserRouter([
     {
@@ -35,23 +37,27 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Login />,
                 index: true,
+                element: (
+                    <PublicRoute>
+                        <Login />
+                    </PublicRoute>
+                ),
             },
             {
                 path: "/home",
                 element: (
-                    <ProtectedRoute>
+                    <PrivateRoute>
                         <Home />
-                    </ProtectedRoute>
+                    </PrivateRoute>
                 ),
             },
             {
                 path: "/:username",
                 element: (
-                    <ProtectedRoute>
+                    <PrivateRoute>
                         <Profile />
-                    </ProtectedRoute>
+                    </PrivateRoute>
                 ),
                 children: [
                     {
@@ -77,7 +83,9 @@ const router = createBrowserRouter([
                 element: (
                     <TabRoute
                         tabs={["followers", "following"]}
-                        context={{ selector: { arg: "username", param: "username" } }}
+                        context={{
+                            selector: { arg: "username", param: "username" },
+                        }}
                     />
                 ),
                 children: [{ path: "", element: <UserFollowers /> }],
@@ -87,7 +95,9 @@ const router = createBrowserRouter([
                 element: (
                     <TabRoute
                         tabs={["followers", "following"]}
-                        context={{ selector: { arg: "username", param: "username" } }}
+                        context={{
+                            selector: { arg: "username", param: "username" },
+                        }}
                     />
                 ),
                 children: [{ path: "", element: <UserFollowings /> }],
