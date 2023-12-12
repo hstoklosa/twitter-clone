@@ -1,0 +1,20 @@
+.bookmarks-header {
+    justify-content: space-between !important;
+    align-items: center;
+    border-bottom: 0 !important;
+}
+
+.bookmarks-header .bookmarks-container h1 {
+    font-size: 1.3rem;
+}
+
+.bookmarks-header .bookmarks-container p {
+    color: var(--grey);
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+.bookmarks-header .bookmarks-container .float-options {
+    bottom: 0;
+    right: 0;
+}

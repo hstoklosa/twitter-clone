@@ -11,6 +11,7 @@ import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
 import Profile from "./routes/Profile";
 import TabRoute from "./routes/TabRoute";
+import Bookmarks from "./routes/Bookmarks";
 
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -132,6 +133,14 @@ const router = createBrowserRouter([
                     />
                 ),
                 children: [{ path: "", element: <LikeEngagements /> }],
+            },
+            {
+                path: "/bookmarks",
+                element: (
+                    <PrivateRoute>
+                        <Bookmarks />
+                    </PrivateRoute>
+                ),
             },
         ],
     },

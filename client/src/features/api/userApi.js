@@ -35,7 +35,8 @@ export const userApi = baseApi.injectEndpoints({
             query: ({ id, page, limit }) => ({
                 url: `/users/${id}/bookmarks?page=${page}&limit=${limit}`,
             }),
-            providesTags: (result) => providesList(result?.data, "Post", "BOOKMARKS"),
+            providesTags: (result) =>
+                providesList(result?.data, "Post", "BOOKMARKS"),
         }),
         createBookmark: builder.mutation({
             query: ({ userId, tweetId }) => ({
@@ -60,12 +61,14 @@ export const userApi = baseApi.injectEndpoints({
                 { type: "User", id: userId },
             ],
         }),
-        clearBookmarks: builder.mutation({
-            query: ({ userId }) => ({
+        deleteAllBookmarks: builder.mutation({
+            query: (userId) => ({
                 url: `/users/${userId}/bookmarks`,
                 method: "DELETE",
             }),
-            invalidatesTags: (result, error, { userId }) => [{ type: "User", id: userId }],
+            invalidatesTags: (result, error, userId) => [
+                { type: "User", id: userId },
+            ],
         }),
 
         getUserFollowers: builder.query({
@@ -73,14 +76,16 @@ export const userApi = baseApi.injectEndpoints({
                 url: `/users/${username}/followers?page=${page}&limit=${limit}`,
                 method: "GET",
             }),
-            providesTags: (result) => providesList(result?.data, "User", "FOLLOWERS"),
+            providesTags: (result) =>
+                providesList(result?.data, "User", "FOLLOWERS"),
         }),
         getUserFollowing: builder.query({
             query: ({ username, page, limit }) => ({
                 url: `/users/${username}/following?page=${page}&limit=${limit}`,
                 method: "GET",
             }),
-            providesTags: (result) => providesList(result?.data, "User", "FOLLOWING"),
+            providesTags: (result) =>
+                providesList(result?.data, "User", "FOLLOWING"),
         }),
 
         getUserTweets: builder.query({
@@ -182,7 +187,7 @@ export const {
     useGetUserMediaQuery,
     useCreateRepostMutation,
     useDeleteRepostMutation,
-    useClearBookmarksMutation,
+    useDeleteAllBookmarksMutation,
     useGetBookmarksQuery,
     useCreateBookmarkMutation,
     useDeleteBookmarkMutation,
