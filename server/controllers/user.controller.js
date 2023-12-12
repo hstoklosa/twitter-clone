@@ -1,114 +1,61 @@
 const fs = require("fs");
 const path = require("path");
-
 const { ObjectId } = require("mongoose").Types;
-const User = require("../models/User.model");
-const Tweet = require("../models/Tweet.model");
 
+const User = require("../models/User.model");
 const asyncHandler = require("../middlewares/asyncHandler");
-const paginate = require("../helpers/paginatePlugin");
-const {
-    userTweetSelector,
-    postAuthorSelector,
-    quoteSelector,
-    followsSelector,
-} = require("../helpers/selectors");
-const { userLookup, quoteLookup, replyLookup } = require("../helpers/aggregation");
+const userService = require("../services/user.service");
 const { NotFoundError, UnauthorizedError } = require("../utils/errors");
 
 const getUser = asyncHandler(async (req, res, next) => {
-    const user = await User.findOne({ username: req.params.username });
+    const { username } = req.params;
+    const user = await userService.findByUsername(username);
 
-    if (!user) {
-        return next(new NotFoundError(`User with the username ${username} was not found!`));
-    }
+    // console.log(user);
 
-    const parsedUrl = new URL(user.profileImageURL);
-    const localFilePath = path.join(__dirname, "./uploads", parsedUrl.pathname);
+    if (!user)
+        return next(
+            new NotFoundError(`The username ${username} couldn't be found.`)
+        );
 
-    // check if static file exists w/ non-blocking I/O operation
-    fs.access(localFilePath, fs.constants.F_OK, async (err) => {
-        if (err) {
-            user.profileImageURL = `${process.env.SERVER_URL}/uploads/default_profile.png`;
-            await user.save();
-        }
-    });
+    // const parsedUrl = new URL(user.profileImageURL);
+    // const localFilePath = path.join(__dirname, "./uploads", parsedUrl.pathname);
 
-    return res.status(200).json(user._doc);
+    // // check if static file exists w/ non-blocking I/O operation
+    // fs.access(localFilePath, fs.constants.F_OK, async (err) => {
+    //     if (err) {
+    //         user.profileImageURL = `${process.env.SERVER_URL}/uploads/default_profile.png`;
+    //         await user.save();
+    //     }
+    // });
+
+    return res.status(200).json(user);
 });
 
 const getFollowers = asyncHandler(async (req, res, next) => {
-    const relevantUser = await User.findOne({ username: req.params.username });
+    const relevantUser = await userService.findByUsername(req.params.username);
 
-    if (!relevantUser) return next(new NotFoundError("User not found!"));
+    if (!relevantUser)
+        return next(new NotFoundError("The specified user could not found!"));
 
-    const pipeline = [
-        {
-            $match: {
-                _id: relevantUser._id,
-            },
-        },
-
-        {
-            $lookup: {
-                from: "users",
-                localField: "followers",
-                foreignField: "_id",
-                as: "populatedFollowers",
-            },
-        },
-
-        {
-            $unwind: {
-                path: "$populatedFollowers",
-                preserveNullAndEmptyArrays: true,
-            },
-        },
-
-        { $project: { document: "$populatedFollowers" } },
-        { $replaceRoot: { newRoot: "$document" } },
-        { $project: followsSelector },
-    ];
-
-    const response = await paginate(User, pipeline, req.pagination);
+    const response = await userService.fetchFollowers(
+        relevantUser._id,
+        req.pagination
+    );
 
     return res.status(200).json(response);
 });
 
 const getFollowing = asyncHandler(async (req, res, next) => {
-    const relevantUser = await User.findOne({ username: req.params.username });
+    const relevantUser = await userService.findByUsername(req.params.username);
 
-    if (!relevantUser) return next(new NotFoundError("User not found!"));
+    if (!relevantUser)
+        return next(new NotFoundError("The specified user could not found!"));
 
-    const pipeline = [
-        {
-            $match: {
-                _id: relevantUser._id,
-            },
-        },
-
-        {
-            $lookup: {
-                from: "users",
-                localField: "following",
-                foreignField: "_id",
-                as: "populatedFollowings",
-            },
-        },
-
-        {
-            $unwind: {
-                path: "$populatedFollowings",
-                preserveNullAndEmptyArrays: true,
-            },
-        },
-
-        { $project: { document: "$populatedFollowings" } },
-        { $replaceRoot: { newRoot: "$document" } },
-        { $project: followsSelector },
-    ];
-
-    const response = await paginate(User, pipeline, req.pagination);
+    const response = await userService.fetchFollowing(
+        relevantUser._id,
+        req.pagination
+    );
 
     return res.status(200).json(response);
 });
@@ -117,34 +64,11 @@ const getProfileTimeline = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.userId);
 
     if (!user)
-        return next(new NotFoundError("Can't retrieve tweets since the user does not exist!"));
+        return next(
+            new NotFoundError("Can't retrieve tweets since the user does not exist!")
+        );
 
-    const pipeline = [
-        {
-            $match: {
-                $and: [
-                    { author: user._id },
-                    { $or: [{ retweets: { $in: [user._id] } }, { replyTo: { $eq: null } }] },
-                ],
-            },
-        },
-
-        ...userLookup,
-        ...quoteLookup,
-
-        {
-            $project: {
-                document: "$$ROOT",
-                ...postAuthorSelector,
-                ...quoteSelector,
-            },
-        },
-        {
-            $replaceRoot: { newRoot: "$document" },
-        },
-    ];
-
-    const response = await paginate(Tweet, pipeline, req.pagination);
+    const response = await userService.fetchTimeline(user._id, req.pagination);
 
     return res.status(200).json(response);
 });
@@ -153,33 +77,15 @@ const getRepliesTimeline = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.userId);
 
     if (!user) {
-        return next(new NotFoundError("Can't retrieve tweets since the user does not exist!"));
+        return next(
+            new NotFoundError("Can't retrieve tweets since the user does not exist!")
+        );
     }
 
-    const pipeline = [
-        {
-            $match: {
-                author: user._id,
-                $or: [{ replyTo: { $ne: null } }, { quoteTo: { $ne: null } }],
-            },
-        },
-
-        ...userLookup,
-        ...replyLookup,
-        ...quoteLookup,
-
-        {
-            $project: {
-                document: "$$ROOT",
-                ...userTweetSelector,
-            },
-        },
-        {
-            $replaceRoot: { newRoot: "$document" },
-        },
-    ];
-
-    const response = await paginate(Tweet, pipeline, req.pagination);
+    const response = await userService.fetchRepliesTimeline(
+        user._id,
+        req.pagination
+    );
 
     return res.status(200).json(response);
 });
@@ -187,34 +93,12 @@ const getRepliesTimeline = asyncHandler(async (req, res, next) => {
 const getMediaTimeline = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.userId);
 
-    if (!user) {
-        return next(new NotFoundError("Can't retrieve tweets since the user does not exist!"));
-    }
+    if (!user)
+        return next(
+            new NotFoundError("Can't retrieve tweets since the user does not exist!")
+        );
 
-    const pipeline = [
-        {
-            $match: {
-                author: user._id,
-                media: { $ne: [] },
-            },
-        },
-
-        ...userLookup,
-        ...replyLookup,
-        ...quoteLookup,
-
-        {
-            $project: {
-                document: "$$ROOT",
-                ...userTweetSelector,
-            },
-        },
-        {
-            $replaceRoot: { newRoot: "$document" },
-        },
-    ];
-
-    const response = await paginate(Tweet, pipeline, req.pagination);
+    const response = await userService.fetchMediaTimeline(user._id, req.pagination);
 
     return res.status(200).json(response);
 });
@@ -223,38 +107,18 @@ const getLikesTimeline = asyncHandler(async (req, res, next) => {
     const { userId } = req.params;
 
     if (!(await User.exists({ _id: userId })))
-        return next(new NotFoundError("Can't retrieve tweets since the user does not exist!"));
+        return next(
+            new NotFoundError("Can't retrieve tweets since the user does not exist!")
+        );
 
-    const pipeline = [
-        {
-            $match: {
-                likes: { $in: [new ObjectId(userId)] },
-            },
-        },
-
-        ...userLookup,
-        ...replyLookup,
-        ...quoteLookup,
-
-        {
-            $project: {
-                document: "$$ROOT",
-                ...userTweetSelector,
-            },
-        },
-        {
-            $replaceRoot: { newRoot: "$document" },
-        },
-    ];
-
-    const response = await paginate(Tweet, pipeline, req.pagination);
+    const response = await userService.fetchLikeTimeline(userId, req.pagination);
 
     return res.status(200).json(response);
 });
 
 const followUser = asyncHandler(async (req, res, next) => {
+    const { sourceUserId } = req.params;
     const { targetUserId } = req.body;
-    const sourceUserId = req.params.userId;
 
     if (!(await User.exists({ _id: sourceUserId })))
         return next(new NotFoundError("Source user not found!"));
@@ -262,10 +126,7 @@ const followUser = asyncHandler(async (req, res, next) => {
     if (!(await User.exists({ _id: targetUserId })))
         return next(new NotFoundError("Target user not found!"));
 
-    await Promise.all([
-        User.updateOne({ _id: targetUserId }, { $push: { followers: sourceUserId } }),
-        User.updateOne({ _id: sourceUserId }, { $push: { following: targetUserId } }),
-    ]);
+    await userService.createFollow(sourceUserId, targetUserId);
 
     return res.status(200).json({
         isFollowing: true,
@@ -274,7 +135,7 @@ const followUser = asyncHandler(async (req, res, next) => {
 
 const unfollowUser = asyncHandler(async (req, res, next) => {
     const { targetUserId } = req.body;
-    const sourceUserId = req.params.userId;
+    const { userId: sourceUserId } = req.params;
 
     if (!(await User.exists({ _id: sourceUserId })))
         return next(new NotFoundError("Source user not found!"));
@@ -282,10 +143,7 @@ const unfollowUser = asyncHandler(async (req, res, next) => {
     if (!(await User.exists({ _id: targetUserId })))
         return next(new NotFoundError("Target user not found!"));
 
-    await Promise.all([
-        User.updateOne({ _id: targetUserId }, { $pull: { followers: sourceUserId } }),
-        User.updateOne({ _id: sourceUserId }, { $pull: { following: targetUserId } }),
-    ]);
+    await userService.removeFollow(sourceUserId, targetUserId);
 
     return res.status(200).json({
         isFollowing: false,
@@ -294,11 +152,10 @@ const unfollowUser = asyncHandler(async (req, res, next) => {
 
 const updateUser = asyncHandler(async (req, res, next) => {
     const { userId } = req.params;
-    const currentUser = req.user;
+    const { _id: currentUserId } = req.user;
 
-    if (currentUser._id.toString() !== userId) {
-        return next(new UnauthorizedError("You are not allowed to edit this user!"));
-    }
+    if (currentUserId.toString() !== userId)
+        return next(new UnauthorizedError("You're not allowed to alter this user."));
 
     const { displayName, bio, location, website } = req.body;
 
@@ -310,10 +167,10 @@ const updateUser = asyncHandler(async (req, res, next) => {
     };
 
     if (req.files["profileImage"])
-        updateData.profileImageURL = `http://localhost:8080/${req.files.profileImage[0].path}`;
+        updateData.profileImageURL = `${process.env.SERVER_URL}/${req.files.profileImage[0].path}`;
 
     if (req.files["bannerImage"])
-        updateData.bannerURL = `http://localhost:8080/${req.files.bannerImage[0].path}`;
+        updateData.bannerURL = `${process.env.SERVER_URL}/${req.files.bannerImage[0].path}`;
 
     await User.findByIdAndUpdate(userId, updateData);
 

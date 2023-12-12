@@ -1,10 +1,7 @@
-const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const passport = require("../config/passport");
-const { transporter } = require("../config/nodemailer");
-
-const User = require("../models/User.model");
 const asyncHandler = require("../middlewares/asyncHandler");
+const authService = require("../services/auth.service");
+const userService = require("../services/user.service");
 
 const {
     BadRequestError,
@@ -14,11 +11,7 @@ const {
 } = require("../utils/errors");
 
 const checkIdentifier = asyncHandler(async (req, res, next) => {
-    const { identifier } = req.params;
-
-    const user = await User.findOne({
-        $or: [{ username: identifier }, { email: identifier }],
-    });
+    const user = userService.findByIdentifier(req.params.identifier);
 
     return res.status(200).json({
         exists: user ? true : false,
@@ -26,17 +19,7 @@ const checkIdentifier = asyncHandler(async (req, res, next) => {
 });
 
 const confirmEmail = asyncHandler(async (req, res, next) => {
-    const { email: targetEmail } = req.params;
-    const code = crypto.randomBytes(3).toString("hex");
-
-    const options = {
-        to: targetEmail,
-        from: '"Twitter Clone" <' + process.env.MAIL_USER + ">",
-        subject: "Email Verification",
-        text: "Thanks for giving my app a try! \nYour verification code is: " + code,
-    };
-
-    const response = await transporter.sendMail(options);
+    const response = await authService.sendConfirmationEmail(req.params.email);
 
     if (response.accepted.includes(targetEmail))
         return next(new InternalServerError("Something went wrong!"));
@@ -50,45 +33,40 @@ const signUp = asyncHandler(async (req, res, next) => {
     const { displayName, dob, username, email, password } = req.body;
 
     if (!displayName || !email || !dob || !password || !username) {
-        return next(new BadRequestError("Provide all the required fields!"));
+        return next(new BadRequestError("Provide all of the required fields!"));
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = await User.addUser({
+        const user = await authService.createLocalUser({
             displayName,
             dob,
             username,
             email,
-            password: hashedPassword,
+            password,
             profileImageURL: "http://localhost:8080/uploads/default_pfp.png",
         });
 
-        req.login(newUser, (err) => {
-            if (err) {
-                return next(new InternalServerError());
-            }
+        req.login(user, (err) => {
+            if (err) return next(new InternalServerError());
 
             return res.json({
                 isAuthenticated: true,
-                data: {
-                    id: newUser._id,
-                    username: newUser.username,
-                },
+                data: user,
             });
         });
     } catch (err) {
-        if (err.code === 11000) {
-            return next(new ConflictError("User with the provided username/email already exists!"));
-        }
+        if (err.code === 11000)
+            return next(
+                new ConflictError(
+                    "User with the provided username/email already exists!"
+                )
+            );
     }
 });
 
 const signIn = (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) return next(new InternalServerError()); // local strategy error
-
         if (!user) return next(new BadRequestError(info.message)); // no user error
 
         req.logIn(user, (err) => {
@@ -96,10 +74,7 @@ const signIn = (req, res, next) => {
 
             return res.status(200).json({
                 isAuthenticated: true,
-                data: {
-                    id: user._id,
-                    username: user.username,
-                },
+                data: user,
             });
         });
     })(req, res, next);
@@ -119,10 +94,7 @@ const isAuth = (req, res, next) => {
     if (req.user)
         return res.status(200).json({
             isAuthenticated: true,
-            data: {
-                id: req.user._id,
-                username: req.user.username,
-            },
+            data: req.user,
         });
 
     return next(new UnauthenticatedError("You are not authenticated!"));
