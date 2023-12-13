@@ -23,32 +23,21 @@ import { IoEllipsisHorizontal } from "react-icons/io5";
 import { PiDotsThreeCircle } from "react-icons/pi";
 import { IoMdCheckmark } from "react-icons/io";
 
+import { useAppSelector, useAppDispatch } from "../../../app/store";
+import { authActions } from "../../../features/slices/authSlice";
+import { useLazySignOutQuery } from "../../../features/api/authApi";
+
 import { FloatOptions, TweetModal } from "../../index";
 
-import { useCheckAuthQuery, useLazySignOutQuery } from "../../../features/api/authApi";
-import { useGetUserInfoQuery } from "../../../features/api/userApi";
-
 const Sidebar = () => {
+    const { isAuth, user: currentUser } = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
+
     const [tweetModal, setTweetModal] = useState(false);
     const [accountFloat, setAccountFloat] = useState(false);
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
-
-    const { currentUser } = useCheckAuthQuery(null, {
-        selectFromResult: ({ data, isLoading }) => ({
-            currentUser: data?.data?.username,
-        }),
-    });
-
-    const { username, displayName, profileImageURL } = useGetUserInfoQuery(currentUser, {
-        selectFromResult: ({ data }) => ({
-            username: data?.username,
-            displayName: data?.displayName,
-            profileImageURL: data?.profileImageURL,
-        }),
-        skip: !currentUser,
-    });
 
     const [signOut] = useLazySignOutQuery();
 
@@ -61,6 +50,7 @@ const Sidebar = () => {
         const result = await signOut();
 
         if (!result.isError) {
+            dispatch(authActions.signOut());
             closeAccountFloat();
             navigate("/");
         }
@@ -71,12 +61,12 @@ const Sidebar = () => {
             className="column"
             id="navbar"
         >
-            {/* {currentUser && (
+            {isAuth && (
                 <TweetModal
                     isOpen={tweetModal}
                     onClose={closeTweetModal}
                 />
-            )} */}
+            )}
 
             <div className="sticky-wrapper">
                 <NavLink
@@ -89,8 +79,10 @@ const Sidebar = () => {
                     />
                 </NavLink>
 
-                {!currentUser && (
-                    <IconContext.Provider value={{ className: "navbar_icon explore" }}>
+                {!isAuth && (
+                    <IconContext.Provider
+                        value={{ className: "navbar_icon explore" }}
+                    >
                         <nav className="navbar">
                             <button className="navbar-link">
                                 <BiSearch
@@ -111,7 +103,7 @@ const Sidebar = () => {
                     </IconContext.Provider>
                 )}
 
-                {currentUser && (
+                {isAuth && (
                     <IconContext.Provider value={{ className: "navbar_icon" }}>
                         <nav className="navbar">
                             <NavLink
@@ -191,7 +183,7 @@ const Sidebar = () => {
                             />
 
                             <NavLink
-                                to={`/${username}`}
+                                to={`/${currentUser.username}`}
                                 className="navbar-link"
                                 children={({ isActive }) => (
                                     <>
@@ -212,7 +204,9 @@ const Sidebar = () => {
                                 onClick={openTweetModal}
                             >
                                 <span className="text">Tweet</span>
-                                <IconContext.Provider value={{ className: "navbar-btn_icon" }}>
+                                <IconContext.Provider
+                                    value={{ className: "navbar-btn_icon" }}
+                                >
                                     <FaFeatherAlt size="15" />
                                 </IconContext.Provider>
                             </button>
@@ -220,7 +214,7 @@ const Sidebar = () => {
                     </IconContext.Provider>
                 )}
 
-                {currentUser && (
+                {isAuth && (
                     <>
                         <button
                             className="navbar-account"
@@ -235,15 +229,19 @@ const Sidebar = () => {
                                     <section className="account-details">
                                         <div className="pfp-container">
                                             <img
-                                                src={profileImageURL}
+                                                src={currentUser.profileImageURL}
                                                 className="pfp"
                                                 alt="User PFP"
                                             />
                                         </div>
 
                                         <div className="navbar-account_names">
-                                            <p className="display_name">{displayName}</p>
-                                            <p className="username">@{username}</p>
+                                            <p className="display_name">
+                                                {currentUser.displayName}
+                                            </p>
+                                            <p className="username">
+                                                @{currentUser.username}
+                                            </p>
                                         </div>
                                         <IoMdCheckmark />
                                     </section>
@@ -252,25 +250,29 @@ const Sidebar = () => {
                                         className="float-btn"
                                         onClick={handleSignOut}
                                     >
-                                        Log out @{username}
+                                        Log out @{currentUser.username}
                                     </button>
                                 </FloatOptions>
                             )}
 
                             <div className="pfp-container">
                                 <img
-                                    src={profileImageURL}
+                                    src={currentUser.profileImageURL}
                                     className="pfp"
                                     alt="User PFP"
                                 />
                             </div>
 
                             <div className="navbar-account_names">
-                                <p className="display_name">{displayName}</p>
-                                <p className="username">@{username}</p>
+                                <p className="display_name">
+                                    {currentUser.displayName}
+                                </p>
+                                <p className="username">@{currentUser.username}</p>
                             </div>
 
-                            <IconContext.Provider value={{ className: "navbar-account_icon" }}>
+                            <IconContext.Provider
+                                value={{ className: "navbar-account_icon" }}
+                            >
                                 <IoEllipsisHorizontal size="15" />
                             </IconContext.Provider>
                         </button>

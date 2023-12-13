@@ -1,22 +1,10 @@
 import { Navigate } from "react-router-dom";
-import { useCheckAuthQuery } from "../features/api/authApi";
-import { Loading } from "../components";
+import { useAppSelector } from "../app/store";
 
 const PrivateRoute = ({ children }) => {
-    const {
-        data: auth,
-        isLoading: isAuthLoading,
-        isFetching: isAuthFetching,
-        isError: isAuthError,
-    } = useCheckAuthQuery();
+    const { isAuth } = useAppSelector((state) => state.auth);
 
-    if (isAuthLoading || isAuthFetching) {
-        return <Loading />;
-    }
-
-    if (!auth?.isAuthenticated || isAuthError) {
-        console.log(auth, isAuthLoading, isAuthFetching, isAuthError);
-        console.log("Redirecting to /");
+    if (!isAuth) {
         return (
             <Navigate
                 to="/"

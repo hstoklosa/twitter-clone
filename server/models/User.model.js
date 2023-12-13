@@ -25,7 +25,9 @@ const userSchema = new Schema(
             lowercase: true,
             validate: {
                 validator: (username) => {
-                    return /^[0-9a-zA-Z_.-]+$/.test(username);
+                    return String(username)
+                        .toLowerCase()
+                        .match(/^[0-9a-zA-Z_.-]+$/);
                 },
                 message: (props) =>
                     `${props.value} is not a valid username. Username must only contain numbers, letters, ".", "-", "_"`,
@@ -33,13 +35,15 @@ const userSchema = new Schema(
         },
         email: {
             type: String,
-            required: [true, "Email required"],
+            required: [true, "Email is required"],
             unique: [true, "Email already exists!"],
             trim: true,
             lowercase: true,
             validate: {
                 validator: (email) => {
-                    return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
+                    return String(email)
+                        .toLowerCase()
+                        .match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
                 },
                 message: (props) => `${props.value} is not a valid email address!`,
             },
@@ -66,7 +70,9 @@ const userSchema = new Schema(
             maxLength: 100,
             validate: {
                 validator: (url) => {
-                    return /^((http|https):\/\/)?[^ "]+$/.test(url);
+                    return String(url)
+                        .toLowerCase()
+                        .match(/^((http|https):\/\/)?[^ "]+$/);
                 },
                 message: (props) => `${props.value} is not a valid URL!`,
             },
@@ -91,27 +97,28 @@ const userSchema = new Schema(
             ref: "Tweet",
             default: [],
         },
-        bookmarks: {
-            type: [ObjectId],
-            ref: "Tweet",
-            default: [],
-        },
     },
     { timestamps: true }
 );
 
-// hide password field
-userSchema.set("toJSON", {
-    transform: (doc, { __v, password, ...rest }, options) => rest,
-});
+// userSchema.index({ username: 1, email: 1 });
 
-// static methods
+/**
+ *
+ * Static methods
+ *
+ */
+
 userSchema.statics.addUser = (data) => {
     const user = new this(data);
     return user.save();
 };
 
-// instance methods
+/**
+ *
+ * Instance methods
+ *
+ */
 userSchema.methods.addRetweet = function (tweetId) {
     const isRetweeted = this.retweets.some((id) => id === tweetId);
 
@@ -133,6 +140,26 @@ userSchema.methods.deleteRetweet = function (tweetId) {
 
     return Promise.resolve(this);
 };
+
+/**
+ *
+ * Virtual fields
+ *
+ */
+
+userSchema.virtual("bookmarks", {
+    ref: "Bookmark",
+    localField: "_id",
+    foreignField: "user",
+});
+
+// To ensure virtuals are included when you convert a document to JSON
+userSchema.set("toJSON", {
+    virtuals: true,
+    transform: (doc, { __v, password, ...rest }, options) => rest,
+});
+
+userSchema.set("toObject", { virtuals: true });
 
 const User = mongoose.model("User", userSchema);
 

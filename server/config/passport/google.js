@@ -1,7 +1,7 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const User = require("../../models/User.model");
 
-const generateUsername = require("../../helpers/generateUsername");
+const userService = require("../../services/user.service");
+const authService = require("../../services/auth.service");
 
 module.exports = new GoogleStrategy(
     {
@@ -11,7 +11,10 @@ module.exports = new GoogleStrategy(
     },
     async (accessToken, refreshToken, profile, cb) => {
         try {
-            const user = await User.findOne({ email: profile.emails[0].value });
+            const user = await userService.findByIdentifier(
+                profile.emails[0].value,
+                { select: "id username displayName profileImageURL provider" }
+            );
 
             if (!user) {
                 const {
@@ -22,15 +25,12 @@ module.exports = new GoogleStrategy(
                     _json: { picture: profileImageURL, locale: location },
                 } = profile;
 
-                const generatedUsername = generateUsername(email);
-                const customDob = new Date("1997-01-01").toISOString().split("T")[0];
-
-                const newUser = await User.addUser({
+                // create the google user
+                const newUser = await authService.createGoogleUser({
                     provider: {
                         providerName: provider,
                         providerId: id,
                     },
-                    username: generatedUsername,
                     displayName,
                     dob: customDob,
                     email,

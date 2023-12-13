@@ -10,11 +10,16 @@ import useOutsideClick from "../../../hooks/useOutsideClick";
 
 import { TweetInput, TweetActions } from "../../index";
 
-import { useCheckAuthQuery } from "../../../features/api/authApi";
-import { useGetUserInfoQuery } from "../../../features/api/userApi";
+import { useAppSelector } from "../../../app/store";
 import { useCreateTweetMutation } from "../../../features/api/tweetApi";
 
-const TweetForm = ({ isReply, button, placeholder, forceExpand, maxLength = 280 }) => {
+const TweetForm = ({
+    isReply,
+    button,
+    placeholder,
+    forceExpand,
+    maxLength = 280,
+}) => {
     const [tweet, setTweet] = useState("");
     const [media, setMedia] = useState(null);
     const [mediaPreview, setMediaPreview] = useState(null);
@@ -24,15 +29,8 @@ const TweetForm = ({ isReply, button, placeholder, forceExpand, maxLength = 280 
     const inputRef = useRef();
 
     const {
-        data: { data: currentUser },
-    } = useCheckAuthQuery();
-
-    const { id, profileImageURL } = useGetUserInfoQuery(currentUser?.username, {
-        selectFromResult: ({ data }) => ({
-            id: data?._id,
-            profileImageURL: data?.profileImageURL,
-        }),
-    });
+        user: { id, profileImageURL },
+    } = useAppSelector((state) => state.auth);
 
     const [createTweet] = useCreateTweetMutation();
 
@@ -121,7 +119,9 @@ const TweetForm = ({ isReply, button, placeholder, forceExpand, maxLength = 280 
                             className="reply"
                             disabled
                         >
-                            <IconContext.Provider value={{ className: "reply_icon" }}>
+                            <IconContext.Provider
+                                value={{ className: "reply_icon" }}
+                            >
                                 <IoEarth size="16" />
                             </IconContext.Provider>
 

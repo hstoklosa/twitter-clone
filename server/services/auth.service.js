@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const { transporter } = require("../config/nodemailer");
 const User = require("../models/User.model");
 
@@ -31,7 +32,7 @@ const sendConfirmationEmail = async (targetEmail) => {
     return await transporter.sendMail(options);
 };
 
-const comparePassword = async (p1, p2) => bcrypt.compareSync(p1, p2);
+const comparePassword = async (p1, p2) => await bcrypt.compareSync(p1, p2);
 
 module.exports = {
     createLocalUser,

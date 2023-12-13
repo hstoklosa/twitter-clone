@@ -21,7 +21,8 @@ export const authApi = baseApi.injectEndpoints({
         }),
         signUp: builder.mutation({
             query: (user) => {
-                const { displayName, username, email, password, day, month, year } = user;
+                const { displayName, username, email, password, day, month, year } =
+                    user;
 
                 const dobDate = new Date(`${year}-${month}-${day}`);
                 const dob = dobDate.toISOString().split("T")[0];
@@ -40,6 +41,9 @@ export const authApi = baseApi.injectEndpoints({
             },
         }),
         signOut: builder.query({
+            // query: () => ({
+            //     url: "/auth/logout",
+            // }),
             async queryFn(_arg, { dispatch }, _extraOptions, fetchWithBQ) {
                 const signOut = await fetchWithBQ({ url: "/auth/logout" });
 

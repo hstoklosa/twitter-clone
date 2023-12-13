@@ -1,14 +1,16 @@
-import "../styles/Login.css";
+import "./styles.css";
 
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
-import { useCheckAuthQuery } from "../store/api/authApi";
 
-import { SignupModal, LoginModal, PreviewList, Links, Signup } from "../components";
+import {
+    SignupModal,
+    LoginModal,
+    PreviewList,
+    Links,
+    Signup,
+} from "../../components";
 
 const Login = () => {
-    const { data } = useCheckAuthQuery();
-
     const [signupModal, setSignupModal] = useState(false);
     const [loginModal, setLoginModal] = useState(false);
 
@@ -17,15 +19,6 @@ const Login = () => {
 
     const openLoginModal = () => setLoginModal(true);
     const closeLoginModal = () => setLoginModal(false);
-
-    if (data?.isAuthenticated) {
-        return (
-            <Navigate
-                to="/home"
-                replace
-            />
-        );
-    }
 
     return (
         <main>
@@ -46,7 +39,7 @@ const Login = () => {
                     <h1>Explore</h1>
                 </header>
 
-                <PreviewList items={[]} />
+                {/* <PreviewList items={[]} /> */}
             </div>
 
             <div

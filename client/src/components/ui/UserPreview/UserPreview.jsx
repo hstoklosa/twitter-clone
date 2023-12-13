@@ -2,13 +2,11 @@ import "./styles.css";
 import "../../../routes/Profile/styles.css";
 
 import { Link } from "react-router-dom";
-import { useCheckAuthQuery } from "../../../features/api/authApi";
 import { FollowButton } from "../../index";
+import { useAppSelector } from "../../../app/store";
 
 const UserPreview = ({ tweet: user = null }) => {
-    const {
-        data: { data: currentUser },
-    } = useCheckAuthQuery();
+    const { user: currentUser } = useAppSelector((state) => state.auth);
 
     const isFollowing = user.followers.includes(currentUser.id);
 

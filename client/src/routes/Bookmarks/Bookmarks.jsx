@@ -4,12 +4,7 @@ import { useState } from "react";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 
 import usePagination from "../../hooks/usePagination";
-
-import { useCheckAuthQuery } from "../../features/api/authApi";
-import {
-    useGetBookmarksQuery,
-    useDeleteAllBookmarksMutation,
-} from "../../features/api/userApi";
+import { useAppSelector } from "../../app/store";
 
 import {
     ColumnHeader,
@@ -21,14 +16,17 @@ import {
     Links,
 } from "../../components";
 
+import {
+    useGetBookmarksQuery,
+    useDeleteAllBookmarksMutation,
+} from "../../features/api/userApi";
+
 import placeholders from "../../config/placeholders";
 
 const Bookmarks = () => {
     const [moreFloat, setMoreFloat] = useState(false);
 
-    const {
-        data: { data: currentUser },
-    } = useCheckAuthQuery();
+    const { user: currentUser } = useAppSelector((state) => state.auth);
 
     const queryResult = usePagination(useGetBookmarksQuery, {
         id: currentUser.id,

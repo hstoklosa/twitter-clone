@@ -10,18 +10,19 @@ import { AiOutlineLink } from "react-icons/ai";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { TbBellPlus, TbBellCheck } from "react-icons/tb";
 
-import { useCheckAuthQuery } from "../../features/api/authApi";
+import { useAppSelector } from "../../app/store";
 import { useGetUserInfoQuery } from "../../features/api/userApi";
 
 import ProfileNotFound from "./ProfileNotFound";
-import { ColumnHeader, Links, EditProfile, FollowButton, TabList } from "../../components";
+import {
+    ColumnHeader,
+    Links,
+    EditProfile,
+    FollowButton,
+    TabList,
+} from "../../components";
 
 import { formatDate } from "../../helpers/date";
-
-const profileTablist = {
-    tabs: ["tweets", "replies", "media", "likes"],
-    options: { indexTab: "tweets" },
-};
 
 const Profile = () => {
     const [tabData, setTabData] = useState({ length: 0 });
@@ -30,9 +31,7 @@ const Profile = () => {
     const { username } = useParams();
     const { pathname } = useLocation();
 
-    const {
-        data: { data: currentUser },
-    } = useCheckAuthQuery();
+    const { user: currentUser } = useAppSelector((state) => state.auth);
 
     const { isCurrentUser, profileUser } = useGetUserInfoQuery(username, {
         selectFromResult: ({ data }) => ({
@@ -41,8 +40,12 @@ const Profile = () => {
         }),
     });
 
-    const createdAt = formatDate(profileUser?.createdAt, { year: "numeric", month: "long" });
-    const isFollowed = !isCurrentUser && profileUser?.followers.includes(currentUser.id);
+    const createdAt = formatDate(profileUser?.createdAt, {
+        year: "numeric",
+        month: "long",
+    });
+    const isFollowed =
+        !isCurrentUser && profileUser?.followers.includes(currentUser.id);
 
     const handleTabData = (data) => {
         setTabData({ length: data.length });
@@ -108,7 +111,9 @@ const Profile = () => {
                                     </button>
                                 </div>
                             ) : (
-                                <IconContext.Provider value={{ className: "reply_icon" }}>
+                                <IconContext.Provider
+                                    value={{ className: "reply_icon" }}
+                                >
                                     <div className="options-container">
                                         <button
                                             className="btn-empty more"
@@ -140,7 +145,9 @@ const Profile = () => {
                             )}
 
                             <div className="info-container">
-                                <h1 className="displayName">{profileUser.displayName}</h1>
+                                <h1 className="displayName">
+                                    {profileUser.displayName}
+                                </h1>
                                 <p className="username">@{profileUser.username}</p>
                                 <p className="biography">{profileUser.bio}</p>
 
@@ -199,9 +206,9 @@ const Profile = () => {
 
                         <section className="tweets">
                             <TabList
-                                tabs={profileTablist.tabs}
+                                tabs={["tweets", "replies", "media", "likes"]}
                                 options={{
-                                    ...profileTablist.options,
+                                    options: { indexTab: "tweets" },
                                     index: `/${profileUser.username}`,
                                 }}
                             />

@@ -11,7 +11,7 @@ const {
 } = require("../utils/errors");
 
 const checkIdentifier = asyncHandler(async (req, res, next) => {
-    const user = userService.findByIdentifier(req.params.identifier);
+    const user = await userService.findByIdentifier(req.params.identifier);
 
     return res.status(200).json({
         exists: user ? true : false,
@@ -43,7 +43,7 @@ const signUp = asyncHandler(async (req, res, next) => {
             username,
             email,
             password,
-            profileImageURL: "http://localhost:8080/uploads/default_pfp.png",
+            profileImageURL: `${process.env.SERVER_ORIGIN}/uploads/default_pfp.png`,
         });
 
         req.login(user, (err) => {

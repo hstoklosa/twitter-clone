@@ -9,9 +9,13 @@ const { NotFoundError, UnauthorizedError } = require("../utils/errors");
 
 const getUser = asyncHandler(async (req, res, next) => {
     const { username } = req.params;
+
+    if (!(await User.exists({ username })))
+        return next(new NotFoundError("The user was not found!"));
+
     const user = await userService.findByUsername(username);
 
-    // console.log(user);
+    // console
 
     if (!user)
         return next(
@@ -117,8 +121,10 @@ const getLikesTimeline = asyncHandler(async (req, res, next) => {
 });
 
 const followUser = asyncHandler(async (req, res, next) => {
-    const { sourceUserId } = req.params;
+    const { userId: sourceUserId } = req.params;
     const { targetUserId } = req.body;
+
+    console.log(sourceUserId, targetUserId);
 
     if (!(await User.exists({ _id: sourceUserId })))
         return next(new NotFoundError("Source user not found!"));
@@ -167,10 +173,10 @@ const updateUser = asyncHandler(async (req, res, next) => {
     };
 
     if (req.files["profileImage"])
-        updateData.profileImageURL = `${process.env.SERVER_URL}/${req.files.profileImage[0].path}`;
+        updateData.profileImageURL = `${process.env.SERVER_ORIGIN}/${req.files.profileImage[0].path}`;
 
     if (req.files["bannerImage"])
-        updateData.bannerURL = `${process.env.SERVER_URL}/${req.files.bannerImage[0].path}`;
+        updateData.bannerURL = `${process.env.SERVER_ORIGIN}/${req.files.bannerImage[0].path}`;
 
     await User.findByIdAndUpdate(userId, updateData);
 

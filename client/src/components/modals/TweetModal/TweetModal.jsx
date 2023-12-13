@@ -6,6 +6,8 @@ import { useState, useRef } from "react";
 import { IconContext } from "react-icons";
 import { IoEarth } from "react-icons/io5";
 
+import { useAppSelector } from "../../../app/store";
+
 import {
     ColumnHeader,
     BaseModal,
@@ -13,8 +15,7 @@ import {
     TweetInput,
     QuotePreview,
 } from "../../index";
-import { useCheckAuthQuery } from "../../../features/api/authApi";
-import { useGetUserInfoQuery } from "../../../features/api/userApi";
+
 import { useCreateTweetMutation } from "../../../features/api/tweetApi";
 
 const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
@@ -25,15 +26,8 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
     const inputRef = useRef();
 
     const {
-        data: { data: currentUser },
-    } = useCheckAuthQuery();
-
-    const { id, profileImageURL } = useGetUserInfoQuery(currentUser?.username, {
-        selectFromResult: ({ data }) => ({
-            id: data?._id,
-            profileImageURL: data?.profileImageURL,
-        }),
-    });
+        user: { id, profileImageURL },
+    } = useAppSelector((state) => state.auth);
 
     const [createTweet] = useCreateTweetMutation();
 

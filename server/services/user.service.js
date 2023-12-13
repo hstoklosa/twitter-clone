@@ -21,11 +21,11 @@ const findByUsername = async (username) => {
 };
 
 const findByIdentifier = async (identifier, options = {}) => {
-    const user = User.findOne({
+    let user = User.findOne({
         $or: [{ username: identifier }, { email: identifier }],
     });
 
-    if (options.select) user = user.select(params.select);
+    if (options.select) user = user.select(options.select);
 
     return await user.exec();
 };
@@ -453,7 +453,7 @@ const createFollow = async (sourceId, targetId) => {
     ]);
 };
 
-const removeFollow = async (targetId, sourceId) => {
+const removeFollow = async (sourceId, targetId) => {
     await Promise.all([
         User.updateOne({ _id: targetId }, { $pull: { followers: sourceId } }),
         User.updateOne({ _id: sourceId }, { $pull: { following: targetId } }),

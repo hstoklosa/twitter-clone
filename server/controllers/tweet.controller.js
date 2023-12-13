@@ -79,7 +79,7 @@ const createTweet = asyncHandler(async (req, res, next) => {
     // Attach incoming files
     if (req.file) {
         tweet.media = {
-            url: `http://localhost:8080/${req.file.path}`,
+            url: `${process.env.SERVER_ORIGIN}/${req.file.path}`,
             mediaType: req.file.mimetype.split("/")[0],
         };
     }

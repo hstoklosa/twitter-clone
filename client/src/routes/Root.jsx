@@ -1,23 +1,19 @@
 import "../routes/Login/styles.css";
 
 import { Outlet } from "react-router-dom";
+
 import { AppLayout } from "../components";
+import { useAppSelector } from "../app/store";
 import { useCheckAuthQuery } from "../features/api/authApi";
 import { useGetUserInfoQuery } from "../features/api/userApi";
 
 const Root = () => {
-    const { auth, isAuthLoading } = useCheckAuthQuery(null, {
-        selectFromResult: ({ data, isLoading, isFetching, isUninitialized }) => ({
-            auth: data,
-            isAuthLoading: !isUninitialized && isLoading,
-        }),
-    });
+    const auth = useAppSelector((state) => state.auth);
 
-    const { isUserLoading } = useGetUserInfoQuery(auth?.data?.username, {
-        skip: !auth?.data?.username,
-        selectFromResult: ({ isLoading, isFetching, isUninitialized }) => ({
-            isUserLoading: !isUninitialized && isLoading,
-        }),
+    const { isLoading: isAuthLoading } = useCheckAuthQuery();
+
+    const { isLoading: isUserLoading } = useGetUserInfoQuery(auth.user?.username, {
+        skip: !auth.isAuth,
     });
 
     return (

@@ -25,7 +25,8 @@ import {
     ConditionalLink,
 } from "../../index";
 
-import { useCheckAuthQuery } from "../../../features/api/authApi";
+import { useAppSelector } from "../../../app/store";
+
 import { useDeleteTweetMutation } from "../../../features/api/tweetApi";
 import {
     useGetUserInfoQuery,
@@ -50,9 +51,7 @@ const Tweet = ({ tweet }) => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
 
-    const {
-        data: { isAuthenticated, data: currentUser },
-    } = useCheckAuthQuery();
+    const { isAuth, user: currentUser } = useAppSelector((state) => state.auth);
 
     const { data: currentUserInfo } = useGetUserInfoQuery(currentUser?.username, {
         skip: !currentUser?.username,
@@ -80,7 +79,7 @@ const Tweet = ({ tweet }) => {
     const media = tweet.media?.[0];
 
     const handlePostClick = (e) => {
-        return isAuthenticated && navigate(`/${tweet.author.username}/status/${tweet._id}`);
+        return isAuth && navigate(`/${tweet.author.username}/status/${tweet._id}`);
     };
 
     const handleTweetDelete = async () => {
@@ -106,7 +105,9 @@ const Tweet = ({ tweet }) => {
     };
 
     const handleLike = async (e) => {
-        isLiked ? await unlikeTweet({ id: tweet._id }) : await likeTweet({ id: tweet._id });
+        isLiked
+            ? await unlikeTweet({ id: tweet._id })
+            : await likeTweet({ id: tweet._id });
     };
 
     const handleBookmark = async () => {
@@ -115,7 +116,9 @@ const Tweet = ({ tweet }) => {
             userId: currentUser.id,
         };
 
-        isBookmarked ? await deleteBookmark(bookmarkData) : await createBookmark(bookmarkData);
+        isBookmarked
+            ? await deleteBookmark(bookmarkData)
+            : await createBookmark(bookmarkData);
     };
 
     const handleFollow = async () => {
@@ -124,7 +127,9 @@ const Tweet = ({ tweet }) => {
             targetUserId: tweet.author._id,
         };
 
-        isFollowingAuthor ? await unfollowUser(followData) : await followUser(followData);
+        isFollowingAuthor
+            ? await unfollowUser(followData)
+            : await followUser(followData);
     };
 
     const openReplyModal = () => setReplyModal(true);
@@ -162,9 +167,9 @@ const Tweet = ({ tweet }) => {
 
             <ConditionalLink
                 className="tweet"
+                condition={isAuth}
                 to={`/${tweet.author.username}/status/${tweet._id}`}
                 state={{ previousPath: pathname }}
-                condition={isAuthenticated}
             >
                 {moreFloat && (
                     <IconContext.Provider value={{ className: "float-icon" }}>
@@ -232,9 +237,13 @@ const Tweet = ({ tweet }) => {
                                 >
                                     <div className="float-icon-container">
                                         {isFollowingAuthor ? (
-                                            <RiUserUnfollowLine style={{ strokeWidth: 0 }} />
+                                            <RiUserUnfollowLine
+                                                style={{ strokeWidth: 0 }}
+                                            />
                                         ) : (
-                                            <RiUserFollowLine style={{ strokeWidth: 0 }} />
+                                            <RiUserFollowLine
+                                                style={{ strokeWidth: 0 }}
+                                            />
                                         )}
                                     </div>
                                     {isFollowingAuthor ? "Unfollow" : "Follow"} @
@@ -341,7 +350,9 @@ const Tweet = ({ tweet }) => {
                         </LinkButton>
 
                         <LinkButton
-                            className={`tweet-btn retweet ${isReposted && "applied"}`}
+                            className={`tweet-btn retweet ${
+                                isReposted && "applied"
+                            }`}
                             onClick={openRetweetFloat}
                         >
                             <div className="icon-container">
@@ -353,7 +364,9 @@ const Tweet = ({ tweet }) => {
                             </div>
 
                             {retweetFloat && (
-                                <IconContext.Provider value={{ className: "float-icon" }}>
+                                <IconContext.Provider
+                                    value={{ className: "float-icon" }}
+                                >
                                     <FloatOptions
                                         isOpen={retweetFloat}
                                         onClose={closeRetweetFloat}
@@ -421,7 +434,11 @@ const Tweet = ({ tweet }) => {
                                 onClick={handleBookmark}
                             >
                                 <div className="icon-container">
-                                    {isBookmarked ? <BiSolidBookmark /> : <BiBookmark />}
+                                    {isBookmarked ? (
+                                        <BiSolidBookmark />
+                                    ) : (
+                                        <BiBookmark />
+                                    )}
                                 </div>
                             </LinkButton>
 

@@ -1,6 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
-const User = require("../../models/User.model");
+const authService = require("../../services/auth.service");
+const userService = require("../../services/user.service");
 
 module.exports = new LocalStrategy(
     {
@@ -9,9 +9,11 @@ module.exports = new LocalStrategy(
     },
     async (identifier, password, cb) => {
         try {
-            const user = await User.findOne({
-                $or: [{ username: identifier }, { email: identifier }],
+            const user = await userService.findByIdentifier(identifier, {
+                select: "id username password displayName profileImageURL",
             });
+
+            const { password: fetchedPassword, ...rest } = user;
 
             if (!user) {
                 return cb(null, false, {
@@ -21,13 +23,19 @@ module.exports = new LocalStrategy(
 
             if (user?.provider) {
                 return cb(null, false, {
-                    message: "You have previously signed up with a different method.",
+                    message:
+                        "You have previously signed up with a different method.",
                 });
             }
 
-            const passwordMatch = bcrypt.compareSync(password, user.password);
+            console.log(password, fetchedPassword);
 
-            if (!passwordMatch) {
+            const isPasswordValid = await authService.comparePassword(
+                password,
+                fetchedPassword
+            );
+
+            if (!isPasswordValid) {
                 return cb(null, false, {
                     message: `The provided password is incorrect!`,
                 });

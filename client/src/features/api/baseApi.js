@@ -2,7 +2,11 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 
 const customBaseQuery =
     ({ baseUrl } = { baseUrl: process.env.REACT_APP_API_URL }) =>
-    async ({ url, method = "GET", headers = {}, body = null }, api, extraOptions) => {
+    async (
+        { url, method = "GET", headers = {}, body = null },
+        api,
+        extraOptions
+    ) => {
         const options = {
             method,
             headers,
@@ -25,11 +29,6 @@ const customBaseQuery =
 
         // backend error
         if (result.error) {
-            // user not authenticated
-            if (result.error.status === 401) {
-                return { data: { isAuthenticated: false } };
-            }
-
             return {
                 error: {
                     status: result.error.status,
