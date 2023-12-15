@@ -1,6 +1,5 @@
-# <p align="center"> X Clone</p>
-
-<p align="center"><img src="https://github.com/imexotic/imexotic/blob/main/assets/x-readme-banner.jpg?raw=true" style="width: 80%" /></p>
+<p align="center" style=""><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/xclone-readme.jpg?raw=true" style="width: 100% border-radius: 1rem;" /></p>
+<p align="center" style="">A simplified version of X/Twitter built in React and Node.js using Express & MongoDB.</p>
 
 ## Roadmap 🎉
 
@@ -8,33 +7,36 @@ The goal of this side-project is to create a fully functional full-stack Twitter
 
 The project is currently in the beginning phases of development, and in order to keep track of the progress, the following README will contain series of information (stack, features, specific todos).
 
-Over the summer of 2023, I will be working on this project until it will be of a satisfactory standard to be deployed and included as my resume project.
+Over the summer of 2023 (or longer if neccessary), I will be working on this project until it will be of a satisfactory standard to be deployed and included as my resume project.
 
 ### 🔍 Features
 
 -   [x] User Authentication
--   [x] Profile Management (profile picture, bio, location)
+-   [x] Profile page & management options
 -   [x] Following/Followers
--   [x] Tweeting (text, images, videos)
--   [ ] Likes, retweets & commenting
--   [ ] Feed (for you & following - algorithmic order)
+-   [x] Tweeting (text & images)
+-   [x] Commenting, retweeting, quoting, liking
+-   [x] Algorithmic feed
 -   [ ] Search Functionality (user/tweets/hashtags)
--   [ ] Direct Messaging
--   [ ] Real-time Notifications (likes, retweets, follows, dms)
-
-Notes:
-
--   `MongoDB` and `Mongoose` to store and model (ODM) data
--   `Passport.js` for local auth and OAuth2.0
--   `express-session` and `mongo-connect` for sessions management & storage
--   `@reduxjs/toolkit` instead of `redux` for quicker development
+-   [ ] Real-time direct messaging
+-   [ ] Real-time notifications - likes, retweets, follows, DMs (websockets)
 
 ## 🔌 Technologies
 
-I have decided to use the **MERN** stack since I've never used a NoSQL database technology before. In addition, MongoDB has gained a lot of popularity among developers due to its capabilities for storing and handling large amounts of data e.g., for social media apps.
+_MERN Stack:_ I'm embracing the opportunity to delve into the realm of NoSQL databases, a new direction for my development skills.
 
-Additinally, I can't ignore the fact that Mongo has gained a ton of popularity among developers due to its capabilities, and it is usually favoured for social media applications.
-<br/><br/>
+MongoDB, a key component of this stack, stands out due to its widespread acclaim in the developer community. Its prowess extends beyond just managing large volumes of data with ease; it's equally adept at handling diverse data structures, making it highly suitable for a variety of complex applications.
+
+The choice of MongoDB is further solidified by its growing prominence across multiple domains, not just limited to social media. Its scalability, combined with user-friendly features, positions it as a strategic choice for developers eager to explore and leverage the full potential of NoSQL databases in modern web development.
+
+**NOTES**
+
+-   `MongoDB` a document-orientated & NoSQL data storage
+-   `Mongoose` for ODM modelling and easier data access/manipulation
+-   `Passport.js` for authentication purposes such as LocalAuth and OAuth2.0
+-   `express-session` and `mongo-connect`, respectively, to create and store the sessions
+-   `@reduxjs/toolkit` instead of `redux` for simplified apprach to state management
+    <br/><br/>
 
 <p align="center">
    <a href="https://react.dev/" target="__blank">
@@ -108,9 +110,9 @@ Additinally, I can't ignore the fact that Mongo has gained a ton of popularity a
 
 ## 📖 Usage
 
-The project is open-source, so feel free to clone the repository and use it as you wish, either to inspect what I've done or to extend it.
+This project is open-source and I welcome anyone to clone the repository. Whether you're curious about my approach or looking to build upon it, feel free to dive in.
 
-However, I would prefer if you didn't copy my code and claim it as your own. Therefore, if you plan on extending and deploying this Twitter clone, please provide a link to this repository in your README.
+I only ask that if you use my code, please don't present it as solely your own creation. If you decide to extend and deploy this X/Twitter clone application, I'd appreciate a shoutout: just add a link back to this repository in your README. Happy exploring!
 
 ### 📦 Installation
 
@@ -135,47 +137,22 @@ A detailed list of the containers found in the `docker-compose.dev.yml` file:
 ```
 docker-compose ps
 
-NAME                IMAGE               COMMAND                  SERVICE             CREATED             STATUS              PORTS
-tc-database         mongo               "docker-entrypoint.s…"   mongo               23 seconds ago      Up 22 seconds       0.0.0.0:27017->27017/tcp
-tc-node-server      tc-server           "docker-entrypoint.s…"   server              23 seconds ago      Up 21 seconds       0.0.0.0:8080->8080/tcp
-tc-react-client     tc-client           "docker-entrypoint.s…"   client              23 seconds ago      Up 21 seconds       0.0.0.0:3000->3000/tcp
+NAME       IMAGE             COMMAND                  SERVICE   CREATED       STATUS       PORTS
+backend    xclone-backend    "docker-entrypoint.s…"   server    2 hours ago   Up 2 hours   0.0.0.0:8080->8080/tcp
+frontend   xclone-frontend   "docker-entrypoint.s…"   client    2 hours ago   Up 2 hours   0.0.0.0:3000->3000/tcp
+mongodb    mongo             "docker-entrypoint.s…"   mongo     2 hours ago   Up 2 hours   0.0.0.0:27017->27017/tcp
 
 ```
+
+### 💻 Production
+
+...
 
 ### ❌ Environmental Variables
 
-For now there is only `docker-compose.developer.yml` that can be used to build the multi-container for local development. However, as I will be working on the project and getting closer to the finish line, I will be creating a `docker-compose.production.yml` for this repository.
+`env_file` options are set up in `docker-compose.yml` and `docker-compose.prod.yml`. All you have to do is: rename the desired file to exclude the `.sample` suffix and fill in the values accordingly to avoid any issues.
 
-`env_file` options for development are already set up in `docker-compose.developer.yml`. All you have to do is to rename the `.env.sample` file to `.env`, and fill in the values accordingly.
-
-The process for setting up **production environmental variables** will vary on the hosting platform that you're planning to use, therefore make sure to check their documentation.
-
-**Sample .env**
-
-```
-MONGO_URI=
-MONGO_LOCAL_PORT=
-MONGO_DOCKER_PORT=
-
-SERVER_ORIGIN=
-SERVER_LOCAL_PORT=
-SERVER_DOCKER_PORT=
-
-CLIENT_ORIGIN=
-CLIENT_LOCAL_PORT=
-CLIENT_DOCKER_PORT=
-
-SESSION_NAME=
-SESSION_SECRET=
-
-MAIL_USER=
-MAIL_PASS=
-MAIL_SERVICE=
-
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_CALLBACK_URL=
-```
+Refer to `.env.sample` and `.env.prod.sample` for the required environmental variables.
 
 ## 📝 License
 
