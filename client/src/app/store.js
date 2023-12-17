@@ -2,14 +2,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 import { baseApi } from "../features/api/baseApi";
-import authReducer from "../features/slices/authSlice";
 
 const middleware = (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend([baseApi.middleware]);
+    getDefaultMiddleware().prepend([
+        baseApi.middleware,
+    ]);
 
 const reducer = {
     [baseApi.reducerPath]: baseApi.reducer,
-    auth: authReducer,
 };
 
 const store = configureStore({
