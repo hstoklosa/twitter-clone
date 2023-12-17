@@ -11,7 +11,6 @@ const Root = () => {
     const auth = useAppSelector((state) => state.auth);
 
     const { isLoading: isAuthLoading } = useCheckAuthQuery();
-
     const { isLoading: isUserLoading } = useGetUserInfoQuery(auth.user?.username, {
         skip: !auth.isAuth,
     });
