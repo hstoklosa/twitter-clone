@@ -6,6 +6,7 @@ const paginate = async (modelName = null, pipeline = [], options = {}) => {
 
     let result = await Model.aggregate([
         ...pipeline,
+
         {
             $sort: { createdAt: -1 },
         },
@@ -24,6 +25,11 @@ const paginate = async (modelName = null, pipeline = [], options = {}) => {
     if (result.data.length === 1 && Object.keys(result.data).length === 0)
         return { data: [], totalCount: 0, totalPages: 0 };
 
+    // handle case of no data
+    if (result.data.length === 0) {
+        return { data: [], totalCount: 0, totalPages: 0 };
+    }
+
     const { data, totalCount: tempCount } = result;
 
     const totalCount = tempCount.length ? tempCount[0].count : 0;
@@ -33,6 +39,8 @@ const paginate = async (modelName = null, pipeline = [], options = {}) => {
         data,
         totalCount,
         totalPages,
+        page: skip / limit + 1,
+        hasNextPage: (skip / limit + 1) < totalPages
     };
 };
 
