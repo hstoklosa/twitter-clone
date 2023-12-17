@@ -11,7 +11,7 @@ import { useAppSelector } from "../../../app/store";
 import {
     ColumnHeader,
     BaseModal,
-    TweetActions,
+    TweetFormActions,
     TweetInput,
     QuotePreview,
 } from "../../index";
@@ -111,7 +111,7 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
                     <span className="reply-option">Everyone can reply</span>
                 </button>
 
-                <TweetActions
+                <TweetFormActions
                     tweet={tweet}
                     setMedia={setMedia}
                     setMediaPreview={setMediaPreview}

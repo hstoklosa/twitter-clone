@@ -1,0 +1,67 @@
+.tweet-actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 0.75rem 0; */
+    margin: 0;
+}
+
+.tweet-actions .attachments {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-left: -6px;
+}
+
+.tweet-attachments_icon {
+    color: var(--primary-colour);
+}
+
+.tweet-attachments_button {
+    cursor: pointer;
+    /* padding: 0.5rem; */
+    width: 33px;
+    height: 33px;
+    /* border-radius: 50%; */
+    /* margin-right: 0.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s linear; */
+}
+/* 
+.tweet-attachments_button:hover {
+    background-color: rgba(29, 155, 240, 0.2);
+} */
+
+.tweet-attachments_button .icon-container {
+    width: 18px;
+    height: 18px;
+}
+
+.tweet-attachments_button .tweet-attachments_icon {
+    color: var(--primary-colour);
+}
+
+.tweet-attachments_button:disabled:hover .icon-container::after {
+    background-color: rgba(29, 155, 240, 0.1);
+}
+
+.tweet-attachments_button:disabled .tweet-attachments_icon {
+    opacity: 0.5;
+}
+
+.tweet-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tweet-submit .separator {
+    height: 25px;
+    width: 2px;
+    background-color: rgb(62, 65, 68);
+    border-radius: 99999rem;
+    margin: 0 0.7rem;
+}

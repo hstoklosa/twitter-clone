@@ -6,6 +6,7 @@
 
 .tweet-modal .modal-content {
     padding: 0 !important;
+    height: auto;
 }
 
 .tweet-modal .modal-content .quote-preview {
