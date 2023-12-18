@@ -1,4 +1,4 @@
-<p align="center" style=""><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/xclone-readme.jpg?raw=true" style="width: 100% border-radius: 1rem;" /></p>
+<p align="center" style="border-radius: 1rem;"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/xclone-readme.jpg?raw=true" style="width: 100%; border-radius: 1rem;" /></p>
 <p align="center" style="">A simplified version of X/Twitter built in React and Node.js using Express & MongoDB.</p>
 
 ## Roadmap 🎉
@@ -17,9 +17,9 @@ Over the summer of 2023 (or longer if neccessary), I will be working on this pro
 -   [x] Tweeting (text & images)
 -   [x] Commenting, retweeting, quoting, liking
 -   [x] Algorithmic feed
--   [ ] Search Functionality (user/tweets/hashtags)
+-   [x] Search Functionality (user/tweets/hashtags)
 -   [ ] Real-time direct messaging
--   [ ] Real-time notifications - likes, retweets, follows, DMs (websockets)
+-   [ ] Real-time notifications - likes, retweets, follows, DMs
 
 ## 🔌 Technologies
 
@@ -122,6 +122,8 @@ The command will clone the repository, and automatically navigate into the proje
 git clone git@github.com:<username>/twitter-clone.git && cd twitter-clone
 ```
 
+> **_Note_**: Use the following argument when using the docker-compose commands **[--build [service_name]]** whenever you make any Docker-wise changes to rebuild the images and containers.
+
 ### 💻 Development
 
 The following commands will build the multi-container application in Docker for local development. Volumes have been defined for client and server to create bind mounts for hot-reloading.
@@ -129,7 +131,7 @@ The following commands will build the multi-container application in Docker for 
 Assuming it's your first time using the project, there is no don't need to use the `--build` flag. However, if you make any Docker-wise changes, you will need to use the previously mentioned flag to rebuild the container/s.
 
 ```
-docker-compose -f docker-compose.dev.yml up [--build [service_name]] [-d]
+docker-compose -f docker-compose.dev.yml up
 ```
 
 A detailed list of the containers found in the `docker-compose.dev.yml` file:
@@ -141,12 +143,52 @@ NAME       IMAGE             COMMAND                  SERVICE   CREATED       ST
 backend    xclone-backend    "docker-entrypoint.s…"   server    2 hours ago   Up 2 hours   0.0.0.0:8080->8080/tcp
 frontend   xclone-frontend   "docker-entrypoint.s…"   client    2 hours ago   Up 2 hours   0.0.0.0:3000->3000/tcp
 mongodb    mongo             "docker-entrypoint.s…"   mongo     2 hours ago   Up 2 hours   0.0.0.0:27017->27017/tcp
-
 ```
 
 ### 💻 Production
 
-...
+The project uses a multi-stage build with containers communicating over networks to create a production-ready deployement.
+
+The first stage builds the necessary images and containers for the reverse proxy and the database, which are located on the `x-proxy-network` and `x-database-network` networks, respectively.
+
+<p align="center" style="border-radius: 1rem;"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/AWS1.jpg?raw=true" style="width: 75%; border-radius: 1rem;" /></p>
+
+1. Create the necessary networks.
+
+    ```
+    docker network create x-network
+    docker network create x-database-network
+    ```
+
+2. Build the images and run the containers.
+
+    https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
+
+    ```
+    docker compose --env-file ./.env.prod -f docker-compose.prod.yml build --no-cache
+    docker compose -f docker-compose.prod.yml down
+    docker compose --env-file .env.prod -f docker-compose.prod.yml up --build
+    docker compose -f docker-compose.prod.yml up -d
+    ```
+
+    A detailed list of the containers found in the `docker-compose.prod.yml` with deployment services and networks:
+
+    ```
+    docker-compose ps
+
+    ```
+
+    A detailed list of the containers found in the `docker-compose.yml` with deployment services and networks:
+
+    ```
+    docker-compose ps
+
+    NAME             IMAGE                       COMMAND                                                  SERVICE          CREATED        STATUS                     PORTS
+    acme-companion   nginxproxy/acme-companion   "/bin/bash /app/entrypoint.sh /bin/bash /app/start.sh"   acme-companion   2 months ago   Up 9 minutes
+    mongodb          mongo                       "docker-entrypoint.sh mongod"                            mongodb          2 hours ago    Up 9 minutes (unhealthy)   127.0.0.1:27017->27017/tcp
+    nginx-proxy      nginxproxy/nginx-proxy      "/app/docker-entrypoint.sh forego start -r"              nginx-proxy      2 months ago   Up 9 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp
+
+    ```
 
 ### ❌ Environmental Variables
 
