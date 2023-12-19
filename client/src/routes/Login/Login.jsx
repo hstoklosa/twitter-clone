@@ -1,54 +1,67 @@
 import "./styles.css";
+import logo from "../../../src/assets/logo-blue.png";
 
-import { useState } from "react";
+import { IconContext } from "react-icons";
+import { FcGoogle } from "react-icons/fc";
 
-import {
-    SignupModal,
-    LoginModal,
-    PreviewList,
-    Links,
-    Signup,
-} from "../../components";
+import { useAppSelector, useAppDispatch } from "../../app/store";
+import { modalActions } from "../../features/slices/modalSlice";
+import { SignupModal, LoginModal, VerificationModal } from "../../components";
+
 
 const Login = () => {
-    const [signupModal, setSignupModal] = useState(false);
-    const [loginModal, setLoginModal] = useState(false);
+    const { signInModal, signUpModal, verificationModal } = useAppSelector((state) => state.modal);
 
-    const openSignupModal = () => setSignupModal(true);
-    const closeSignupModal = () => setSignupModal(false);
-
-    const openLoginModal = () => setLoginModal(true);
-    const closeLoginModal = () => setLoginModal(false);
+    const dispatch = useAppDispatch();
 
     return (
-        <main>
+        <main className="auth-route app-container">
             <SignupModal
-                isOpen={signupModal}
-                closeModal={closeSignupModal}
+                isOpen={signUpModal}
+                closeModal={() => dispatch(modalActions.disableSignUpModal())}
             />
+
             <LoginModal
-                isOpen={loginModal}
-                closeModal={closeLoginModal}
+                isOpen={signInModal}
+                closeModal={() => dispatch(modalActions.disableSignInModal())}
             />
 
-            <div
-                className="column"
-                id="general"
-            >
-                <header>
-                    <h1>Explore</h1>
-                </header>
+            <VerificationModal
+                isOpen={verificationModal.isOpen}
+                closeModal={() => dispatch(modalActions.disableVerificationModal())}
+            />
 
-                {/* <PreviewList items={[]} /> */}
-            </div>
+            <img
+                src={logo}
+                className="twitter-logo"
+                alt="Twitter's Logo"
+            />
 
-            <div
-                className="column"
-                id="widgets"
-            >
-                <div className="sticky-wrapper">
-                    <Signup openModal={openSignupModal} />
-                    <Links />
+            <div className="signup-container">
+                <div className="text wrapper">
+                    <h2>New to Twitter Clone?</h2>
+                    <p>Sign up now to give the clone a try!</p>
+                </div>
+
+                <div className="wrapper">
+                    <a
+                        href={`${process.env.REACT_APP_API_URL}/auth/google`}
+                        className="white-btn signup-btn"
+                    >
+                        <IconContext.Provider value={{ className: "signup_icon" }}>
+                            <FcGoogle size="18" />
+                        </IconContext.Provider>
+                        Sign up with Google
+                    </a>
+
+                    <button
+                        className="white-btn signup-btn"
+                        onClick={() => dispatch(
+                            modalActions.enableSignUpModal()
+                        )}
+                    >
+                        Create Account
+                    </button>
                 </div>
             </div>
 
@@ -57,22 +70,24 @@ const Login = () => {
                     <h2>Don't miss what's happening</h2>
                     <p>People on Twitter are the first to know.</p>
                 </div>
+
                 <div className="footer_btns">
                     <button
                         className="login"
-                        onClick={openLoginModal}
+                        onClick={() => dispatch(modalActions.enableSignInModal())}
                     >
                         Log In
                     </button>
+
                     <button
                         className="white-btn signup"
-                        onClick={openSignupModal}
+                        onClick={() => dispatch(modalActions.enableSignUpModal())}
                     >
                         Sign up
                     </button>
                 </div>
             </div>
-        </main>
+        </main >
     );
 };
 

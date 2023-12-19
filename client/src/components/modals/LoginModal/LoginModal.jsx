@@ -1,214 +1,212 @@
-import "../../styles/LoginModal.css";
-import logo from "../../assets/logo-white.png";
+import "./styles.css";
+import logo from "../../../assets/logo-white.png";
 
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 import { IconContext } from "react-icons";
-import { IoMdClose } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
-import { checkIdentifier, signIn } from "../../redux/authSlice";
-import { BaseModal, InputContainer } from "../index";
+import { useAppSelector } from "../../../app/store";
+import useModalPagination from "../../../hooks/useModalPagination";
 
-const NUM_PAGES = 3;
+import {
+    BaseModal,
+    ColumnHeader,
+    TextInput,
+} from "../../index";
 
-const LoginModal = ({ isOpen, closeModal }) => {
+import {
+    useSignInMutation,
+    useLazyIdentifierExistsQuery,
+} from "../../../features/api/authApi";
+
+import { modalActions } from "../../../features/slices/modalSlice";
+import { loginActions } from "../../../features/slices/loginSlice";
+
+
+const LoginModal = ({ isOpen }) => {
+    const formState = useAppSelector((state) => state.login.form);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [page, setPage] = useState(1);
+    const { currentPage, setCurrentPage, nextPage } = useModalPagination(3);
 
-    const [formState, setFormState] = useState({
-        identifier: "",
-        password: "",
-    });
+    const [checkIdentifier, { data: identifierExists }] = useLazyIdentifierExistsQuery();
+    const [signIn, { error: signInError }] = useSignInMutation();
 
-    const [identifierError, setIdentifierError] = useState(null);
-    const [passwordError, setPasswordError] = useState(null);
+    const handleSignIn = async (e) => {
+        e.preventDefault();
 
-    const nextPage = () => page < NUM_PAGES && setPage(page + 1);
-    const prevPage = () => page > 1 && setPage(page - 1);
+        const result = await signIn(formState);
 
-    const handleIdentifierBlur = async (e) => {
-        const identifierExists = await checkIdentifier(e.target.value);
-
-        if (!identifierExists) {
-            return setIdentifierError("The username/email does not exist!");
+        if (!result.error && result.data.isEmailVerified === false) {
+            dispatch(modalActions.enableVerificationModal({ userId: result.data.id }));
         }
 
-        return setIdentifierError(null);
-    };
-
-    const handleSignIn = async () => {
-        const result = await dispatch(signIn(formState));
-
-        if (result.error) {
-            return;
+        if (!result.error && result.data.isAuthenticated) {
+            closeLoginModal();
+            dispatch(modalActions.disableVerificationModal());
+            navigate("/home");
         }
-
-        closeModal();
-        navigate("/home");
     };
 
-    const updateFormState = (field, value) => {
-        setFormState((prevState) => ({
-            ...prevState,
-            [field]: value,
-        }));
+    const handleIdentiferBlur = async ({ target }) => {
+        formState.identifier.length > 0 && (await checkIdentifier(target.value));
     };
+
+
+    const closeLoginModal = () => {
+        setCurrentPage(1);
+        dispatch(loginActions.clearForm());
+        dispatch(modalActions.disableSignInModal())
+
+    };
+
+    const switchToSignup = () => {
+        dispatch(modalActions.disableSignInModal())
+        dispatch(modalActions.enableSignUpModal());
+    }
+
 
     return (
         <BaseModal
             isOpen={isOpen}
-            onClose={closeModal}
+            onClose={closeLoginModal}
         >
-            <header className="login-modal_header">
-                <button
-                    className="btn-close-modal"
-                    onClick={closeModal}
-                >
-                    <IconContext.Provider value={{ className: "btn-close_icon" }}>
-                        <IoMdClose size="25" />
-                    </IconContext.Provider>
-                </button>
-                <div></div>
-            </header>
+            <ColumnHeader
+                className="login-modal_header"
+                close={closeLoginModal}
+            >
+                <div className="header_container">
+                    <Link
+                        to={`/`}
+                        className="logo-container"
+                    >
+                        <img
+                            src={logo}
+                            alt="X Logo"
+                        />
+                    </Link>
+                </div>
+            </ColumnHeader>
 
-            <form className="login-modal_content">
-                {page === 1 && (
-                    <div className="page page-1">
-                        <Link
-                            to={`/`}
-                            className="logo-container"
-                        >
-                            <img
-                                src={logo}
-                                alt="Logo"
-                            />
-                        </Link>
-
+            <form
+                className="login-modal_form"
+                onSubmit={handleSignIn}
+            >
+                {currentPage === 1 && (
+                    <div className="page">
                         <h1>Sign in to Twitter</h1>
 
                         <div className="signin-methods">
                             <a
-                                href="http://localhost:8080/auth/google"
-                                className="signup-btn"
+                                href={`${process.env.REACT_APP_API_URL}/auth/google`}
+                                className="white-btn signup-btn"
                             >
-                                <IconContext.Provider value={{ className: "signup_icon" }}>
+                                <IconContext.Provider
+                                    value={{ className: "signup_icon" }}
+                                >
                                     <FcGoogle size="18" />
                                 </IconContext.Provider>
                                 Sign in with Google
                             </a>
+
                             <div className="category-separator">
-                                <div className="line"></div>
-                                <p>or</p>
-                                <div className="line"></div>
+                                <div>or</div>
                             </div>
-                            <InputContainer
+
+                            <TextInput
                                 type="text"
                                 id="identifier"
                                 name="identifier"
-                                value={formState.identifier}
-                                onChange={(e) => updateFormState("identifier", e.target.value)}
-                                onFocus={() => setIdentifierError(null)}
-                                onBlur={handleIdentifierBlur}
-                                error={identifierError}
-                                setError={setIdentifierError}
                                 label="Username/email"
+                                onChange={({ target }) => dispatch(
+                                    loginActions.updateForm({
+                                        name: "identifier",
+                                        value: target.value
+                                    })
+                                )}
+                                value={formState.identifier}
+                                error={!identifierExists}
+                                onBlur={handleIdentiferBlur}
                             />
                         </div>
+
                         <button
-                            type="button"
-                            className="btn-next"
-                            disabled={!formState.identifier || identifierError}
+                            className="white-btn next"
                             onClick={nextPage}
+                            disabled={!formState.identifier || !identifierExists}
                         >
                             Next
                         </button>
+
                         <button
-                            className="btn-forgot-password"
-                            onClick={() => console.log(page)}
+                            className="btn-empty"
+                            disabled
                         >
                             Forgot password?
                         </button>
-                        <p className="no-account">
-                            Don't have an account?{" "}
-                            <a
-                                href="/home"
-                                className="link-blue"
-                            >
-                                Signup
-                            </a>
-                        </p>
                     </div>
                 )}
 
-                {page === 2 && (
-                    <div className="page page-2">
-                        <Link
-                            to={`/`}
-                            className="logo-container"
-                        >
-                            <img
-                                src={logo}
-                                alt="Logo"
-                            />
-                        </Link>
-
+                {currentPage === 2 && (
+                    <div className="page p2">
                         <h1>Enter your password</h1>
 
-                        <InputContainer
+                        <TextInput
                             type="text"
                             id="identifier"
                             name="identifier"
-                            value={formState.identifier}
-                            onChange={(e) => updateFormState("identifier", e.target.value)}
-                            onFocus={() => setIdentifierError(null)}
-                            onBlur={handleIdentifierBlur}
-                            error={identifierError}
-                            setError={setIdentifierError}
                             label="Username/email"
+                            value={formState.identifier}
                             disabled={true}
                         />
 
-                        <InputContainer
+                        <TextInput
                             type="password"
                             id="password"
                             name="password"
+                            label="Password"
+                            onChange={({ target }) => dispatch(
+                                loginActions.updateForm({
+                                    name: "password",
+                                    value: target.value
+                                })
+                            )}
                             value={formState.password}
-                            onChange={(e) => updateFormState("password", e.target.value)}
-                            onFocus={() => setPasswordError(null)}
-                            error={passwordError}
-                            setError={setPasswordError}
+                            error={signInError}
                         />
 
-                        <a
-                            href="/"
+                        <Link
+                            to={`/`}
                             className="forgot-password link-blue"
                         >
                             Forgot password?
-                        </a>
+                        </Link>
 
                         <button
-                            type="button"
-                            className="btn-next"
-                            onClick={handleSignIn}
+                            type="submit"
+                            className="white-btn next"
+                            disabled={!formState.password}
                         >
-                            Next
+                            Log In
                         </button>
-                        <p className="no-account">
-                            Don't have an account?{" "}
-                            <a
-                                href="/home"
-                                className="link-blue"
-                            >
-                                Signup
-                            </a>
-                        </p>
                     </div>
                 )}
+
+                <div className="no-account">
+                    <span>Don't have an account? </span>
+
+                    <button
+                        type="button"
+                        className="link-blue"
+                        onClick={switchToSignup}
+                    >
+                        Sign up
+                    </button>
+                </div>
             </form>
         </BaseModal>
     );

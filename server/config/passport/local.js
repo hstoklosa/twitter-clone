@@ -10,7 +10,7 @@ module.exports = new LocalStrategy(
     async (identifier, password, cb) => {
         try {
             const user = await userService.findByIdentifier(identifier, {
-                select: "id username password displayName profileImageURL",
+                select: "id username password displayName profileImageURL verified email",
             });
 
             const { password: fetchedPassword, ...rest } = user;
@@ -27,8 +27,6 @@ module.exports = new LocalStrategy(
                         "You have previously signed up with a different method.",
                 });
             }
-
-            console.log(password, fetchedPassword);
 
             const isPasswordValid = await authService.comparePassword(
                 password,

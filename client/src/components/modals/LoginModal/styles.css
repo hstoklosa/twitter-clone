@@ -2,24 +2,40 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 600px;
 }
 
 .login-modal_header {
-    display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
     width: 100%;
 }
 
-.login-modal_content {
+.login-modal_header .header-btn .icon-container {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+.login-modal_header .header-btn .icon-container .icon {
+    width: 80% !important;
+}
+
+.login-modal_header .header_container {
+    display: flex;
+    justify-content: center;
+}
+
+.login-modal_form {
     width: 100%;
+    height: 100%;
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.login-modal_content h1 {
+.login-modal_form h1 {
     margin-top: 0.5rem;
     margin-bottom: 4rem;
 }
@@ -31,31 +47,37 @@
 .category-separator {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     margin: 0.5rem 0;
+    width: 100%;
 }
 
-.category-separator .line {
-    height: 1px;
-    width: 44%;
-    background-color: var(--input-border);
-}
-
-.category-separator p {
+.category-separator div {
+    position: relative;
     font-size: 1.2rem;
     font-weight: 500;
+    margin: 0 0.5rem;
 }
 
-.login-modal_content .btn-next {
+.category-separator::before,
+.category-separator::after {
+    content: "";
+    flex-grow: 1;
+    height: 2px;
+    /* margin: 0 10px;  */
+    background-color: var(--black);
+}
+
+.login-modal_form .next {
     padding: 0.6rem 1rem;
     margin-bottom: 1.5rem;
 }
 
-.login-modal_content .btn-forgot-password {
+.login-modal_form .btn-empty {
     margin-bottom: 4rem;
 }
 
-.login-modal_content .input-container {
+.login-modal_form .input-wrapper {
     margin-bottom: 1.5rem;
 }
 
@@ -63,8 +85,6 @@
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--grey);
-    align-self: flex-start;
-    margin-left: 0.3rem;
 }
 
 .no-account .link-blue {
@@ -77,7 +97,7 @@
     align-self: flex-start;
 }
 
-.login-modal_content .page {
+.login-modal_form .page {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -85,22 +105,22 @@
     width: 55%;
 }
 
-.login-modal_content .page.page-2 {
+.login-modal_form .page.p2 {
     width: 70%;
 }
 
-.login-modal_content .page-2 .password-input {
+.login-modal_form .p2 .password-input {
     margin-bottom: 0.5rem;
 }
 
-.login-modal_content .page-2 .forgot-password {
+.login-modal_form .p2 .forgot-password {
     margin-bottom: 2rem;
 }
 
-.login-modal_content .page-2 .btn-next {
+.login-modal_form .p2 .next {
     margin-bottom: 0.8rem;
 }
 
-.login-modal_content .page .input-container {
+.login-modal_form .page .input-wrapper {
     width: 100%;
 }

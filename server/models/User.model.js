@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Tweet = require("./Tweet.model");
+const Bookmark = require("./Tweet.model");
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
@@ -23,6 +25,8 @@ const userSchema = new Schema(
             unique: [true, "Username already exists!"],
             trim: true,
             lowercase: true,
+            minLength: [3, "Username must be at least 3 characters long!"],
+            maxlength: [15, "Username should be at most 15 characters long!"],
             validate: {
                 validator: (username) => {
                     return String(username)
@@ -48,6 +52,10 @@ const userSchema = new Schema(
                 message: (props) => `${props.value} is not a valid email address!`,
             },
         },
+        verified: {
+            type: Boolean,
+            default: false,
+        },
         password: {
             type: String,
             required: false,
@@ -56,10 +64,6 @@ const userSchema = new Schema(
         profileImageURL: String,
         bannerURL: String,
         displayName: String,
-        dob: {
-            type: Date,
-            required: true,
-        },
         bio: {
             type: String,
             maxLength: 160,
@@ -109,9 +113,9 @@ const userSchema = new Schema(
  *
  */
 
-userSchema.statics.addUser = (data) => {
-    const user = new this(data);
-    return user.save();
+userSchema.statics.addUser = async (data) => {
+    const user = new User(data);
+    return await user.save();
 };
 
 /**
@@ -153,6 +157,23 @@ userSchema.virtual("bookmarks", {
     foreignField: "user",
 });
 
+
+/**
+ *
+ * Middlewares (cascading delete...)
+ *
+ */
+
+userSchema.pre('findOneAndDelete', async function (next) {
+    const userId = this.getQuery()['_id'];
+    await Tweet.deleteMany({ author: userId });
+    await Tweet.updateMany({ retweets: userId }, { $pull: { retweets: userId } });
+    await Tweet.updateMany({ likes: userId }, { $pull: { likes: userId } });
+    await Bookmark.deleteMany({ user: userId });
+    next();
+});
+
+
 // To ensure virtuals are included when you convert a document to JSON
 userSchema.set("toJSON", {
     virtuals: true,
@@ -162,5 +183,6 @@ userSchema.set("toJSON", {
 userSchema.set("toObject", { virtuals: true });
 
 const User = mongoose.model("User", userSchema);
+
 
 module.exports = User;

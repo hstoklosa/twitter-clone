@@ -1,12 +1,40 @@
+.auth-route.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-route .twitter-logo {
+    width: 200px;
+}
+
 .signup-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: flex-start;
-    height: 225px;
+    align-items: center;
+    width: 400px;
     padding: 1rem;
     border-radius: 1rem;
     border: 1px solid var(--border);
+    margin: 3rem 0 5rem 0;
+}
+
+.signup-container .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.signup-container .text.wrapper h2 {
+    margin-bottom: 0.25rem;
+}
+
+.signup-container .text.wrapper p {
+    margin-bottom: 1rem;
 }
 
 .signup-container h2 {
@@ -25,11 +53,19 @@
     justify-content: center;
     align-items: center;
     font-size: 14px;
-    padding: 0.6rem 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.signup-btn:not(:last-child) {
+    margin-bottom: 1rem;
 }
 
 .signup-btn .signup_icon {
     margin-right: 0.3rem;
+}
+
+.agreement-text {
+    text-align: center;
 }
 
 .agreement-text a {

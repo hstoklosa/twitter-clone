@@ -1,0 +1,25 @@
+.verification-modal .modal-content_wrapper {
+    height: 275px !important;
+}
+
+.verification-modal_form h1 {
+    margin-bottom: 0.25rem;
+}
+
+.verification-modal_form p {
+    font-size: 0.938rem;
+    font-weight: 500;
+    color: var(--grey);
+}
+
+.verification-modal_form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-grow: 1;
+    padding: 1rem 0;
+}
+
+input#code {
+    margin-bottom: 1rem;
+}

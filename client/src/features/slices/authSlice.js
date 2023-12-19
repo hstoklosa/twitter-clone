@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authApi } from "../api/authApi";
+import socketClient from "../../app/socketClient";
 
 const initialState = {
     isAuth: false,
@@ -12,25 +13,12 @@ export const authSlice = createSlice({
     reducers: {
         signOut(state) {
             state.isAuth = false;
+            socketClient.disconnect();
         },
     },
     extraReducers: (builder) => {
         builder.addMatcher(
             authApi.endpoints.checkAuth.matchFulfilled,
-            (state, { payload }) => {
-                state.isAuth = true;
-                state.user = payload.data;
-            }
-        );
-        builder.addMatcher(
-            authApi.endpoints.signUp.matchFulfilled,
-            (state, { payload }) => {
-                state.isAuth = true;
-                state.user = payload.data;
-            }
-        );
-        builder.addMatcher(
-            authApi.endpoints.signIn.matchFulfilled,
             (state, { payload }) => {
                 state.isAuth = true;
                 state.user = payload.data;

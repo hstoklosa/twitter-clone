@@ -1,45 +1,6 @@
-const generateOptions = (start, end) => {
-    const options = [];
-
-    for (let i = start; i <= end; i++) {
-        options.push(i);
-    }
-
-    return options;
-};
-
-export const monthsLong = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-];
-
 export const monthsShort = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
-
-export const days = generateOptions(1, 31);
-export const years = generateOptions(1900, new Date().getFullYear());
 
 export const formatDate = (date, options) => {
     return new Date(date).toLocaleDateString("en-US", options);

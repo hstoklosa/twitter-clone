@@ -20,49 +20,53 @@ export const authApi = baseApi.injectEndpoints({
             invalidatesTags: () => [{ type: "Auth" }],
         }),
         signUp: builder.mutation({
-            query: (user) => {
-                const { displayName, username, email, password, day, month, year } =
-                    user;
+            query: (formData) => ({
+                url: "/auth/signup",
+                method: "POST",
+                body: formData
+            }),
+        }),
+        verifyToken: builder.query({
+            query: ({ id, token }) => ({
+                url: `/auth/verify/${id}/${token}`,
+            }),
+            async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
+                const data = await cacheDataLoaded;
 
-                const dobDate = new Date(`${year}-${month}-${day}`);
-                const dob = dobDate.toISOString().split("T")[0];
-
-                return {
-                    url: "/auth/signup",
-                    method: "POST",
-                    body: {
-                        displayName,
-                        username,
-                        email,
-                        password,
-                        dob,
-                    },
-                };
+                if (data.data?.isAuthenticated) {
+                    dispatch(baseApi.endpoints["checkAuth"].initiate());
+                }
             },
         }),
         signOut: builder.query({
-            // query: () => ({
-            //     url: "/auth/logout",
-            // }),
-            async queryFn(_arg, { dispatch }, _extraOptions, fetchWithBQ) {
-                const signOut = await fetchWithBQ({ url: "/auth/logout" });
+            query: () => ({
+                url: "/auth/logout",
+            }),
+            async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
+                const data = await cacheDataLoaded;
 
-                if (!signOut?.data.isAuthenticated) {
+                if (!data?.isAuthenticated)
                     dispatch(baseApi.util.resetApiState());
-                }
             },
         }),
         identifierExists: builder.query({
             query: (identifier) => ({
-                url: `/auth/check-identifier/${identifier}`,
+                url: `/auth/check-identifier/${identifier}?identifier=1`,
             }),
             transformResponse: (response) => response.exists,
         }),
-        receiveCode: builder.mutation({
-            query: (email) => ({
-                url: `/auth/confirm-email/${email}`,
+        checkUsername: builder.query({
+            query: (username) => ({
+                url: `/auth/check-identifier/${username}?username=1`,
             }),
+            transformResponse: (response) => response.exists,
         }),
+        checkEmail: builder.query({
+            query: (email) => ({
+                url: `/auth/check-identifier/${email}?email=1`,
+            }),
+            transformResponse: (response) => response.exists,
+        })
     }),
 });
 
@@ -72,6 +76,8 @@ export const {
     useSignInMutation,
     useSignUpMutation,
     useLazyIdentifierExistsQuery,
+    useLazyCheckUsernameQuery,
+    useLazyCheckEmailQuery,
     useLazySignOutQuery,
-    useReceiveCodeMutation,
+    useLazyVerifyTokenQuery,
 } = authApi;

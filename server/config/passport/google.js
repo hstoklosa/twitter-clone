@@ -9,11 +9,11 @@ module.exports = new GoogleStrategy(
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
-    async (accessToken, refreshToken, profile, cb) => {
+    async (_accessToken, _refreshToken, profile, cb) => {
         try {
             const user = await userService.findByIdentifier(
                 profile.emails[0].value,
-                { select: "id username displayName profileImageURL provider" }
+                { select: "id username displayName profileImageURL provider email" }
             );
 
             if (!user) {
@@ -22,33 +22,32 @@ module.exports = new GoogleStrategy(
                     provider,
                     displayName,
                     emails: [{ value: email }],
-                    _json: { picture: profileImageURL, locale: location },
+                    _json: { picture: profileImageURL },
                 } = profile;
 
-                // create the google user
-                const newUser = await authService.createGoogleUser({
+                const data = {
                     provider: {
-                        providerName: provider,
                         providerId: id,
+                        providerName: provider,
                     },
                     displayName,
-                    dob: customDob,
                     email,
                     profileImageURL,
-                    location,
-                });
+                }
 
-                return cb(null, newUser);
+                // create the google user
+                await authService.createGoogleUser(data);
+
+                return cb(null, data);
             }
 
             // users exists with a different provider
-            if (user.provider != "google") {
+            if (user.provider.providerName != "google") {
                 return cb(null, false, {
                     message: `You have previously signed up with a different sign-in method`,
                 });
             }
 
-            // sending back existing google user
             return cb(null, user);
         } catch (err) {
             cb(err);
