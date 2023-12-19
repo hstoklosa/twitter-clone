@@ -1,17 +1,15 @@
-import Sidebar from "./Sidebar";
-import { Loading } from "../index";
+import { Outlet } from "react-router-dom";
+import { Sidebar } from "../index";
 
-const AppLayout = ({ isAuthLoading, children }) => {
-    if (isAuthLoading) {
-        return <Loading />;
-    }
+const AppLayout = ({ children }) => {
 
     return (
         <div className="app-container">
             <Sidebar />
-            {children}
+            <Outlet />
         </div>
     );
 };
+
 
 export default AppLayout;

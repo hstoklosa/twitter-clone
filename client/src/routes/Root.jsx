@@ -2,10 +2,11 @@ import "../routes/Login/styles.css";
 
 import { Outlet } from "react-router-dom";
 
-import { AppLayout } from "../components";
 import { useAppSelector } from "../app/store";
 import { useCheckAuthQuery } from "../features/api/authApi";
 import { useGetUserInfoQuery } from "../features/api/userApi";
+
+import { Loading } from "../components";
 
 const Root = () => {
     const auth = useAppSelector((state) => state.auth);
@@ -15,10 +16,14 @@ const Root = () => {
         skip: !auth.isAuth,
     });
 
+    if (isAuthLoading || isUserLoading)
+        return <Loading />;
+
+
     return (
-        <AppLayout isAuthLoading={isAuthLoading || isUserLoading}>
+        <div className="app-container">
             <Outlet />
-        </AppLayout>
+        </div>
     );
 };
 
