@@ -1,13 +1,18 @@
-const Placeholder = ({ header, subheader, image }) => {
+const Placeholder = ({ title, subtitle, image }) => {
     return (
         <div className="placeholder">
-            {image && <div className="placeholder__image"></div>}
+            {image && (
+                <div className="placeholder__image">
+                    <img src={image} alt="Placeholder" />
+                </div>
+            )}
 
-            <div className="placeholder-text__heading">
-                {header || "Nothing to see here"}
+            <div className="placeholder-text__title">
+                {title || "Nothing to see here"}
             </div>
-            <div className="placeholder-text__subheading">
-                {subheader || "Try again soon!"}
+
+            <div className="placeholder-text__subtitle">
+                {subtitle || "Try again soon!"}
             </div>
         </div>
     );

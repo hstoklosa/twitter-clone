@@ -9,10 +9,16 @@ const ErrorPlaceholder = ({ error }) => (
             alignItems: "center",
         }}
     >
-        <span style={{ fontSize: "1.5rem" }}>Something went wrong. Try reloading.</span>
+        <span style={{ fontSize: "1.5rem" }}>
+            Something went wrong. Try reloading.
+        </span>
+
         <button
             className="blue-btn"
-            style={{ padding: "0.5rem 1rem", marginTop: "0.75rem" }}
+            style={{
+                padding: "0.5rem 1rem",
+                marginTop: "0.75rem"
+            }}
         >
             Retry
         </button>
