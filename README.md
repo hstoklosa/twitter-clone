@@ -18,8 +18,8 @@ Over the summer of 2023 (or longer if neccessary), I will be working on this pro
 -   [x] Commenting, retweeting, quoting, liking
 -   [x] Algorithmic feed
 -   [x] Search Functionality (user/tweets/hashtags)
--   [ ] Real-time direct messaging
--   [ ] Real-time notifications - likes, retweets, follows, DMs
+-   [x] Real-time direct messaging
+-   [x] Real-time notifications - likes, retweets, follows, DMs
 
 ## 🔌 Technologies
 
@@ -122,7 +122,11 @@ The command will clone the repository, and automatically navigate into the proje
 git clone git@github.com:<username>/twitter-clone.git && cd twitter-clone
 ```
 
-> **_Note_**: Use the following argument when using the docker-compose commands **[--build [service_name]]** whenever you make any Docker-wise changes to rebuild the images and containers.
+#### ❌ Environmental Variables
+
+`env_file` options are set up in `docker-compose.yml` and `docker-compose.prod.yml`. All you have to do is: rename the desired file to exclude the `.sample` suffix and fill in the values accordingly to avoid any issues.
+
+Refer to `.env.sample` and `.env.prod.sample` for the required environmental variables.
 
 ### 💻 Development
 
@@ -134,10 +138,14 @@ Assuming it's your first time using the project, there is no don't need to use t
 docker-compose -f docker-compose.dev.yml up
 ```
 
+> **_Note_**: Use the **[--build [service_name]]** argument whenever you make any Docker-wise changes to rebuild the images and containers, in order for the changes to take place.
+
 A detailed list of the containers found in the `docker-compose.dev.yml` file:
 
+**Development App Services:**
+
 ```
-docker-compose ps
+docker-compose -f docker-compose.dev.yml ps
 
 NAME       IMAGE             COMMAND                  SERVICE   CREATED       STATUS       PORTS
 backend    xclone-backend    "docker-entrypoint.s…"   server    2 hours ago   Up 2 hours   0.0.0.0:8080->8080/tcp
@@ -151,34 +159,50 @@ The project uses a multi-stage build with containers communicating over networks
 
 The first stage builds the necessary images and containers for the reverse proxy and the database, which are located on the `x-proxy-network` and `x-database-network` networks, respectively.
 
-<p align="center" style="border-radius: 1rem;"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/AWS1.jpg?raw=true" style="width: 75%; border-radius: 1rem;" /></p>
+In the second stage, we build the front-end and back-end images to run in the container, and they will be located on the `x-network` network. The frontend and backend containers will be able to communicate with the reverse proxy, and only the backend container will be able to communicate with the database container over the `x-database-network` network.
 
-1. Create the necessary networks.
+<p align="center" style="border-radius: 1rem;"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/AWS1.jpg?raw=true" style="width: 85%; border-radius: 1rem;" /></p>
+
+1.  Create the necessary networks.
 
     ```
     docker network create x-network
     docker network create x-database-network
     ```
 
-2. Build the images and run the containers.
+2.  Build the images and run containers for the proxy and database.
 
-    https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04
+    **Note**: Incompatible with docker-compose v1.x
+
+    ```
+    docker compose -f docker-compose.yml up -d
+    ```
+
+    Rebuilding production images and containers:
+
+    ```
+    docker compose build --no-cache
+
+    docker compose -f docker-compose.prod.yml down
+    ```
+
+3.  Build the images and run containers for the application.
+
+    **Note**: Incompatible with docker-compose v1.x and v2.x
 
     ```
     docker compose --env-file ./.env.prod -f docker-compose.prod.yml build --no-cache
-    docker compose -f docker-compose.prod.yml down
-    docker compose --env-file .env.prod -f docker-compose.prod.yml up --build
-    docker compose -f docker-compose.prod.yml up -d
+
+    docker compose --env-file ./.env.prod -f docker-compose.prod.yml up -d
     ```
 
-    A detailed list of the containers found in the `docker-compose.prod.yml` with deployment services and networks:
+    > **_Note_**: If you don't have enough memory on a machine (such as a VPS) to build the production images, consider setting up swap memory. [Here's a guide](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04) on how to do it.
 
-    ```
-    docker-compose ps
-
-    ```
+4.  Check the containers installed for both docker composes.
 
     A detailed list of the containers found in the `docker-compose.yml` with deployment services and networks:
+
+    **First Layer of Services:**
 
     ```
     docker-compose ps
@@ -190,12 +214,18 @@ The first stage builds the necessary images and containers for the reverse proxy
 
     ```
 
-### ❌ Environmental Variables
+    **Second Layer of Services (Production App):**
 
-`env_file` options are set up in `docker-compose.yml` and `docker-compose.prod.yml`. All you have to do is: rename the desired file to exclude the `.sample` suffix and fill in the values accordingly to avoid any issues.
+    ```
+    docker-compose -f docker-compose.prod.yml ps
 
-Refer to `.env.sample` and `.env.prod.sample` for the required environmental variables.
+
+    ```
 
 ## 📝 License
 
-[MIT License](https://github.com/imexotic/ExoBot/blob/main/LICENSE)
+H. Stoklosa - hubert.stoklosa23@gmail.com
+
+Distributed under the MIT license. See `LICENSE` for more information.
+
+[https://github.com/hstoklosa](https://github.com/hstoklosa)
