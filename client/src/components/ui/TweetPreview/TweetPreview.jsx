@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { IconContext } from "react-icons";
+import { LuRepeat2 } from "react-icons/lu";
 import { TbMessageCircle2, TbTrash, TbPinned } from "react-icons/tb";
 import { IoMdStats } from "react-icons/io";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { RiUserFollowLine, RiUserUnfollowLine } from "react-icons/ri";
-import { MdBlock } from "react-icons/md";
 
 import {
     TweetText,
@@ -19,6 +19,7 @@ import {
     TweetActions,
     QuotePreview,
     LinkButton,
+    MediaModal,
     ConditionalLink,
 } from "../../index";
 
@@ -34,6 +35,7 @@ import {
 import { isObjEmpty } from "../../../utils/object";
 
 const TweetPreview = ({ tweet, displayReply = true }) => {
+    const [mediaModal, setMediaModal] = useState(false);
     const [replyModal, setReplyModal] = useState(false);
     const [quoteModal, setQuoteModal] = useState(false);
     const [retweetFloat, setRetweetFloat] = useState(false);
@@ -54,8 +56,20 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
 
     const isFollowingAuthor = tweet.author.followers.includes(currentUser.id);
     const isReply = tweet.replyTo && !isObjEmpty(tweet.replyTo);
-    const isRetweet = tweet.retweets.includes(currentUser.id);
     const isQuote = tweet.quoteTo && !isObjEmpty(tweet.quoteTo);
+    const isRetweet = tweet.retweets.includes(currentUser.id);
+    // const isFollowerRetweet =
+
+    // viewing_user, author_user
+    // if viewing_user is current user // viewing own tweets
+    //      if viewing_user is tweet author
+    //          show retweet - "You reposted..."
+    //      else
+    //          show retweet - "[username] respoted"
+    //          
+    // else // not viewing own tweets
+    //      
+
 
     const media = tweet.media?.[0];
 
@@ -83,6 +97,9 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
             : await followUser(followData);
     };
 
+    const openMediaModal = () => setMediaModal(true);
+    const closeMediaModal = () => setMediaModal(false);
+
     const openReplyModal = () => setReplyModal(true);
     const closeReplyModal = () => setReplyModal(false);
 
@@ -95,7 +112,6 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
     const openMoreFloat = () => setMoreFloat(true);
     const closeMoreFloat = () => setMoreFloat(false);
 
-    console.log(tweet, currentUser);
 
     return (
         <IconContext.Provider value={{ className: "tweet_icon" }}>
@@ -112,6 +128,14 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
                     isOpen={quoteModal}
                     onClose={closeQuoteModal}
                     quote={tweet}
+                />
+            )}
+
+            {mediaModal && (
+                <MediaModal
+                    isOpen={mediaModal}
+                    closeMediaModal={closeMediaModal}
+                    mediaUrl={media.url}
                 />
             )}
 
@@ -215,16 +239,20 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
                 </div>
 
                 <div className="tweet-container">
-                    {/* {username} retweeted */}
-                    {isRetweet && <span className="replyingTo">You retweeted</span>}
+                    {isRetweet && (
+                        <span className="replyingTo">
+                            <LuRepeat2 className="replyingTo-icon" />
+                            You retweeted
+                        </span>
+                    )}
 
                     <TweetDetails tweet={tweet}>
                         <LinkButton
-                            className="tweet-btn more"
+                            className="blue_round-btn more"
                             onClick={openMoreFloat}
                         >
                             <div className="icon-container">
-                                <IoEllipsisHorizontal size="16" />
+                                <IoEllipsisHorizontal size="16" className="icon" />
                             </div>
                         </LinkButton>
                     </TweetDetails>
@@ -246,13 +274,16 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
                         <TweetText text={tweet.content} />
 
                         {media && (
-                            <div className="media-container">
+                            <LinkButton
+                                className="media-container"
+                                onClick={openMediaModal}
+                            >
                                 <img
                                     src={media.url}
                                     className="tweet_media"
                                     alt="Tweet Media"
                                 />
-                            </div>
+                            </LinkButton>
                         )}
                     </div>
 

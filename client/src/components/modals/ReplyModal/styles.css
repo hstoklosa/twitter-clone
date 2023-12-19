@@ -6,6 +6,7 @@
 
 .reply-modal .modal-content {
     display: block;
+    height: auto;
     padding: 0;
     overflow: auto;
 }

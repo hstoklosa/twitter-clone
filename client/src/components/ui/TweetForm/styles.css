@@ -64,25 +64,25 @@
 }
 
 .tweet-input_container.expanded .audience,
-.tweet-input_container.expanded .reply {
+.tweet-input_container.expanded .reply_label {
     display: flex;
 }
 
-.tweet-form.force-expand .reply,
+.tweet-form.force-expand .reply_label,
 .tweet-form.force-expand .audience {
     width: auto;
 }
 
-.tweet-form.force-expand .reply {
+.tweet-form.force-expand .reply_label {
     margin-top: auto;
 }
 
 .audience,
-.reply {
+.reply_label {
     width: auto;
 }
 
-.reply {
+.reply_label {
     display: none;
     align-items: center;
     justify-content: flex-start;
@@ -92,11 +92,15 @@
     color: var(--primary-colour);
 }
 
-.reply:hover {
+.reply_label .reply_icon {
+    margin-right: 0.5rem;
+}
+
+.reply_label:hover {
     background-color: var(--borderless-hover);
 }
 
-.reply-option {
+.reply_label-option {
     font-size: 0.9rem;
     margin-left: 0.5rem;
 }

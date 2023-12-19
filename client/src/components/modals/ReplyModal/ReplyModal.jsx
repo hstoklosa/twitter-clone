@@ -1,4 +1,4 @@
-import "../../ui/Tweet/styles.css";
+import "../../ui/TweetPreview/styles.css";
 import "./styles.css";
 
 import { useRef, useState } from "react";
@@ -9,7 +9,7 @@ import {
     ColumnHeader,
     TweetText,
     TweetInput,
-    TweetActions,
+    TweetFormActions,
     TweetDetails,
     QuotePreview,
 } from "../../index";
@@ -118,7 +118,7 @@ const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
                 </div>
             </section>
 
-            <TweetActions
+            <TweetFormActions
                 tweet={tweet}
                 setMedia={setMedia}
                 setMediaPreview={setMediaPreview}

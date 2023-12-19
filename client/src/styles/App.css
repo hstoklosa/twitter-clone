@@ -151,8 +151,8 @@ select {
 .pfp-container {
     display: flex;
     justify-content: center;
-    align-items: center;
     border-radius: 50%;
+    height: auto;
 }
 
 .pfp-container .icon-container {
@@ -324,16 +324,24 @@ select {
 
 .navbar-account .account-details {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 1rem;
     border-bottom: 1px solid var(--border);
+}
+
+.account-details .wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.account-details .account-checkmark {
+    color: var(--primary-colour);
 }
 
 #navbar .float-btn {
     display: flex;
     align-items: center;
-}
-
-#navbar .more-options {
 }
 
 /* SECOND COLUMN: General */
@@ -461,6 +469,8 @@ img.pfp {
     filter: brightness(0.8);
 }
 
+.red_round-btn,
+.green_round-btn,
 .light_round-btn,
 .blue_round-btn,
 .dark_round-btn {
@@ -474,6 +484,8 @@ img.pfp {
     transition: all 0.2s ease-out;
 }
 
+.red_round-btn .icon-container,
+.green_round-btn .icon-container,
 .light_round-btn .icon-container,
 .blue_round-btn .icon-container,
 .dark_round-btn .icon-container {
@@ -488,6 +500,8 @@ img.pfp {
     transition: all 0.2s ease-out;
 }
 
+.red_round-btn .icon-container::after,
+.green_round-btn .icon-container::after,
 .light_round-btn .icon-container::after,
 .blue_round-btn .icon-container::after,
 .dark_round-btn .icon-container::after {
@@ -499,12 +513,38 @@ img.pfp {
     transition: all 0.2s ease-out;
 }
 
+.red_round-btn .icon,
+.green_round-btn .icon,
 .light_round-btn .icon,
 .blue_round-btn .icon,
 .dark_round-btn .icon {
     width: 100%;
     height: 100%;
     transition: all 0.2s ease-out;
+}
+
+.red_round-btn .icon {
+    color: var(--grey);
+}
+
+.red_round-btn:hover .icon-container::after {
+    background-color: rgba(249, 24, 128, 0.2);
+}
+
+.red_round-btn:hover .icon {
+    color: var(--like);
+}
+
+.green_round-btn .icon {
+    color: var(--grey);
+}
+
+.green_round-btn:hover .icon-container::after {
+    background-color: rgba(0, 186, 124, 0.2);
+}
+
+.green_round-btn:hover .icon {
+    color: var(--retweet);
 }
 
 .dark_round-btn .icon {
@@ -809,10 +849,9 @@ img.pfp {
     justify-content: center;
     align-items: center;
     height: 250px;
-    /* width: 90%; */
 }
 
-.placeholder-text__heading {
+.placeholder-text__title {
     font-size: 2rem;
     font-weight: 800;
     text-align: center;
@@ -820,12 +859,12 @@ img.pfp {
     width: 90%;
 }
 
-.placeholder-text__subheading {
+.placeholder-text__subtitle {
     color: var(--grey);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 500;
     text-align: center;
-    width: 90%;
+    width: 80%;
 }
 
 /* Utils */

@@ -8,17 +8,17 @@ import { IoEarth } from "react-icons/io5";
 
 import useOutsideClick from "../../../hooks/useOutsideClick";
 
-import { TweetInput, TweetActions } from "../../index";
+import { TweetInput, TweetFormActions } from "../../index";
 
 import { useAppSelector } from "../../../app/store";
 import { useCreateTweetMutation } from "../../../features/api/tweetApi";
 
 const TweetForm = ({
-    isReply,
-    button,
-    placeholder,
+    replyTo,
     forceExpand,
     maxLength = 280,
+    buttonText = "Tweet",
+    placeholder = "What's happening?",
 }) => {
     const [tweet, setTweet] = useState("");
     const [media, setMedia] = useState(null);
@@ -40,6 +40,7 @@ const TweetForm = ({
         formData.append("content", tweet);
         formData.append("author", id);
         formData.append("media", media);
+        replyTo && formData.append("replyTo", replyTo);
 
         const result = await createTweet(formData).unwrap();
 
@@ -75,7 +76,7 @@ const TweetForm = ({
 
             <div className="tweet-input">
                 <div className={`tweet-input_container ${expanded && "expanded"}`}>
-                    {!isReply && (
+                    {!replyTo && (
                         <button
                             type="button"
                             className="audience"
@@ -113,10 +114,10 @@ const TweetForm = ({
                         </div>
                     )}
 
-                    {!isReply && (
+                    {!replyTo && (
                         <button
                             type="button"
-                            className="reply"
+                            className="reply_label"
                             disabled
                         >
                             <IconContext.Provider
@@ -130,7 +131,7 @@ const TweetForm = ({
                     )}
                 </div>
 
-                <TweetActions
+                <TweetFormActions
                     maxLength={maxLength}
                     tweet={tweet}
                     setMedia={setMedia}

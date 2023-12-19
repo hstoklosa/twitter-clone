@@ -38,7 +38,10 @@
 
 .reply.applied .icon,
 .reply.applied span,
-.reply:hover span {
+.reply:hover span,
+.view.applied .icon,
+.view.applied span,
+.view:hover span {
     color: var(--primary-colour) !important;
 }
 

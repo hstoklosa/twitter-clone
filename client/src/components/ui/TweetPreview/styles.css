@@ -130,7 +130,7 @@
     height: auto;
 } */
 
-.tweet-btn.more {
+.blue_round-btn.more {
     margin-left: auto;
     margin-right: 0;
     padding: 0 !important;
@@ -179,6 +179,12 @@
 .tweet .replyingTo {
     color: var(--grey);
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.tweet .replyingTo-icon {
+    margin-right: 0.25rem;
 }
 
 .tweet .replyingTo,

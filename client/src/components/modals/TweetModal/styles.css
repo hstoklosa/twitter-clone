@@ -79,3 +79,7 @@
     border-top: 1px solid var(--border);
     padding: 0.75rem 0 0.2rem 0;
 }
+
+.tweet-modal .reply_label {
+    display: flex;
+}
