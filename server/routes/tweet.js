@@ -17,6 +17,8 @@ router.get("/:tweetId/replies", paginate, tweetController.getTweetReplies);
 
 router.get("/:tweetId/engagement", paginate, tweetController.getTweetEngagement);
 
+router.get("/trending/keywords", paginate, tweetController.getTrendingKeywords);
+
 router.post("/", upload.single("media"), tweetController.createTweet);
 
 router.post("/:tweetId/repost", tweetController.createRepost);

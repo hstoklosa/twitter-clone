@@ -17,6 +17,20 @@ const getUser = asyncHandler(async (req, res, next) => {
     return res.status(200).json(user);
 });
 
+const getRecommendedUsers = asyncHandler(async (req, res, next) => {
+    const { userId } = req.params;
+
+    if (!(await User.exists({ _id: userId })))
+        return next(new NotFoundError("User not found!"));
+
+    const response = await userService.fetchRecommendedUsers(
+        new ObjectId(userId),
+        req.pagination
+    );
+
+    return res.status(200).json(response);
+});
+
 const getFollowers = asyncHandler(async (req, res, next) => {
     const relevantUser = await userService.findByUsername(req.params.username);
 
@@ -177,6 +191,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
 
 module.exports = {
     getUser,
+    getRecommendedUsers,
     getFollowing,
     getFollowers,
     getHomeFeed,

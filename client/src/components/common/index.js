@@ -10,3 +10,4 @@ export { default as Spinner } from "./Spinner";
 export { default as TweetDetails } from "./TweetDetails";
 export { default as InputAccentRadio } from "./InputAccentRadio";
 export { default as InputThemeRadio } from "./InputThemeRadio";
+export { default as BaseWidget } from "./BaseWidget";

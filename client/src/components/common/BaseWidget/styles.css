@@ -1,0 +1,122 @@
+.widget-container {
+    background-color: var(--sidebar-background);
+    border-radius: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.widget-container .widget-item {
+    display: flex;
+    flex-direction: column;
+
+    padding: 0.75rem 1rem;
+    width: 100%;
+}
+
+.widget-header {
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+}
+
+.widget-item_header {
+    font-size: 0.9375rem;
+    margin: 0.25rem 0;
+    color: var(--text-primary);
+}
+
+.widget-item_subheader {
+    font-size: 0.83rem;
+    color: var(--grey);
+    font-weight: 500;
+}
+
+.widget-button {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--primary-colour);
+    padding: 0.75rem 1rem;
+    display: block;
+}
+
+.widget-item:hover,
+.widget-button:hover {
+    background-color: var(--tweet-hover);
+}
+
+.widget-container .follow {
+    width: auto;
+    height: 30px !important;
+}
+
+/* Trending */
+
+.trending .subheader_container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* .trending .subheader_container svg {
+    color: var(--grey);
+}
+
+.trending .widget-item .dark_round-btn .icon {
+    color: var(--grey) !important;
+} */
+
+.trending .widget-item .blue_round-btn .icon-container::after {
+    width: 25px;
+    height: 25px;
+}
+
+.trending .widget-item .blue_round-btn .icon-container {
+    width: 17px;
+    height: 17px;
+}
+
+/* Connect */
+
+.connect-list .widget-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.connect-list .simple-card {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.simple-card .pfp-container {
+    margin-right: 0.75rem;
+}
+
+.simple-card .pfp-container > .pfp {
+    width: 40px;
+    height: 40px;
+}
+
+.connect-list .widget-item_header {
+    font-size: 0.938rem;
+    margin: 0 0 0.2rem 0;
+}
+
+.connect-list .widget-item_subheader {
+    font-size: 0.938rem;
+    margin-left: -0.075rem;
+}
+
+.widget-container .error-placeholder {
+    text-align: center;
+}
+
+.widget-container .error-placeholder span {
+    font-size: 1rem !important;
+    font-weight: 500;
+    color: var(--grey);
+    margin-bottom: 0.5rem;
+}

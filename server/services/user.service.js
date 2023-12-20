@@ -32,6 +32,35 @@ const findByIdentifier = async (identifier, options = {}) => {
     return await user.exec();
 };
 
+const fetchRecommendedUsers = async (userId, options) => {
+    return await paginate(
+        "User",
+        [
+
+            {
+                $match: { _id: { $ne: userId } }
+            },
+            {
+                $lookup: {
+                    from: 'users', // the collection name
+                    localField: '_id',
+                    foreignField: 'following',
+                    as: 'followedUsers'
+                }
+            },
+            {
+                $match: {
+                    'followedUsers._id': { $ne: userId }
+                }
+            },
+            {
+                $sample: { size: options.limit }
+            }
+
+        ],
+        options
+    );
+};
 
 const fetchHomeFeed = async (userId, options) => {
     return await paginate(
@@ -520,6 +549,7 @@ const removeFollow = async (sourceId, targetId) => {
 
 module.exports = {
     findByUsername,
+    fetchRecommendedUsers,
     findByIdentifier,
     fetchFollowers,
     fetchFollowing,

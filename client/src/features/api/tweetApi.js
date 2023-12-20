@@ -16,6 +16,18 @@ export const tweetApi = baseApi.injectEndpoints({
             }),
             providesTags: (result) => providesList(result?.data, "Post", "TWEET_REPLIES"),
         }),
+        getHomeTimeline: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/users/${id}/home_timeline?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post", "HOME_FEED"),
+        }),
+        getTrendingKeywords: builder.query({
+            query: ({ page, limit }) => ({
+                url: `/tweets/trending/keywords?page=${page}&limit=${limit}`,
+            }),
+            transformResponse: (response) => response.data,
+        }),
         getQuotes: builder.query({
             query: ({ id, page, limit }) => ({
                 url: `/tweets/${id}/engagement?quotes=1&page=${page}&limit=${limit}`,
@@ -51,10 +63,10 @@ export const tweetApi = baseApi.injectEndpoints({
 
 export const {
     useGetTweetQuery,
-    useGetRepliesQuery,
     useGetHomeTimelineQuery,
     useCreateTweetMutation,
     useDeleteTweetMutation,
+    useGetTrendingKeywordsQuery,
     useGetQuotesQuery,
     useGetRepostUsersQuery,
     useGetLikeUsersQuery,

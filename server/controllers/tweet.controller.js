@@ -38,6 +38,29 @@ const getTweetReplies = asyncHandler(async (req, res, next) => {
     return res.status(200).json(response);
 });
 
+const getTrendingKeywords = asyncHandler(async (req, res, next) => {
+    const response = await paginate(
+        "Tweet",
+        [
+            {
+                $unwind: {
+                    path: "$hashtags",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+
+            { $match: { hashtags: { $ne: null } } },
+            { $group: { _id: "$hashtags", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+
+            { $project: { hashtag: "$_id", count: 1, _id: 0 } },
+        ],
+        req.pagination
+    );
+
+    return res.status(200).json(response);
+});
+
 const getTweetEngagement = asyncHandler(async (req, res, next) => {
     const { tweetId } = req.params;
 
@@ -223,6 +246,7 @@ module.exports = {
     getTweet,
     getTweetReplies,
     getTweetEngagement,
+    getTrendingKeywords,
     createTweet,
     createRepost,
     likeTweet,

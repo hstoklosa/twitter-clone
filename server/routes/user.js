@@ -21,6 +21,8 @@ router.use(authenticate);
 
 router.get("/:username", userController.getUser);
 
+router.get("/:userId/recommended", paginate, userController.getRecommendedUsers);
+
 router.get("/:userId/home_timeline", paginate, userController.getHomeFeed);
 
 router.get("/:userId/timeline", paginate, userController.getProfileTimeline);

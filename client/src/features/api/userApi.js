@@ -17,6 +17,13 @@ export const userApi = baseApi.injectEndpoints({
                     ]
                     : ["User"],
         }),
+        getRecommendedUsers: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/users/${id}/recommended?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "User", "RECOMMENDED"),
+            transformResponse: (response) => response.data,
+        }),
         updateUser: builder.mutation({
             query: ({ id, data }) => ({
                 url: `/users/${id}`,
@@ -191,4 +198,5 @@ export const {
     useGetBookmarksQuery,
     useCreateBookmarkMutation,
     useDeleteBookmarkMutation,
+    useGetRecommendedUsersQuery,
 } = userApi;
