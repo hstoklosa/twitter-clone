@@ -102,16 +102,16 @@ const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPre
                     <div
                         className="progressbar-container"
                         style={{
-                            width: 25,
-                            height: 25,
+                            width: 23,
+                            height: 23,
                         }}
                     >
                         <CircularProgressbar
                             value={(tweet.length / 280) * 100}
                             styles={buildStyles({
-                                pathColor: tweet.length === maxLength ? "red" : "#1D9BF0",
-                                trailColor: "#2F3336",
-                                backgroundColor: "#3e98c7",
+                                pathColor: tweet.length === maxLength ? "red" : "var(--primary-colour)",
+                                trailColor: "var(--border-2)",
+                                backgroundColor: "var(--primary-colour)",
                             })}
                         />
                     </div>

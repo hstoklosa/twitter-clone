@@ -1,13 +1,15 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../index";
 
+import PrivateRoute from "../../routes/PrivateRoute";
+
 const AppLayout = ({ children }) => {
 
     return (
-        <div className="app-container">
+        <PrivateRoute>
             <Sidebar />
             <Outlet />
-        </div>
+        </PrivateRoute>
     );
 };
 

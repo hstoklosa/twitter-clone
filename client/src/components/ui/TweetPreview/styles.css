@@ -40,7 +40,7 @@
 .tweet-content .tweet_text {
     font-size: 0.95rem;
     font-weight: 500;
-    color: var(--white);
+    color: var(--primary-text);
     white-space: pre-wrap;
 }
 

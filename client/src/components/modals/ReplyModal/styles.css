@@ -41,7 +41,7 @@
     width: 2px;
     height: 100vh;
     z-index: -11;
-    background-color: var(--black);
+    background-color: var(--border-2);
 }
 
 .reply-modal .pfp-container .pfp {

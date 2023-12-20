@@ -15,7 +15,6 @@
     width: 100%;
     padding: 1rem;
     border-bottom: 0 !important;
-    border-radius: 1rem;
     backdrop-filter: blur(12px);
 }
 
@@ -76,7 +75,7 @@
 }
 
 .edit-profile .pfp-container > .pfp {
-    border: 4px solid #000;
+    border: 4px solid var(--background);
 }
 
 .upload-btn {
@@ -108,6 +107,7 @@
 
 .upload-btn .upload_icon {
     cursor: pointer !important;
+    color: var(--text-primary);
 }
 
 .dob {
@@ -137,13 +137,14 @@
     height: 50px !important;
     width: 100%;
     text-align: start;
+    color: var(--text-primary);
     padding: 0 1.125rem;
     margin-bottom: 1rem;
     transition: background-color 0.2s;
 }
 
 .full-btn:hover {
-    background-color: rgb(22, 24, 28);
+    background-color: var(--sidebar-background);
 }
 
 .full-btn .full-btn_icon {

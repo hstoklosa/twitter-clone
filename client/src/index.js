@@ -4,6 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "./contexts/ThemeProvider.jsx"
 
 import { AppLayout } from "./components";
 
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
                     </PublicRoute>
                 ),
             },
+
             {
                 path: "/",
                 element: <AppLayout />,
@@ -48,6 +50,7 @@ const router = createBrowserRouter([
                             </PrivateRoute>
                         ),
                     },
+
                     {
                         path: "/:username",
                         element: (
@@ -75,6 +78,8 @@ const router = createBrowserRouter([
                         element: <ProfileConnections />
                     })),
 
+
+
                     ...[
                         '/:username/status/:tweetId/quotes',
                         '/:username/status/:tweetId/reposts',
@@ -83,6 +88,7 @@ const router = createBrowserRouter([
                         path: path,
                         element: <TweetEngagements />
                     })),
+
                     {
                         path: "/bookmarks",
                         element: (
@@ -93,6 +99,7 @@ const router = createBrowserRouter([
                     },
                 ]
             },
+
             {
                 path: "*",
                 element: <NotFound />,
@@ -106,7 +113,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <RouterProvider router={router} />
+            <ThemeProvider>
+                <RouterProvider router={router} />
+            </ThemeProvider>
         </Provider>
     </React.StrictMode>
 );

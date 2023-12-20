@@ -1,12 +1,13 @@
 .quote-preview {
     border-radius: 1rem;
-    border: 1px solid var(--black);
+    border: 1px solid var(--border);
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     overflow: hidden;
+    margin-bottom: 1rem;
 }
 
 .quote-preview .details-wrapper {
@@ -38,6 +39,7 @@
     width: 100%;
     font-weight: 500;
     font-size: 0.9375rem;
+    margin: 0 !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -48,6 +50,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    padding: 0 0.75rem;
     padding: 0 0.75rem 0.75rem 0.75rem;
 }
 
@@ -55,22 +58,22 @@
     width: 100%;
     height: 300px;
     margin: 0 !important;
+    position: relative;
 }
 
 .quote-preview .media-container .tweet_media {
+    position: absolute;
     object-fit: cover;
     width: 100%;
     height: 100%;
-    border-radius: 0;
+    border: 0 !important;
+    border-radius: 0 !important;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
 }
 
 .quote-preview .replyingTo {
-    color: var(--grey);
+    color: var(--border-2);
     font-size: 0.975rem;
     margin-bottom: 0.5rem;
-}
-
-.quote-preview .media-container .tweet_media {
-    border: 0;
-    border-top: 1px solid var(--black);
 }

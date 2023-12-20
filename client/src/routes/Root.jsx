@@ -6,23 +6,27 @@ import { useAppSelector } from "../app/store";
 import { useCheckAuthQuery } from "../features/api/authApi";
 import { useGetUserInfoQuery } from "../features/api/userApi";
 
+import { useTheme } from "../contexts/ThemeProvider";
+
 import { Loading } from "../components";
 
 const Root = () => {
     const auth = useAppSelector((state) => state.auth);
+
+    const { theme, accent } = useTheme();
 
     const { isLoading: isAuthLoading } = useCheckAuthQuery();
     const { isLoading: isUserLoading } = useGetUserInfoQuery(auth.user?.username, {
         skip: !auth.isAuth,
     });
 
-    if (isAuthLoading || isUserLoading)
-        return <Loading />;
-
 
     return (
-        <div className="app-container">
-            <Outlet />
+        <div id="app" data-theme={theme} data-accent={accent}>
+            <div id="app-container">
+                {(isAuthLoading || isUserLoading) ? <Loading /> : <Outlet />}
+
+            </div>
         </div>
     );
 };

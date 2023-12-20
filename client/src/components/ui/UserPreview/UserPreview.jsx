@@ -7,8 +7,8 @@ import { useAppSelector } from "../../../app/store";
 
 const UserPreview = ({ tweet: user = null }) => {
     const { user: currentUser } = useAppSelector((state) => state.auth);
-
-    const isFollowing = user.followers.includes(currentUser.id);
+    console.log(user);
+    const isFollowing = user?.followers.includes(currentUser.id);
 
     return (
         <Link className="user-card">

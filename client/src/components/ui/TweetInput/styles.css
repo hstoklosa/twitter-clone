@@ -17,7 +17,7 @@
 
     font-size: 1.25rem;
     color: transparent;
-    caret-color: #fff;
+    caret-color: var(--text-primary);
     white-space: pre-wrap;
     word-wrap: break-word;
 

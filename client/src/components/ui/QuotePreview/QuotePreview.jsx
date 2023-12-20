@@ -1,17 +1,19 @@
 import "./styles.css";
 
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
 import { TweetDetails } from "../../index";
 import { isObjEmpty } from "../../../utils/object";
 
 const QuotePreview = ({ tweet }) => {
+    const { pathname } = useLocation();
+
     const isReply = tweet.replyTo && !isObjEmpty(tweet.replyTo);
     const media = tweet.media?.[0];
 
     return (
         <Link
             to={`/${tweet.author.username}/status/${tweet._id}`}
+            state={{ previousPath: pathname }}
             className="quote-preview"
         >
             <div className="details-wrapper">
@@ -38,7 +40,7 @@ const QuotePreview = ({ tweet }) => {
                 </div>
 
                 {media && (
-                    <div className="media-container">
+                    <div className="media-container quote-media">
                         <img
                             src={media.url}
                             className="tweet_media"

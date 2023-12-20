@@ -97,7 +97,7 @@
 }
 
 .reply_label:hover {
-    background-color: var(--borderless-hover);
+    background-color: var(--accent-hover);
 }
 
 .reply_label-option {
@@ -117,7 +117,7 @@
 }
 
 .audience:hover {
-    background-color: var(--borderless-hover);
+    background-color: var(--accent-hover);
 }
 
 .tweet-submit {

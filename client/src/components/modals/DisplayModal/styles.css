@@ -1,0 +1,71 @@
+.display-modal .modal-content {
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2rem;
+}
+
+.display-modal_header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0.75rem;
+}
+
+.display-modal_preview {
+    display: flex;
+    width: 90%;
+    border: 1px solid rgba(239, 243, 244, 1);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.display-modal_preview .display-name {
+    color: var(--text-primary);
+    font-weight: 700 !important;
+}
+
+.display-modal_preview .tweet-text span {
+    font-size: 0.9375rem;
+}
+
+.display-modal_preview .pfp-container {
+    margin-right: 1rem;
+}
+
+.display-modal_header p {
+    color: var(--grey);
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.display-modal_section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0.75rem 0;
+}
+
+.display-modal_section-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--sidebar-background);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.display-modal_section-title {
+    color: var(--grey);
+    font-weight: 500;
+}
+
+.display-modal_section-title {
+    margin-bottom: 0.5rem;
+}
+
+.display-modal .blue-btn {
+    padding: 0.6rem 1rem;
+    margin-top: 1rem;
+}

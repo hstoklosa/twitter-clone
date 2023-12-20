@@ -19,10 +19,18 @@
     stroke-width: unset !important;
 }
 
-.tweet-actions .tweet-btn .float-options {
-    bottom: -50px !important;
+.action-btn {
+    position: relative;
+}
+
+.tweet-actions .action-btn .retweet-options {
+    top: -10px !important;
     left: -10px !important;
-    width: 200px;
+    width: 135px !important;
+}
+
+.tweet-actions .action-btn .retweet-options .float-icon-container {
+    width: 30px !important;
 }
 
 .action-btn .count-container {

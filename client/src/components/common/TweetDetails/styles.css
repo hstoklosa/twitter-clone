@@ -8,6 +8,7 @@
 
 .tweet-details .display_name {
     margin-right: 0.3rem;
+    color: var(--text-primary);
 }
 
 .tweet-details .display_name:hover {

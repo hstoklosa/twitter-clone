@@ -6,10 +6,9 @@ import { IconContext } from "react-icons";
 import { IoMdClose, IoIosArrowForward } from "react-icons/io";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
-import { BaseModal, TextInput } from "../../index";
+import { ColumnHeader, BaseModal, TextInput } from "../../index";
 import { useUpdateUserMutation } from "../../../features/api/userApi";
 import { updateFormState } from "../../../helpers/updateState";
-import { formatDate } from "../../../helpers/date";
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
 
@@ -28,9 +27,7 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
         bannerImage: null,
     });
 
-    const [updateUser, updateResult] = useUpdateUserMutation();
-
-    const dob = formatDate(user.dob, { year: "numeric", month: "long", day: "numeric" });
+    const [updateUser, { isFetching: isUpdateFetching }] = useUpdateUserMutation();
 
     const handleFileChange = ({ target }) => {
         const files = target.files;
@@ -81,25 +78,24 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
             onClose={closeModal}
             className="edit-modal"
         >
-            <header className="edit-modal_header">
-                <button
-                    className="btn-close-modal"
-                    onClick={closeModal}
-                >
-                    <IconContext.Provider value={{ className: "btn-close_icon" }}>
-                        <IoMdClose size="25" />
-                    </IconContext.Provider>
-                </button>
+
+            <ColumnHeader
+                className="edit-modal_header"
+                close={closeModal}
+            >
                 <h1>Edit Profile</h1>
 
                 <button
                     type="button"
                     className="white-btn save"
                     onClick={handleProfileUpdate}
+                    disabled={isUpdateFetching}
                 >
                     Save
                 </button>
-            </header>
+            </ColumnHeader>
+
+
 
             <form
                 className="edit-profile"
@@ -209,15 +205,6 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
                         highlight={false}
                         maxLength={100}
                     />
-                </div>
-
-                <div className="dob">
-                    <div className="dob-header">
-                        <p>
-                            Birth date · <span className="link-blue">Edit</span>
-                        </p>
-                    </div>
-                    <h2>{dob}</h2>
                 </div>
 
                 <button

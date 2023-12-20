@@ -1,26 +1,22 @@
-import logo from "../../assets/logo-blue.png";
+import logo from "../../assets/logo.svg";
+import classNames from "classnames";
+import { useTheme } from "../../contexts/ThemeProvider";
 
 const Loading = () => {
+    const { theme } = useTheme();
+
+    console.log(theme);
+
     return (
-        <div
-            className="loading"
-            style={{
-                backgroundColor: "#000",
-                position: "fixed",
-                top: "0",
-                left: "0",
-                width: "100vw",
-                minHeight: "100vh",
-                zIndex: "999999",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-            }}
-        >
+        <div className="loading-route">
             <img
                 src={logo}
+                className={classNames("logo", {
+                    dark: theme === "dim" || theme === "dark",
+                    light: theme === "light"
+                })}
+                style={{ width: "100px" }}
                 alt="Twitter Icon"
-                style={{ width: "80px" }}
             />
         </div>
     );

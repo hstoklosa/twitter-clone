@@ -1,0 +1,94 @@
+.accent-radio {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 5px;
+    cursor: pointer;
+    /* border: 1px solid #fff; */
+}
+
+.accent-radio::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-width: 5px;
+    border-style: solid;
+}
+
+.accent-radio.yellow {
+    background-color: rgb(255, 212, 0);
+}
+
+.accent-radio.yellow::before {
+    border-color: rgb(255, 213, 0, 0.1);
+}
+
+.accent-radio.blue {
+    background-color: rgb(29, 155, 240);
+}
+
+.accent-radio.blue::before {
+    border-color: rgb(29, 155, 240, 0.1);
+}
+
+.accent-radio.pink {
+    background-color: rgb(249, 24, 128);
+}
+
+.accent-radio.pink::before {
+    border-color: rgb(249, 26, 130, 0.1);
+}
+
+.accent-radio.purple {
+    background-color: rgb(120, 86, 255);
+}
+
+.accent-radio.purple::before {
+    border-color: rgb(120, 87, 255, 0.1);
+}
+
+.accent-radio.orange {
+    background-color: rgb(255, 122, 0);
+}
+
+.accent-radio.orange::before {
+    border-color: rgb(255, 122, 0, 0.1);
+}
+
+.accent-radio.green {
+    background-color: rgb(0, 186, 124);
+}
+
+.accent-radio.green::before {
+    border-color: rgb(0, 184, 122, 0.1);
+}
+
+.accent-radio_input {
+    display: none;
+}
+
+.accent-radio_selected {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.accent-radio_input:checked + .accent-radio_selected {
+    display: flex;
+}
+
+.accent-radio_selected-icon {
+    color: #fff;
+}

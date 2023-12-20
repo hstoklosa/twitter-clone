@@ -112,6 +112,7 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
     const openMoreFloat = () => setMoreFloat(true);
     const closeMoreFloat = () => setMoreFloat(false);
 
+    console.log(tweet, currentUser.id);
 
     return (
         <IconContext.Provider value={{ className: "tweet_icon" }}>
