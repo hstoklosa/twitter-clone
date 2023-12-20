@@ -1,18 +1,20 @@
 import "./styles.css";
+// import noBookmarksImage from "../../assets/no-bookmarks.png";
 
 import { useState } from "react";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 
-import usePagination from "../../hooks/usePagination";
 import { useAppSelector } from "../../app/store";
+import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 
 import {
     ColumnHeader,
     MiddleColumn,
     LeftColumn,
     FloatOptions,
-    PreviewList,
-    Tweet,
+    PaginatedList,
+    TweetPreview,
+    Placeholder,
     Links,
 } from "../../components";
 
@@ -21,17 +23,11 @@ import {
     useDeleteAllBookmarksMutation,
 } from "../../features/api/userApi";
 
-import placeholders from "../../config/placeholders";
 
 const Bookmarks = () => {
     const [moreFloat, setMoreFloat] = useState(false);
-
     const { user: currentUser } = useAppSelector((state) => state.auth);
-
-    const queryResult = usePagination(useGetBookmarksQuery, {
-        id: currentUser.id,
-    });
-
+    const queryResult = useInfiniteScroll(useGetBookmarksQuery, { id: currentUser.id })
     const [deleteAllBookmarks, clearResult] = useDeleteAllBookmarksMutation();
 
     const openMoreFloat = () => setMoreFloat(true);
@@ -62,6 +58,7 @@ const Bookmarks = () => {
                             <div className="icon-container">
                                 <IoEllipsisHorizontal className="icon" />
                             </div>
+
                             {moreFloat && (
                                 <FloatOptions
                                     className="more-float"
@@ -81,10 +78,15 @@ const Bookmarks = () => {
                     </div>
                 </ColumnHeader>
 
-                <PreviewList
+                <PaginatedList
                     queryResult={queryResult}
-                    PreviewComponent={Tweet}
-                    placeholder={placeholders.bookmarks}
+                    component={TweetPreview}
+                    renderPlaceholder={() => (
+                        <Placeholder
+                            title="Save Tweets for later"
+                            subtitle="Don't let the good ones fly away! Bookmark Tweets to easily find them again in the future."
+                        />
+                    )}
                 />
             </MiddleColumn>
 

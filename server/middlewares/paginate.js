@@ -7,7 +7,7 @@ const paginate = (req, res, next) => {
     };
 
     options.skip = (options.page - 1) * options.limit;
-    options.sortBy = req.query.sortBy || "createdAt:desc";
+    // options.sortBy = req.query.sortBy || "createdAt:desc";
 
     if (isNaN(options.page) || isNaN(options.limit))
         return next(new BadRequest("Invalid pagination parameters"));

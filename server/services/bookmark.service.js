@@ -10,6 +10,7 @@ const fetchUserBookmarks = async (userId, options) => {
         [
             { $match: { user: userId } },
 
+
             {
                 $lookup: {
                     from: "tweets",
@@ -18,13 +19,26 @@ const fetchUserBookmarks = async (userId, options) => {
                     as: "tweetDetails",
                 },
             },
+
+
             {
                 $unwind: "$tweetDetails",
             },
 
             {
-                $replaceRoot: { newRoot: "$tweetDetails" },
+                $addFields: {
+                    bookmarkCreatedAt: "$createdAt"
+                }
             },
+
+            {
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: ["$tweetDetails", { bookmarkCreatedAt: "$bookmarkCreatedAt" }]
+                    }
+                }
+            },
+
 
             {
                 $lookup: {
@@ -37,6 +51,7 @@ const fetchUserBookmarks = async (userId, options) => {
             {
                 $unwind: {
                     path: "$author",
+                    preserveNullAndEmptyArrays: true,
                 },
             },
 
@@ -102,20 +117,31 @@ const fetchUserBookmarks = async (userId, options) => {
 
             {
                 $project: {
-                    ...userTweetSelector,
+                    bookmarkCreatedAt: 1,
+                    ...userTweetSelector
                 },
             },
         ],
-        options
+        {
+            ...options,
+            sortBy: { bookmarkCreatedAt: -1 },
+        }
+
     );
 };
 
 const createBookmark = async (userId, tweetId) => {
-    await Bookmark.create({ user: userId, tweet: tweetId });
+    await Bookmark.create({
+        user: userId,
+        tweet: tweetId
+    });
 };
 
 const deleteBookmark = async (userId, tweetId) => {
-    await Bookmark.deleteOne({ user: userId, tweet: tweetId });
+    await Bookmark.deleteOne({
+        user: userId,
+        tweet: tweetId
+    });
 };
 
 const deleteAllBookmarks = async (userId) => {

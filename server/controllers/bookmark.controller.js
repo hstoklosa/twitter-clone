@@ -47,16 +47,6 @@ const createBookmark = asyncHandler(async (req, res, next) => {
     if (!(await Tweet.exists({ _id: tweetId })))
         return next(new NotFoundError("The tweet could not be found!"));
 
-    console.log(userId, tweetId);
-
-    const data = {
-        user: new ObjectId(userId),
-        tweet: new ObjectId(tweetId),
-    };
-
-    const b = await Bookmark.find({});
-    console.log(b);
-
     if (
         await Bookmark.exists({
             user: userId,
