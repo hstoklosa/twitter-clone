@@ -1,0 +1,66 @@
+version: "2"
+
+services:
+    nginx-proxy:
+        container_name: nginx-proxy
+        image: nginxproxy/nginx-proxy
+        restart: unless-stopped
+        volumes:
+            - conf:/etc/nginx/conf.d
+            - vhost:/etc/nginx/vhost.d
+            - html:/usr/share/nginx/html
+            - certs:/etc/nginx/certs:ro
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - x-proxy-network
+
+    acme-companion:
+        container_name: acme-companion
+        image: nginxproxy/acme-companion
+        restart: unless-stopped
+        environment:
+            DEFAULT_EMAIL: hubert.stoklosa23@gmail.com
+            DEFAULT_NGINX_CONTAINER: nginx-proxy
+        depends_on:
+            - nginx-proxy
+        volumes_from:
+            - nginx-proxy
+        volumes:
+            - certs:/etc/nginx/certs:rw
+            - acme:/etc/acme.sh
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        networks:
+            - x-proxy-network
+
+    mongodb:
+        container_name: mongodb
+        image: mongo
+        restart: unless-stopped
+        ports:
+            - 127.0.0.1:27017:27017
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' |  mongosh mongodb://mongodb:27017/twitter --quiet 1
+            interval: 10s
+            timeout: 10s
+            retries: 5
+        volumes:
+            - db:/data/db
+        networks:
+            - x-database-network
+
+networks:
+    x-proxy-network:
+        external: true
+    x-database-network:
+        external: true
+
+volumes:
+    conf:
+    vhost:
+    html:
+    certs:
+    acme:
+    db:

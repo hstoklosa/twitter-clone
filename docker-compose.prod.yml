@@ -1,0 +1,59 @@
+version: "3.5"
+
+services:
+    backend:
+        container_name: backend
+        image: xclone-backend
+        restart: unless-stopped
+        build:
+            context: server
+            dockerfile: Dockerfile.prod
+        env_file:
+            - .env.prod
+        environment:
+            - VIRTUAL_HOST=$NGINX_HOSTNAME
+            - VIRTUAL_PORT=$API_PORT
+            - VIRTUAL_PATH=/api
+        ports:
+            - $API_PORT
+        volumes:
+            - /app/node_modules
+        networks:
+            - x-proxy-network
+            - x-database-network
+            - x-network
+
+    frontend:
+        container_name: frontend
+        image: xclone-frontend
+        build:
+            context: client
+            dockerfile: Dockerfile.prod
+            args:
+                - API_URL=$API_URL
+        restart: unless-stopped
+        env_file:
+            - .env.prod
+        environment:
+            - VIRTUAL_HOST=$NGINX_HOSTNAME
+            - VIRTUAL_PORT=$CLIENT_PORT
+            - VIRTUAL_PATH=/
+            - LETSENCRYPT_HOST=$NGINX_HOSTNAME
+            - LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
+        depends_on:
+            - backend
+        ports:
+            - $CLIENT_PORT
+        volumes:
+            - /app/node_modules
+        networks:
+            - x-proxy-network
+            - x-network
+
+networks:
+    x-proxy-network:
+        external: true
+    x-database-network:
+        external: true
+    x-network:
+        driver: bridge
