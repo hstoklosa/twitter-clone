@@ -4,15 +4,14 @@ const useOutsideClick = (callback, options = { click: true, escape: true }) => {
     const ref = useRef();
 
     const handleClick = (e) => {
-        if (options.click && ref.current && !ref.current.contains(e.target)) {
+        if (options.click && ref.current && !ref.current.contains(e.target))
             callback();
-        }
+
     };
 
     const handleEscape = (e) => {
-        if (options.escape && e.key === "Escape") {
+        if (options.escape && e.key === "Escape")
             callback();
-        }
     };
 
     useEffect(() => {
