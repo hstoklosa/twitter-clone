@@ -36,8 +36,6 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
         limit,
     ]);
 
-    // console.log(combinedData);
-
     const { page: remotePage = 1, hasNextPage = false } =
         currentQueryResponse?.data || {};
 
@@ -50,6 +48,18 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
             currentQueryResponse?.isFetching,
             lastQueryResponse?.isFetching,
             nextQueryResponse?.isFetching,
+        ]
+    );
+
+    const isLoading = useMemo(
+        () =>
+            lastQueryResponse?.isLoading ||
+            currentQueryResponse?.isLoading ||
+            nextQueryResponse?.isLoading,
+        [
+            currentQueryResponse?.isLoading,
+            lastQueryResponse?.isLoading,
+            nextQueryResponse?.isLoading,
         ]
     );
 
@@ -66,8 +76,6 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
         ]
     );
 
-    // console.log(remotePage, hasNextPage);
-
 
     const lastIntObserver = useRef(null);
     const lastRowRef = useCallback(
@@ -77,7 +85,6 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
             lastIntObserver.current = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && hasNextPage && currentPage === remotePage) {
                     setCurrentPage(currentPage + 1);
-                    console.log("next");
                 }
             });
             if (node) lastIntObserver.current.observe(node);
@@ -92,10 +99,8 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
             if (firstIntObserver.current) firstIntObserver.current.disconnect();
 
             firstIntObserver.current = new IntersectionObserver((entries) => {
-                console.log("touchy");
                 if (entries[0].isIntersecting && currentPage > 1) {
                     setCurrentPage(currentPage - 1);
-                    console.log("prev");
                 }
             });
             if (node) firstIntObserver.current.observe(node);
@@ -106,6 +111,7 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
     return {
         combinedData,
         isFetching,
+        isLoading,
         isError,
         lastRowRef,
         firstRowRef,

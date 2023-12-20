@@ -1,57 +1,97 @@
-import "../styles/App.css";
+import "./styles.css";
 
 import { useState } from "react";
-import { ColumnHeader, Links, Feed, TweetInput, TabList } from "../components";
+import { Link } from "react-router-dom";
+import { BiCog } from "react-icons/bi";
 
-const EmptyFeed = () => {
-    return (
-        <div className="not-found-container">
-            <h1>Nothing to see!</h1>
-            <p>No tweets found</p>
-        </div>
-    );
-};
+import { useAppSelector } from "../../app/store";
+import { useLazyGetSearchUsersQuery } from "../../features/api/userApi";
+import { useGetHomeTimelineQuery } from "../../features/api/tweetApi";
+
+import {
+    MiddleColumn,
+    LeftColumn,
+    ColumnHeader,
+    TweetForm,
+    PaginatedList,
+    TweetPreview,
+    SearchBar,
+    FloatOptions,
+    Links,
+    Trending,
+    Connect,
+} from "../../components";
+
+import withQuery from "../../hoc/withQuery";
+
+const PaginatedHomeList = withQuery(useGetHomeTimelineQuery)(PaginatedList);
 
 const Home = () => {
-    const [tab, setTab] = useState("For you");
+    const [searchQuery, setSearchQuery] = useState("");
+    const { user: currentUser } = useAppSelector((state) => state.auth);
+
+    const [triggerUserSearch, { data: users }] = useLazyGetSearchUsersQuery();
+
+    const handleDebounceChange = (search) => {
+        triggerUserSearch(search);
+        setSearchQuery(search)
+    }
+
+    const handleSettingClick = () => {
+        triggerUserSearch();
+    };
 
     return (
         <main>
-            <div
-                className="column"
-                id="general"
-            >
+            <MiddleColumn>
                 <ColumnHeader className="home-column-header">
                     <h1>Home</h1>
 
-                    <TabList
-                        tabs={["For you", "Following"]}
-                        currentTab={tab}
-                        setCurrentTab={setTab}
-                    />
+                    <button
+                        className="dark_round-btn"
+                        onClick={handleSettingClick}
+                    >
+                        <div className="icon-container">
+                            <BiCog
+                                size="20"
+                                className="icon"
+                            />
+                        </div>
+                    </button>
                 </ColumnHeader>
 
-                <TweetInput maxLength={280} />
+                <TweetForm maxLength={280} />
 
-                {tab === "For you" && (
-                    <Feed
-                        tweets={[]}
-                        isTweetsLoading={true}
-                        NotFoundComponent={<EmptyFeed />}
-                    />
-                )}
-            </div>
+                <PaginatedHomeList
+                    component={TweetPreview}
+                    args={{ id: currentUser.id }}
+                />
+            </MiddleColumn>
 
-            <div
-                className="column"
-                id="widgets"
-            >
-                <div className="sticky-wrapper">
-                    {/* TODO: Other widgets */}
-                    <Links />
-                </div>
-            </div>
-        </main>
+            <LeftColumn>
+                <SearchBar onChange={handleDebounceChange}>
+                    <>
+                        <Link
+                            type="button"
+                            className="float-btn search-tweets_btn"
+                        >
+                            Search for "{searchQuery}"
+                        </Link>
+
+                        <Link
+                            to={`/status/${searchQuery}`}
+                            className="float-btn search-tweets_btn"
+                        >
+                            Go to @{searchQuery}
+                        </Link>
+
+                    </>
+                </SearchBar>
+                <Connect />
+                <Trending />
+                <Links />
+            </LeftColumn>
+        </main >
     );
 };
 

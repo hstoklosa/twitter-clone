@@ -1,16 +1,19 @@
 const express = require("express");
 
 const tweetController = require("../controllers/tweet.controller");
-const isAuthenticated = require("../middlewares/isAuthenticated");
-const paginate = require("../middlewares/paginateMiddleware");
+const authenticate = require("../middlewares/authenticate");
+const paginate = require("../middlewares/paginate");
 
 const upload = require("../config/multer");
 
 const router = express.Router();
 
-router.use(isAuthenticated);
+router.use(authenticate);
+
 
 router.get("/:tweetId", tweetController.getTweet);
+
+router.get("/:tweetId/engagement", paginate, tweetController.getTweetEngagement);
 
 router.post("/", upload.single("media"), tweetController.createTweet);
 

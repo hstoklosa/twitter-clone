@@ -1,5 +1,3 @@
-const fs = require("fs");
-const path = require("path");
 const { ObjectId } = require("mongoose").Types;
 
 const User = require("../models/User.model");
@@ -7,31 +5,14 @@ const asyncHandler = require("../middlewares/asyncHandler");
 const userService = require("../services/user.service");
 const { NotFoundError, UnauthorizedError } = require("../utils/errors");
 
+
 const getUser = asyncHandler(async (req, res, next) => {
     const { username } = req.params;
 
-    if (!(await User.exists({ username })))
-        return next(new NotFoundError("The user was not found!"));
+    if (!(await User.exists({ username: username })))
+        return next(new NotFoundError(`The username ${username} couldn't be found.`));
 
     const user = await userService.findByUsername(username);
-
-    // console
-
-    if (!user)
-        return next(
-            new NotFoundError(`The username ${username} couldn't be found.`)
-        );
-
-    // const parsedUrl = new URL(user.profileImageURL);
-    // const localFilePath = path.join(__dirname, "./uploads", parsedUrl.pathname);
-
-    // // check if static file exists w/ non-blocking I/O operation
-    // fs.access(localFilePath, fs.constants.F_OK, async (err) => {
-    //     if (err) {
-    //         user.profileImageURL = `${process.env.SERVER_URL}/uploads/default_profile.png`;
-    //         await user.save();
-    //     }
-    // });
 
     return res.status(200).json(user);
 });
@@ -60,6 +41,17 @@ const getFollowing = asyncHandler(async (req, res, next) => {
         relevantUser._id,
         req.pagination
     );
+
+    return res.status(200).json(response);
+});
+
+const getHomeFeed = asyncHandler(async (req, res, next) => {
+    const { userId } = req.params;
+
+    if (!(await User.exists({ _id: userId })))
+        return next(new NotFoundError("User not found!"));
+
+    const response = await userService.fetchHomeFeed(new ObjectId(userId), req.pagination);
 
     return res.status(200).json(response);
 });
@@ -124,8 +116,6 @@ const followUser = asyncHandler(async (req, res, next) => {
     const { userId: sourceUserId } = req.params;
     const { targetUserId } = req.body;
 
-    console.log(sourceUserId, targetUserId);
-
     if (!(await User.exists({ _id: sourceUserId })))
         return next(new NotFoundError("Source user not found!"));
 
@@ -173,10 +163,10 @@ const updateUser = asyncHandler(async (req, res, next) => {
     };
 
     if (req.files["profileImage"])
-        updateData.profileImageURL = `${process.env.SERVER_ORIGIN}/${req.files.profileImage[0].path}`;
+        updateData.profileImageURL = `${process.env.API_URL}/${req.files.profileImage[0].path}`;
 
     if (req.files["bannerImage"])
-        updateData.bannerURL = `${process.env.SERVER_ORIGIN}/${req.files.bannerImage[0].path}`;
+        updateData.bannerURL = `${process.env.API_URL}/${req.files.bannerImage[0].path}`;
 
     await User.findByIdAndUpdate(userId, updateData);
 
@@ -189,6 +179,7 @@ module.exports = {
     getUser,
     getFollowing,
     getFollowers,
+    getHomeFeed,
     getProfileTimeline,
     getRepliesTimeline,
     getMediaTimeline,

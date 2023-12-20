@@ -20,7 +20,7 @@
     position: relative;
     width: 600px;
     height: 200px;
-    background-color: rgb(51, 54, 57);
+    background-color: var(--border-2);
 }
 
 .profile .pfp-container {
@@ -30,7 +30,7 @@
     width: 140px;
     height: 140px;
     background-color: #16181c;
-    border: 4px solid #000;
+    border: 4px solid var(--background);
 }
 
 .profile .follow {
@@ -109,7 +109,7 @@
 
 .count span {
     font-weight: 700;
-    color: #fff;
+    color: var(--text-primary);
     margin-right: 0.3rem;
 }
 

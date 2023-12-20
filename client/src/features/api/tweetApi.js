@@ -45,6 +45,7 @@ export const tweetApi = baseApi.injectEndpoints({
 
 export const {
     useGetTweetQuery,
+    useGetHomeTimelineQuery,
     useCreateTweetMutation,
     useDeleteTweetMutation,
     useGetQuotesQuery,

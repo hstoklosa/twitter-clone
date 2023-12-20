@@ -2,10 +2,10 @@ const { ObjectId } = require("mongoose").Types;
 const User = require("../models/User.model");
 const Tweet = require("../models/Tweet.model");
 const asyncHandler = require("../middlewares/asyncHandler");
+const tweetService = require("../services/tweet.service");
 
 const paginate = require("../helpers/paginatePlugin");
-
-const tweetService = require("../services/tweet.service");
+const { engagementSelector } = require("../helpers/selectors");
 
 const { NotFoundError, ForbiddenError } = require("../utils/errors");
 const { isObjEmpty } = require("../utils/object");
@@ -24,28 +24,51 @@ const getTweet = asyncHandler(async (req, res, next) => {
     });
 });
 
-const deleteTweet = asyncHandler(async (req, res, next) => {
+
+const getTweetEngagement = asyncHandler(async (req, res, next) => {
     const { tweetId } = req.params;
 
-    const tweet = await Tweet.findById(tweetId);
-    const tweetAuthorId = tweet.author._id.toString();
-    const authUserId = req.user._id.toString();
+    const query = pick(req.query, ["quotes", "retweets", "likes"]);
 
-    if (!tweet)
-        return next(
-            new NotFoundError("The tweet couldn't be found in the database!")
-        );
+    const isQueryEmpty = isObjEmpty(query);
 
-    if (tweetAuthorId !== authUserId)
-        return next(
-            new ForbiddenError("You are not authorized to delete this tweet!")
-        );
+    if (isQueryEmpty)
+        return next(new BadRequestError("Invalid query parameters!"));
 
-    await tweet.deleteOne();
+    if (!(await Tweet.exists({ _id: tweetId })))
+        return next(new NotFoundError("Tweet with such ID doesn't exist!"));
 
-    return res.status(200).json({
-        isTweetDeleted: true,
-    });
+    const parsedId = new ObjectId(tweetId);
+
+    const field = query.likes ? "likes" : query.retweets ? "retweets" : "quotes";
+    const filter = field === "quotes" ? { quoteTo: parsedId } : { _id: parsedId };
+
+    const response = await paginate(
+        "Tweet",
+        [
+            { $match: filter },
+
+            {
+                $lookup: {
+                    from: "users",
+                    localField: `${field}`,
+                    foreignField: "_id",
+                    as: `${field}`,
+                },
+            },
+            {
+                $unwind: {
+                    path: `$${field}`,
+                },
+            },
+
+            { $replaceRoot: { newRoot: `$${field}` } },
+            { $project: { ...engagementSelector } },
+        ],
+        req.pagination
+    );
+
+    return res.status(200).json(response);
 });
 
 const createTweet = asyncHandler(async (req, res, next) => {
@@ -54,17 +77,23 @@ const createTweet = asyncHandler(async (req, res, next) => {
     const mentions = content.match(/(@[a-zA-Z0-9_]+)/g) || [];
     const hashtags = content.match(/#\w+/g) || [];
 
-    const tweet = new Tweet({
+    const data = {
         content,
         author,
         mentions,
         hashtags,
         replyTo,
         quoteTo,
-    });
+    };
 
-    // Check for the tweet type
+    // Check the tweet type
+    if (replyTo && quoteTo)
+        return next(new ForbiddenError("Tweet can't be both a reply and a quote!"));
+
     if (quoteTo && !(await Tweet.exists({ _id: quoteTo })))
+        return next(new NotFoundError("Tweet being quoted is not found!"));
+
+    if (replyTo && !(await Tweet.exists({ _id: replyTo })))
         return next(new NotFoundError("Tweet being quoted is not found!"));
 
     if (replyTo) {
@@ -78,16 +107,36 @@ const createTweet = asyncHandler(async (req, res, next) => {
 
     // Attach incoming files
     if (req.file) {
-        tweet.media = {
-            url: `${process.env.SERVER_ORIGIN}/${req.file.path}`,
+        data.media = {
+            url: `${process.env.API_URL}/${req.file.path}`,
             mediaType: req.file.mimetype.split("/")[0],
         };
     }
 
-    await tweet.save();
+    await tweetService.createTweet(data);
 
     return res.status(200).json({
-        isTweetAdded: true,
+        isTweetCreated: true,
+    });
+});
+
+const deleteTweet = asyncHandler(async (req, res, next) => {
+    const { tweetId } = req.params;
+
+    const tweet = await Tweet.findById(tweetId);
+    const tweetAuthorId = tweet.author._id.toString();
+    const authUserId = req.user._id.toString();
+
+    if (!tweet)
+        return next(new NotFoundError("The tweet couldn't be found in the database!"));
+
+    if (tweetAuthorId !== authUserId)
+        return next(new ForbiddenError("You are not authorized to delete this tweet!"));
+
+    await tweet.deleteOne();
+
+    return res.status(200).json({
+        isTweetDeleted: true,
     });
 });
 
@@ -97,7 +146,8 @@ const createRepost = asyncHandler(async (req, res, next) => {
 
     const tweet = await Tweet.findById(tweetId);
 
-    if (!tweet) next(new NotFoundError("Tweet not found!"));
+    if (!tweet)
+        return next(new NotFoundError("Tweet not found!"));
 
     const user = await User.findById(userId);
 
@@ -118,7 +168,10 @@ const deleteRepost = asyncHandler(async (req, res, next) => {
 
     const user = await User.findById(userId);
 
-    await Promise.all([tweet.deleteRetweet(userId), user.deleteRetweet(tweetId)]);
+    await Promise.all([
+        tweet.deleteRetweet(userId),
+        user.deleteRetweet(tweetId)
+    ]);
 
     return res.status(200).json({
         isReposted: false,
@@ -155,6 +208,7 @@ const unlikeTweet = asyncHandler(async (req, res, next) => {
 
 module.exports = {
     getTweet,
+    getTweetEngagement,
     createTweet,
     createRepost,
     likeTweet,

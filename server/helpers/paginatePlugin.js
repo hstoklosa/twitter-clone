@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const paginate = async (modelName = null, pipeline = [], options = {}) => {
+    const { skip, limit, sortBy = null } = options;
     const Model = mongoose.model(modelName);
-    const { skip, limit } = options;
 
     let result = await Model.aggregate([
         ...pipeline,
 
         {
-            $sort: { createdAt: -1 },
+            $sort: sortBy ?? { createdAt: -1 },
         },
 
         {

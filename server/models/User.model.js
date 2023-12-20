@@ -5,6 +5,7 @@ const Bookmark = require("./Tweet.model");
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
+
 const providerSchema = new Schema({
     providerId: String,
     providerName: {
@@ -29,12 +30,9 @@ const userSchema = new Schema(
             maxlength: [15, "Username should be at most 15 characters long!"],
             validate: {
                 validator: (username) => {
-                    return String(username)
-                        .toLowerCase()
-                        .match(/^[0-9a-zA-Z_.-]+$/);
+                    return /^[0-9a-zA-Z_.-]+$/.test(username);
                 },
-                message: (props) =>
-                    `${props.value} is not a valid username. Username must only contain numbers, letters, ".", "-", "_"`,
+                message: props => `${props.value} is not a valid username. Username must only contain numbers, letters, ".", "-", "_"`,
             },
         },
         email: {
@@ -182,7 +180,7 @@ userSchema.set("toJSON", {
 
 userSchema.set("toObject", { virtuals: true });
 
-const User = mongoose.model("User", userSchema);
 
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

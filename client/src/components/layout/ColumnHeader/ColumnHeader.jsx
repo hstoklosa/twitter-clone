@@ -3,7 +3,13 @@ import { IconContext } from "react-icons";
 import { BiArrowBack } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 
-const ColumnHeader = ({ close, modalBack, routerBack, className, children }) => {
+const ColumnHeader = ({
+    close,
+    modalBack,
+    routerBack,
+    className,
+    children
+}) => {
     const { state } = useLocation();
 
     return (

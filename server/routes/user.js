@@ -7,7 +7,7 @@ const bookmarkController = require("../controllers/bookmark.controller");
 const paginate = require("../middlewares/paginate");
 const upload = require("../config/multer");
 
-// Multer fields
+// File upload fields
 const updateUserFields = [
     { name: "profileImage", maxCount: 1 },
     { name: "bannerImage", maxCount: 1 },
@@ -18,7 +18,10 @@ const router = express.Router();
 
 router.use(authenticate);
 
+
 router.get("/:username", userController.getUser);
+
+router.get("/:userId/home_timeline", paginate, userController.getHomeFeed);
 
 router.get("/:userId/timeline", paginate, userController.getProfileTimeline);
 

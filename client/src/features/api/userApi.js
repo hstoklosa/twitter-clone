@@ -10,11 +10,11 @@ export const userApi = baseApi.injectEndpoints({
             providesTags: (result, err, arg) =>
                 result
                     ? [
-                          {
-                              type: "User",
-                              id: result._id,
-                          },
-                      ]
+                        {
+                            type: "User",
+                            id: result._id,
+                        },
+                    ]
                     : ["User"],
         }),
         updateUser: builder.mutation({
@@ -30,13 +30,11 @@ export const userApi = baseApi.injectEndpoints({
                 },
             ],
         }),
-
         getBookmarks: builder.query({
             query: ({ id, page, limit }) => ({
                 url: `/users/${id}/bookmarks?page=${page}&limit=${limit}`,
             }),
-            providesTags: (result) =>
-                providesList(result?.data, "Post", "BOOKMARKS"),
+            providesTags: (result) => providesList(result?.data, "Post", "BOOKMARKS"),
         }),
         createBookmark: builder.mutation({
             query: ({ userId, tweetId }) => ({
@@ -70,24 +68,20 @@ export const userApi = baseApi.injectEndpoints({
                 { type: "User", id: userId },
             ],
         }),
-
         getUserFollowers: builder.query({
             query: ({ username, page, limit }) => ({
                 url: `/users/${username}/followers?page=${page}&limit=${limit}`,
                 method: "GET",
             }),
-            providesTags: (result) =>
-                providesList(result?.data, "User", "FOLLOWERS"),
+            providesTags: (result) => providesList(result?.data, "User", "FOLLOWERS"),
         }),
         getUserFollowing: builder.query({
             query: ({ username, page, limit }) => ({
                 url: `/users/${username}/following?page=${page}&limit=${limit}`,
                 method: "GET",
             }),
-            providesTags: (result) =>
-                providesList(result?.data, "User", "FOLLOWING"),
+            providesTags: (result) => providesList(result?.data, "User", "FOLLOWING"),
         }),
-
         getUserTweets: builder.query({
             query: ({ id, page, limit }) => ({
                 url: `/users/${id}/timeline?page=${page}&limit=${limit}`,
@@ -112,7 +106,6 @@ export const userApi = baseApi.injectEndpoints({
             }),
             providesTags: (result) => providesList(result?.data, "Post", "MEDIA"),
         }),
-
         followUser: builder.mutation({
             query: ({ id, targetUserId }) => ({
                 url: `/users/${id}/following`,
@@ -124,6 +117,10 @@ export const userApi = baseApi.injectEndpoints({
             invalidatesTags: (result, error, { id, targetUserId }) => [
                 { type: "User", id },
                 { type: "User", id: targetUserId },
+                { type: "User", id: "FOLLOWING" },
+                { type: "User", id: "FOLLOWERS" },
+                { type: "Post", id: "HOME_FEED" },
+                { type: "User", id: "RECOMMENDED" }
             ],
         }),
         unfollowUser: builder.mutation({
@@ -137,9 +134,12 @@ export const userApi = baseApi.injectEndpoints({
             invalidatesTags: (result, error, { id, targetUserId }) => [
                 { type: "User", id },
                 { type: "User", id: targetUserId },
+                { type: "User", id: "FOLLOWING" },
+                { type: "User", id: "FOLLOWERS" },
+                { type: "Post", id: "HOME_FEED" },
+                { type: "User", id: "RECOMMENDED" }
             ],
         }),
-
         createRepost: builder.mutation({
             query: ({ tweetId }) => ({
                 url: `/tweets/${tweetId}/repost`,
