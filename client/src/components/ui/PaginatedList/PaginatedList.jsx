@@ -1,37 +1,36 @@
 import "./styles.css";
 
-import React, { useEffect } from "react";
-// import InfiniteLoader from 'react-window-infinite-loader';
-// import { FixedSizeList as List } from "react-window";
-import { Spinner, ErrorPlaceholder } from "../../index";
-// import useInfiniteScroll from "../../../hooks/useInfiniteScrolll";
+import React from "react";
+import { Spinner, Placeholder, ErrorPlaceholder } from "../../index";
 
 
 const PaginatedList = ({
     queryResult = {},
     component: Component,
-    children
+    renderPlaceholder = () => <Placeholder />,
+    renderError = () => <ErrorPlaceholder />,
+    loadingIndicator = () => <Spinner />,
 }) => {
     const {
         combinedData: data,
         lastRowRef,
         firstRowRef,
         isFetching,
+        isLoading,
         isError,
     } = queryResult;
 
-    console.log(isFetching, isError);
 
-
-    if (isError) return <ErrorPlaceholder />;
-    if (data.length === 0) return children;
+    if (isError) return renderError();
+    if (isLoading) return loadingIndicator();
+    if (data.length === 0) return renderPlaceholder();
 
     return (
         <section
             className="preview-list"
             id="preview-list"
         >
-            {data.map((item, index) => {
+            {(data.map((item, index) => {
                 const caseRef = item !== undefined
                     ? index === 0
                         ? firstRowRef
@@ -46,8 +45,9 @@ const PaginatedList = ({
                         <Component tweet={item} />
                     </div>
                 )
-            })}
-            {/* {isFetching && <Spinner />} */}
+            }))}
+
+            {isFetching && loadingIndicator()}
         </section>
     );
 };
