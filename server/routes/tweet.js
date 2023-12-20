@@ -13,6 +13,8 @@ router.use(authenticate);
 
 router.get("/:tweetId", tweetController.getTweet);
 
+router.get("/:tweetId/replies", paginate, tweetController.getTweetReplies);
+
 router.get("/:tweetId/engagement", paginate, tweetController.getTweetEngagement);
 
 router.post("/", upload.single("media"), tweetController.createTweet);

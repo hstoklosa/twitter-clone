@@ -1,0 +1,119 @@
+.tweet-route-header {
+    border-bottom: 0 !important;
+    padding: 0 1rem !important;
+    height: 50px !important;
+}
+
+.tweet-route .original-tweet {
+    overflow: hidden;
+    padding-bottom: 1rem;
+}
+
+.tweet-route_general .tweet {
+    border: 0;
+    padding: 1rem;
+}
+
+.tweet-route_general .relevant-tweets {
+    overflow: hidden !important;
+}
+
+.tweet-route_general .original-tweet .pfp-container::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    width: 2px;
+    height: 100vh;
+    z-index: -99999;
+    background-color: var(--black);
+}
+
+.tweet-route_general .current-tweet .pfp-container {
+    overflow: hidden;
+}
+
+.tweet-route_general .current-tweet {
+    position: relative !important;
+    z-index: 1111111;
+    padding: 0 1rem;
+}
+
+.tweet-details {
+    width: 100%;
+    display: flex;
+}
+
+.user-info .pfp-container {
+    margin-right: 1rem;
+}
+
+.user-info {
+    display: flex;
+    width: 100%;
+}
+
+.wrapper .displayName {
+    font-size: 0.95rem;
+}
+
+.tweet-route .current-tweet .tweet-content {
+    margin: 1rem 0;
+}
+
+.tweet-route .tweet-content .tweet-text {
+    font-size: 1.065rem;
+}
+
+.tweet-route .blue_round-btn .icon-container {
+    width: 17px;
+    height: 17px;
+}
+
+.tweet-route .tweet-stats .separator {
+    height: 25px;
+    width: 2px;
+    margin: 0 0.5rem;
+}
+
+.tweet-route .tweet-stats .link:hover {
+    text-decoration-line: underline;
+    text-decoration-color: var(--grey);
+    text-underline-offset: 2px;
+}
+
+.tweet-route .tweet-stats .stat {
+    font-weight: 500;
+    font-size: 0.938rem !important;
+    color: var(--grey);
+}
+
+.tweet-route .tweet-stats .views {
+    font-size: 0.938rem !important;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.tweet-route .tweet-form {
+    padding: 0 1rem 0.5rem 1rem !important;
+}
+
+.tweet-route .tweet-form .tweet-input_container.expanded {
+    border: 0 !important;
+}
+
+.tweet-route_general > .tweet-actions {
+    padding: 1rem !important;
+    margin-top: 1rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.tweet-route_general > .tweet-actions .action-btn .icon-container {
+    width: 20px;
+    height: 20px;
+}
+
+.tweet-route_general .preview-list .tweet {
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+}

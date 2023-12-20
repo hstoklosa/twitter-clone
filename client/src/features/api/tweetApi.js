@@ -10,6 +10,12 @@ export const tweetApi = baseApi.injectEndpoints({
             providesTags: (result, err, id) => [{ type: "Post", id }],
             transformResponse: (response) => response.tweet,
         }),
+        getReplies: builder.query({
+            query: ({ id, page, limit }) => ({
+                url: `/tweets/${id}/replies?page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post", "TWEET_REPLIES"),
+        }),
         getQuotes: builder.query({
             query: ({ id, page, limit }) => ({
                 url: `/tweets/${id}/engagement?quotes=1&page=${page}&limit=${limit}`,
@@ -45,6 +51,7 @@ export const tweetApi = baseApi.injectEndpoints({
 
 export const {
     useGetTweetQuery,
+    useGetRepliesQuery,
     useGetHomeTimelineQuery,
     useCreateTweetMutation,
     useDeleteTweetMutation,

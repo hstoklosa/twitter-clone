@@ -4,7 +4,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
-import { ThemeProvider } from "./contexts/ThemeProvider.jsx"
 
 import { AppLayout } from "./components";
 
@@ -15,11 +14,14 @@ import Home from "./routes/Home";
 import Profile from "./routes/Profile";
 import ProfileTabList from "./routes/Profile/ProfileTabList";
 import ProfileConnections from "./routes/Profile/ProfileConnections";
+import Tweet from "./routes/Tweet";
 import TweetEngagements from "./routes/Tweet/TweetEngagements";
 import Bookmarks from "./routes/Bookmarks";
 
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
+
+import { ThemeProvider } from "./context/ThemeProvider.jsx"
 
 import store from "./app/store";
 
@@ -79,7 +81,14 @@ const router = createBrowserRouter([
                     })),
 
 
-
+                    {
+                        path: "/:username/status/:tweetId",
+                        element: (
+                            <PrivateRoute>
+                                <Tweet />
+                            </PrivateRoute>
+                        ),
+                    },
                     ...[
                         '/:username/status/:tweetId/quotes',
                         '/:username/status/:tweetId/reposts',

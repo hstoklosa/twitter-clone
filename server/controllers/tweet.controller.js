@@ -24,6 +24,19 @@ const getTweet = asyncHandler(async (req, res, next) => {
     });
 });
 
+const getTweetReplies = asyncHandler(async (req, res, next) => {
+    const { tweetId } = req.params;
+
+    if (!(await Tweet.exists({ _id: tweetId })))
+        return next(new NotFoundError("Tweet with such ID doesn't exist!"));
+
+    const response = await tweetService.fetchReplies(
+        new ObjectId(tweetId),
+        req.pagination
+    );
+
+    return res.status(200).json(response);
+});
 
 const getTweetEngagement = asyncHandler(async (req, res, next) => {
     const { tweetId } = req.params;
@@ -208,6 +221,7 @@ const unlikeTweet = asyncHandler(async (req, res, next) => {
 
 module.exports = {
     getTweet,
+    getTweetReplies,
     getTweetEngagement,
     createTweet,
     createRepost,
