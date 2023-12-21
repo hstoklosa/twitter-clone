@@ -17,7 +17,11 @@ router.get("/:tweetId/replies", paginate, tweetController.getTweetReplies);
 
 router.get("/:tweetId/engagement", paginate, tweetController.getTweetEngagement);
 
+router.get("/search/recent", paginate, tweetController.getSearchTweets);
+
 router.get("/trending/keywords", paginate, tweetController.getTrendingKeywords);
+
+router.get("/trending/content", paginate, tweetController.getTrendingTweets);
 
 router.post("/", upload.single("media"), tweetController.createTweet);
 

@@ -9,7 +9,7 @@ const tweetSchema = new Schema(
     {
         content: {
             type: String,
-            required: true,
+            required: [true, "Tweet content is required."],
             trim: true,
             maxLength: [280, "The tweet can't be longer than 280 characters."],
             validate: {
@@ -20,7 +20,7 @@ const tweetSchema = new Schema(
         author: {
             type: ObjectId,
             ref: "User",
-            required: true,
+            required: [true, "Author is required."],
         },
         media: [
             {

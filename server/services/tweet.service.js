@@ -30,6 +30,36 @@ const fetchById = async (tweetId) => {
     return tweet;
 };
 
+const fetchByQuery = async (query, options) => {
+    return await paginate(
+        "Tweet",
+        [
+            { $unwind: '$hashtags' },
+            {
+                $match: {
+                    hashtags: { $regex: query }
+                }
+            },
+            {
+                $group: {
+                    _id: '$hashtags', count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: {
+                    count: -1
+                }
+            },
+            {
+                $project: {
+                    hashtag: '$_id', count: 1, _id: 0
+                }
+            }
+        ],
+        options
+    )
+}
+
 const fetchReplies = async (tweetId, options) => {
     return await paginate(
         "Tweet",
@@ -150,8 +180,7 @@ const fetchEngagement = async (req, res, next) => {
 };
 
 const createTweet = async (data) => {
-    const tweet = new Tweet(data);
-    await tweet.save();
+    return (await new Tweet(data).save());
 }
 
 
@@ -169,6 +198,7 @@ const removeLike = async (tweetId, userId) => {
 
 module.exports = {
     fetchById,
+    fetchByQuery,
     fetchReplies,
     fetchEngagement,
     createTweet,

@@ -39,6 +39,8 @@ router.get("/:username/following", paginate, userController.getFollowing);
 
 router.get("/:userId/bookmarks", paginate, bookmarkController.getBookmarks);
 
+router.get("/search/recent", paginate, userController.getQueryUsers);
+
 router.post("/:userId/bookmarks", bookmarkController.createBookmark);
 
 router.put("/:userId", upload.fields(updateUserFields), userController.updateUser);

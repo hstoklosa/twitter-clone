@@ -4,6 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "./contexts/ThemeProvider.jsx"
 
 import { AppLayout } from "./components";
 
@@ -17,11 +18,13 @@ import ProfileConnections from "./routes/Profile/ProfileConnections";
 import Tweet from "./routes/Tweet";
 import TweetEngagements from "./routes/Tweet/TweetEngagements";
 import Bookmarks from "./routes/Bookmarks";
+import Explore from "./routes/Explore";
+import ExploreTabList from "./routes/Explore/ExploreTabList";
+import Search from "./routes/Explore";
 
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
 
-import { ThemeProvider } from "./context/ThemeProvider.jsx"
 
 import store from "./app/store";
 
@@ -106,13 +109,25 @@ const router = createBrowserRouter([
                             </PrivateRoute>
                         ),
                     },
+                    {
+                        path: "/explore",
+                        element: (
+                            <PrivateRoute>
+                                <Explore />
+                            </PrivateRoute>
+                        ),
+                        children: [
+                        ],
+                    },
+                    ...[
+                        '/explore/tweets',
+                        '/explore/people',
+                    ].map(path => ({
+                        path: path,
+                        element: <ExploreTabList />
+                    })),
                 ]
             },
-
-            {
-                path: "*",
-                element: <NotFound />,
-            }
         ],
     },
 ]);

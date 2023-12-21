@@ -26,7 +26,11 @@ export const tweetApi = baseApi.injectEndpoints({
             query: ({ page, limit }) => ({
                 url: `/tweets/trending/keywords?page=${page}&limit=${limit}`,
             }),
-            transformResponse: (response) => response.data,
+        }),
+        getTrendingTweets: builder.query({
+            query: ({ page, limit }) => ({
+                url: `/tweets/trending/content?page=${page}&limit=${limit}`,
+            }),
         }),
         getQuotes: builder.query({
             query: ({ id, page, limit }) => ({
@@ -61,13 +65,17 @@ export const tweetApi = baseApi.injectEndpoints({
     }),
 });
 
+
 export const {
     useGetTweetQuery,
     useGetHomeTimelineQuery,
     useCreateTweetMutation,
     useDeleteTweetMutation,
     useGetTrendingKeywordsQuery,
+    useLazyGetTrendingTweetsQuery,
     useGetQuotesQuery,
     useGetRepostUsersQuery,
     useGetLikeUsersQuery,
+    useGetTrendingTweetsQuery,
+    useGetRepliesQuery
 } = tweetApi;

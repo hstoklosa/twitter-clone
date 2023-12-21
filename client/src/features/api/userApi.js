@@ -17,12 +17,25 @@ export const userApi = baseApi.injectEndpoints({
                     ]
                     : ["User"],
         }),
+        getSearchUsers: builder.query({
+            query: (searchQuery) => ({
+                url: `/users/search/recent?query=${searchQuery}`,
+            }),
+            // providesTags: (result, err, arg) =>
+            //     result
+            //         ? [
+            //             {
+            //                 type: "User",
+            //                 id: result._id,
+            //             },
+            //         ]
+            //         : ["User"],
+        }),
         getRecommendedUsers: builder.query({
             query: ({ id, page, limit }) => ({
                 url: `/users/${id}/recommended?page=${page}&limit=${limit}`,
             }),
             providesTags: (result) => providesList(result?.data, "User", "RECOMMENDED"),
-            transformResponse: (response) => response.data,
         }),
         updateUser: builder.mutation({
             query: ({ id, data }) => ({
@@ -199,4 +212,6 @@ export const {
     useCreateBookmarkMutation,
     useDeleteBookmarkMutation,
     useGetRecommendedUsersQuery,
+    useLazyGetSearchUsersQuery,
+    useGetSearchUsersQuery
 } = userApi;

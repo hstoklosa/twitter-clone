@@ -32,6 +32,28 @@ const findByIdentifier = async (identifier, options = {}) => {
     return await user.exec();
 };
 
+const findFromQuery = async (query, options) => {
+    return await paginate(
+        "User",
+        [
+            {
+                $match: {
+                    $or: [
+                        { username: { $regex: query } },
+                        { displayName: { $regex: query } },
+                    ],
+                },
+            },
+            // {
+            //     $project: {
+            //         ...userTweetSelector,
+            //     },
+            // },
+        ],
+        options
+    );
+}
+
 const fetchRecommendedUsers = async (userId, options) => {
     return await paginate(
         "User",
@@ -551,6 +573,7 @@ module.exports = {
     findByUsername,
     fetchRecommendedUsers,
     findByIdentifier,
+    findFromQuery,
     fetchFollowers,
     fetchFollowing,
     fetchHomeFeed,
