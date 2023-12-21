@@ -20,13 +20,18 @@ const PaginatedTabList = ({
     const pathname = removeTrailingSlash(initialPathname);
     const previousPathname = getPreviousPathname(pathname);
 
+
     useEffect(() => {
-        const newTab = pathname.split('/').pop();
+        if (index === pathname)
+            setActiveTab(tabs[0]);
+
+
+        const newTab = pathname.split("/").pop();
 
         if (tabs.includes(newTab)) {
             setActiveTab(newTab);
         }
-    }, [initialPathname, tabs, pathname]);
+    }, [pathname, tabs]);
 
     return (
         <div className="tab-list">
@@ -49,6 +54,7 @@ const PaginatedTabList = ({
                     const isActive = isTabIndex
                         ? pathname === index
                         : pathname.endsWith(tab);
+
 
                     return (
                         <Link
