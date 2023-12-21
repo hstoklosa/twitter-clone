@@ -18,8 +18,8 @@ Over the summer of 2023 (or longer if neccessary), I will be working on this pro
 -   [x] Commenting, retweeting, quoting, liking
 -   [x] Algorithmic feed
 -   [x] Search Functionality (user/tweets/hashtags)
--   [x] Real-time direct messaging
--   [x] Real-time notifications - likes, retweets, follows, DMs
+-   [x] Real-time direct messaging (currently only in development)
+-   [x] Real-time notifications (currently only in development)
 
 ## 🔌 Technologies
 
@@ -211,7 +211,6 @@ In the second stage, we build the front-end and back-end images to run in the co
     acme-companion   nginxproxy/acme-companion   "/bin/bash /app/entrypoint.sh /bin/bash /app/start.sh"   acme-companion   2 months ago   Up 9 minutes
     mongodb          mongo                       "docker-entrypoint.sh mongod"                            mongodb          2 hours ago    Up 9 minutes (unhealthy)   127.0.0.1:27017->27017/tcp
     nginx-proxy      nginxproxy/nginx-proxy      "/app/docker-entrypoint.sh forego start -r"              nginx-proxy      2 months ago   Up 9 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp
-
     ```
 
     **Second Layer of Services (Production App):**
@@ -219,7 +218,9 @@ In the second stage, we build the front-end and back-end images to run in the co
     ```
     docker-compose -f docker-compose.prod.yml ps
 
-
+    NAME       IMAGE             COMMAND                                          SERVICE    CREATED        STATUS              PORTS
+    backend    xclone-backend    "docker-entrypoint.sh npm run prod"              backend    11 hours ago   Up About a minute   0.0.0.0:33566->8080/tcp, :::33566->8080/tcp
+    frontend   xclone-frontend   "/docker-entrypoint.sh nginx -g 'daemon off;'"   frontend   11 hours ago   Up 11 hours         80/tcp, 0.0.0.0:33539->3000/tcp, :::33539->3000/tcp
     ```
 
 ## 📝 License
