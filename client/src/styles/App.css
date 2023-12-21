@@ -125,6 +125,7 @@
 
 #root {
     position: relative;
+    font-family: "Chirp", monospace;
     background-color: var(--background);
 }
 
@@ -134,7 +135,6 @@
 }
 
 #app-container {
-    font-family: "Chirp", monospace;
     color: var(--text-primary);
     background-color: var(--background);
     /* overflow-y: scroll; */
@@ -143,7 +143,7 @@
 a {
     cursor: pointer;
     text-decoration: none;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 a[disabled] {
@@ -178,7 +178,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: #fff !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
 }
 
 input::-webkit-input-placeholder {
@@ -241,7 +241,7 @@ select {
 }
 
 .username {
-    font-size: 0.937rem;
+    font-size: 0.9375rem !important;
     font-weight: 500;
     color: var(--grey);
 }
@@ -301,6 +301,15 @@ select {
     height: 26px;
     stroke-width: 0;
     color: var(--text-primary);
+}
+
+.navbar .more-options .float-btn .wrapper {
+    width: 20px;
+    margin-right: 1rem;
+}
+
+.navbar .more-options .float-btn svg {
+    margin: 0 !important;
 }
 
 .navbar .navbar-link {
@@ -478,7 +487,9 @@ select {
 #general {
     border-right: 1px solid var(--border);
     border-left: 1px solid var(--border);
-    width: 600px !important;
+    /* width: 600px !important; */
+    width: 100% !important;
+    max-width: 600px;
 }
 
 img.banner,
@@ -496,6 +507,7 @@ img.pfp {
 
 #widgets {
     width: 350px;
+    margin-top: 0.5rem !important;
 }
 
 #widgets .sticky-wrapper {
@@ -608,6 +620,7 @@ img.pfp {
 .dark_round-btn .icon {
     width: 100%;
     height: 100%;
+    z-index: 1111;
     transition: all 0.2s ease-out;
 }
 
@@ -659,12 +672,13 @@ img.pfp {
     color: var(--white) !important;
 }
 
-.light_round-btn .icon-container::after {
+.light_round-btn .icon-container {
     background-color: rgba(15, 20, 25, 0.75);
+    backdrop-filter: blur(4px);
 }
 
 .light_round-btn:hover .icon-container::after {
-    background-color: rgba(239, 243, 244, 0.1);
+    background-color: rgba(39, 44, 48, 0.75) !important;
 }
 
 .more-btn {
@@ -728,15 +742,15 @@ img.pfp {
 }
 
 .modal-content_wrapper {
-    width: 600px;
+    width: 90%;
+    max-width: 600px;
     height: 650px;
     border-radius: 1rem;
-
     overflow: hidden !important;
 }
 
 .modal-content {
-    width: 600px;
+    /* width: 600px; */
     /* height: 650px; */
     max-height: 100%; /* Ensures it doesn't grow beyond the wrapper */
     padding: 1rem;
@@ -753,7 +767,7 @@ img.pfp {
 
 .input-wrapper .input {
     font-size: 0.9rem;
-    color: #fff;
+    color: var(--text-primary);
     position: relative;
     height: 60px;
     padding: 1.3rem 0.6rem 0rem 0.6rem;
@@ -834,15 +848,15 @@ img.pfp {
 }
 
 .input-wrapper .input:disabled {
-    background-color: var(--input-disabled);
-    color: var(--label-disabled);
+    background-color: var(--search-background);
+    color: var(--grey) !important;
 
     border: none !important;
     user-select: none;
 }
 
 .input-wrapper .input:disabled ~ label {
-    color: var(--label-disabled) !important;
+    color: var(--grey) !important;
     user-select: none;
 }
 
@@ -856,6 +870,10 @@ img.pfp {
     z-index: 11111;
     transform: translateY(-20%);
     margin-right: 0.8rem;
+}
+
+.btn-show-password .btn-icon {
+    color: var(--text-primary);
 }
 
 .modal-content .error-message {
@@ -872,7 +890,6 @@ img.pfp {
     flex-wrap: wrap;
     justify-content: center;
     align-content: space-around;
-    margin-top: 1rem;
     width: 100%;
 }
 
@@ -923,6 +940,7 @@ img.pfp {
 #app-container main {
     display: flex;
     gap: 2rem !important;
+    width: 100% !important;
 }
 
 @media screen and (max-width: 1287px) {
@@ -966,7 +984,7 @@ img.pfp {
     }
 
     #navbar .sticky-wrapper {
-        padding: 0.2rem 1rem;
+        padding: 0.2rem;
         align-items: center;
     }
 }

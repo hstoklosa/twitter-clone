@@ -1,4 +1,4 @@
-#not-found .app-container {
+#not-found {
     min-height: 100vh;
     display: flex !important;
     flex-direction: column;
@@ -8,18 +8,18 @@
 
 #not-found h1 {
     font-size: 72px;
-    color: var(--white);
+    color: var(--text-primary);
 }
 
 #not-found p {
-    color: var(--white);
+    color: var(--text-primary);
     font-size: 20px;
 }
 
 #not-found .home-link {
     display: inline-block;
     margin-top: 20px;
-    color: #0088cc;
+    color: var(--primary-colour);
     text-decoration: none;
     font-size: 16px;
 }

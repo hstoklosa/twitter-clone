@@ -20,7 +20,6 @@ import TweetEngagements from "./routes/Tweet/TweetEngagements";
 import Bookmarks from "./routes/Bookmarks";
 import Explore from "./routes/Explore";
 import ExploreTabList from "./routes/Explore/ExploreTabList";
-import Search from "./routes/Explore";
 
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -32,7 +31,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
-        errorElement: <NotFound />,
+        // errorElement: <NotFound />,
         children: [
             {
                 index: true,
@@ -128,6 +127,10 @@ const router = createBrowserRouter([
                     })),
                 ]
             },
+            {
+                path: "*",
+                element: <NotFound />,
+            }
         ],
     },
 ]);
@@ -141,5 +144,5 @@ root.render(
                 <RouterProvider router={router} />
             </ThemeProvider>
         </Provider>
-    </React.StrictMode>
+    </React.StrictMode >
 );
