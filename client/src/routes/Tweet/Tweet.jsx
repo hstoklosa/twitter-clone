@@ -17,13 +17,17 @@ import {
     TweetText,
     Spinner,
     Links,
+    MediaModal,
     PaginatedList,
     ErrorPlaceholder,
     TweetPreview,
     QuotePreview,
     TweetActions,
+    TweetContent,
     ReplyModal,
-    TweetModal
+    TweetModal,
+    Trending,
+    Connect
 } from "../../components";
 
 import { formatDate, formatTime } from "../../helpers/date";
@@ -34,6 +38,7 @@ const Tweet = () => {
 
     const [replyModal, setReplyModal] = useState(false);
     const [quoteModal, setQuoteModal] = useState(false);
+    const [mediaModal, setMediaModal] = useState(false);
 
     const { isAuth, user: currentUser } = useAppSelector((state) => state.auth);
 
@@ -43,7 +48,6 @@ const Tweet = () => {
     const { data: tweet, isLoading, isFetching, isError } = useGetTweetQuery(tweetId);
 
     const queryResult = useInfiniteScroll(useGetRepliesQuery, { id: tweetId })
-
 
     const isQuote = tweet?.quoteTo && !isObjEmpty(tweet.quoteTo);
     const media = tweet?.media?.[0];
@@ -64,6 +68,10 @@ const Tweet = () => {
     const openQuoteModal = () => setQuoteModal(true);
     const closeQuoteModal = () => setQuoteModal(false);
 
+    const openMediaModal = () => setMediaModal(true);
+    const closeMediaModal = () => setMediaModal(false);
+
+
     console.log(tweet, isLoading, isFetching, isError);
 
     return (
@@ -81,6 +89,14 @@ const Tweet = () => {
                     isOpen={quoteModal}
                     onClose={closeQuoteModal}
                     quote={tweet}
+                />
+            )}
+
+            {media && (
+                <MediaModal
+                    isOpen={mediaModal}
+                    closeMediaModal={closeMediaModal}
+                    mediaUrl={media.url}
                 />
             )}
 
@@ -129,19 +145,25 @@ const Tweet = () => {
                                     </button>
                                 </div>
 
-                                <div className="tweet-content">
+                                {/* <div className="tweet-content">
                                     <TweetText text={tweet.content} />
 
                                     {media && (
                                         <div className="media-container">
                                             <img
-                                                src={media.url}
                                                 className="tweet_media"
+                                                src={media.url}
                                                 alt="Tweet Media"
                                             />
                                         </div>
                                     )}
-                                </div>
+                                </div> */}
+
+                                <TweetContent
+                                    openMediaModal={openMediaModal}
+                                    content={tweet.content}
+                                    media={media}
+                                />
 
                                 {isQuote && <QuotePreview tweet={tweet.quoteTo} />}
 
@@ -190,6 +212,8 @@ const Tweet = () => {
             </MiddleColumn>
 
             <LeftColumn>
+                <Trending />
+                <Connect />
                 <Links />
             </LeftColumn>
         </main >

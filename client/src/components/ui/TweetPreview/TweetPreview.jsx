@@ -19,6 +19,7 @@ import {
     TweetActions,
     QuotePreview,
     LinkButton,
+    TweetContent,
     MediaModal,
     ConditionalLink,
 } from "../../index";
@@ -58,6 +59,9 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
     const isReply = tweet.replyTo && !isObjEmpty(tweet.replyTo);
     const isQuote = tweet.quoteTo && !isObjEmpty(tweet.quoteTo);
     const isRetweet = tweet.retweets.includes(currentUser.id);
+
+    console.log(isReply, tweet);
+
     // const isFollowerRetweet =
 
     // viewing_user, author_user
@@ -103,16 +107,13 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
     const openReplyModal = () => setReplyModal(true);
     const closeReplyModal = () => setReplyModal(false);
 
-    const openQuoteModal = () => {
-        setQuoteModal(true);
-        setRetweetFloat(false);
-    };
+    const openQuoteModal = () => { setQuoteModal(true); setRetweetFloat(false); };
     const closeQuoteModal = () => setQuoteModal(false);
 
     const openMoreFloat = () => setMoreFloat(true);
     const closeMoreFloat = () => setMoreFloat(false);
 
-    console.log(tweet, currentUser.id);
+    console.log(mediaModal);
 
     return (
         <IconContext.Provider value={{ className: "tweet_icon" }}>
@@ -132,7 +133,7 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
                 />
             )}
 
-            {mediaModal && (
+            {media && (
                 <MediaModal
                     isOpen={mediaModal}
                     closeMediaModal={closeMediaModal}
@@ -258,9 +259,9 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
                         </LinkButton>
                     </TweetDetails>
 
-                    {(isReply && !displayReply) && (
+                    {(isReply && displayReply) && (
                         <span className="replyingTo">
-                            Replying to{" "}
+                            <p>Replying to </p>
                             <Link
                                 to={`/${tweet.replyTo.author.username}`}
                                 state={{ previousPath: pathname }}
@@ -271,22 +272,11 @@ const TweetPreview = ({ tweet, displayReply = true }) => {
                         </span>
                     )}
 
-                    <div className="tweet-content">
-                        <TweetText text={tweet.content} />
-
-                        {media && (
-                            <LinkButton
-                                className="media-container"
-                                onClick={openMediaModal}
-                            >
-                                <img
-                                    src={media.url}
-                                    className="tweet_media"
-                                    alt="Tweet Media"
-                                />
-                            </LinkButton>
-                        )}
-                    </div>
+                    <TweetContent
+                        content={tweet.content}
+                        media={media}
+                        openMediaModal={openMediaModal}
+                    />
 
                     {isQuote && <QuotePreview tweet={tweet.quoteTo} />}
 

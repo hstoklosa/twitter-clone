@@ -10,6 +10,7 @@ import { MdOutlinePoll, MdOutlineGifBox } from "react-icons/md";
 import { PiImageSquareBold } from "react-icons/pi";
 
 const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPreview }) => {
+
     const handleFileChange = ({ target }) => {
         const types = ["image/png", "image/jpeg", "image/jpg"];
         const files = target.files;
@@ -99,25 +100,29 @@ const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPre
 
             <div className="tweet-submit">
                 {tweet.length > 0 && (
-                    <div
-                        className="progressbar-container"
-                        style={{
-                            width: 23,
-                            height: 23,
-                        }}
-                    >
-                        <CircularProgressbar
-                            value={(tweet.length / 280) * 100}
-                            styles={buildStyles({
-                                pathColor: tweet.length === maxLength ? "red" : "var(--primary-colour)",
-                                trailColor: "var(--border-2)",
-                                backgroundColor: "var(--primary-colour)",
-                            })}
-                        />
-                    </div>
-                )}
+                    <>
+                        <div
+                            className="progressbar-container"
+                            style={{
+                                width: 23,
+                                height: 23,
+                            }}
+                        >
+                            <CircularProgressbar
+                                value={(tweet.length / 280) * 100}
+                                styles={buildStyles({
+                                    pathColor: tweet.length === maxLength
+                                        ? "red"
+                                        : "var(--primary-colour)",
+                                    trailColor: "var(--border-2)",
+                                    backgroundColor: "var(--primary-colour)",
+                                })}
+                            />
+                        </div>
 
-                {tweet.length > 0 && <div className="separator"></div>}
+                        <div className="separator"></div>
+                    </>
+                )}
 
                 <button
                     type="button"

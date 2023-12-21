@@ -1,0 +1,33 @@
+.tweet-content .tweet_text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--primary-text);
+    white-space: pre-wrap;
+}
+
+.tweet-content .tweet-text {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    /* display: block; */
+    word-wrap: break-word;
+}
+
+.tweet-content .media-container {
+    margin-top: 0.75rem;
+}
+
+.tweet-content .media-container .tweet_media {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+}
+
+.tweet-content .media-container {
+    margin-top: 0.75rem;
+}
+
+.tweet-content .media-container .tweet_media {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+}

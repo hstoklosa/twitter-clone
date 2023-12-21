@@ -55,7 +55,7 @@ const TweetInput = ({
             {mediaPreview && (
                 <div className="media-preview">
                     <button
-                        className="media-preview_close light_round-btn"
+                        className="media-preview_close dark_round-btn"
                         onClick={clearMedia}
                     >
                         <div className="icon-container">

@@ -59,6 +59,19 @@
     top: 30px;
 }
 
+.media-preview .dark_round-btn .icon-container::after {
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.media-preview .dark_round-btn:hover .icon-container::after {
+    background-color: rgba(26, 26, 26, 0.75);
+}
+
+.media-preview .dark_round-btn .icon {
+    color: var(--white) !important;
+}
+
 .media-preview img {
     border-radius: 1rem;
     width: 100%;

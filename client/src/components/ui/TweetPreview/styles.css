@@ -55,16 +55,6 @@
     width: 100%;
 }
 
-.tweet-content .media-container {
-    margin-top: 0.75rem;
-}
-
-.tweet-content .media-container .tweet_media {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 1rem;
-}
-
 .tweet-btn {
     position: relative;
     display: flex;

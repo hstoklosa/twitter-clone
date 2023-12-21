@@ -6,7 +6,9 @@
 
 .tweet-route .original-tweet {
     overflow: hidden;
+    position: relative;
     padding-bottom: 1rem;
+    z-index: 1111;
 }
 
 .tweet-route_general .tweet {
@@ -18,14 +20,24 @@
     overflow: hidden !important;
 }
 
-.tweet-route_general .original-tweet .pfp-container::after {
+.tweet-route .original-tweet .pfp-container {
+    z-index: 999999999;
+    position: relative;
+}
+
+.tweet-route .original-tweet .pfp-container .pfp {
+    position: relative;
+    z-index: 999999999;
+}
+
+.tweet-route .original-tweet .pfp-container::after {
     content: "";
     position: absolute;
     top: 20px;
     width: 2px;
     height: 100vh;
-    z-index: -99999;
-    background-color: var(--black);
+    z-index: 11;
+    background-color: var(--border-2);
 }
 
 .tweet-route_general .current-tweet .pfp-container {

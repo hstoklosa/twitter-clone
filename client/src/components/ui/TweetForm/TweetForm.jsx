@@ -1,7 +1,7 @@
 import "./styles.css";
 
 import { useState, useRef } from "react";
-
+import { toast } from "react-hot-toast";
 import { IconContext } from "react-icons";
 import { IoMdClose } from "react-icons/io";
 import { IoEarth } from "react-icons/io5";
@@ -44,7 +44,12 @@ const TweetForm = ({
 
         const result = await createTweet(formData).unwrap();
 
-        if (!result?.error) {
+        if (result.error) {
+            toast.error("Error creating tweet")
+        }
+
+        if (!result.error) {
+            toast.success("Tweet created!")
             closeInput();
         }
     };
