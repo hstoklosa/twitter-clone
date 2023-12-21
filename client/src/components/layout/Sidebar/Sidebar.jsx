@@ -16,7 +16,6 @@ import {
     BiSolidBell,
     BiUser,
     BiSolidUser,
-    BiCog,
 } from "react-icons/bi";
 import { FaFeatherAlt } from "react-icons/fa";
 import { IoEllipsisHorizontal } from "react-icons/io5";
@@ -223,10 +222,12 @@ const Sidebar = () => {
                                     className="more-options"
                                 >
                                     <Link
-                                        to={``}
+                                        to={`/explore/people`}
                                         className="float-btn"
                                     >
-                                        <FaEarthAmericas />
+                                        <div className="wrapper">
+                                            <FaEarthAmericas />
+                                        </div>
                                         Connect
                                     </Link>
 
@@ -235,7 +236,10 @@ const Sidebar = () => {
                                         className="float-btn"
                                         onClick={openDisplayModal}
                                     >
-                                        <HiOutlinePencilAlt style={{ strokeWidth: "2" }} />
+                                        <div className="wrapper">
+                                            <HiOutlinePencilAlt style={{ strokeWidth: "2" }} />
+                                        </div>
+
                                         Display
                                     </button>
                                 </FloatOptions>
