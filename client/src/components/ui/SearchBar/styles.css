@@ -1,0 +1,81 @@
+.searchbar {
+    position: relative;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: var(--search-background);
+    border-radius: 99999999rem;
+    width: 100%;
+    padding: 0 0.75rem 0 1rem;
+    /* margin: 0.5rem 0 1rem 0; */
+}
+
+.searchbar .float-options {
+    top: 50px;
+    left: 0;
+    z-index: 999 !important;
+    width: 350px;
+    border-radius: 0.5rem !important;
+    padding-bottom: 0.5rem;
+}
+
+.searchbar .float-options .float-btn {
+    font-weight: 500;
+}
+
+.float-btn.search-tweets_btn {
+    border-bottom: 1px solid var(--border);
+}
+
+.searchbar label {
+    margin-right: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchbar-icon {
+    color: var(--grey);
+}
+
+.searchbar input {
+    font-size: 1rem;
+    padding: 0.75rem 0;
+    width: 100%;
+    color: var(--white);
+}
+
+.searchbar input::placeholder {
+    font-size: 1rem !important;
+}
+
+.searchbar input::-webkit-input-placeholder {
+    font-size: 1rem !important;
+}
+
+.searchbar input:-ms-input-placeholder {
+    font-size: 1rem !important;
+}
+
+.searchbar:focus-within {
+    outline: 1px solid var(--primary-colour);
+    background-color: var(--background);
+}
+
+.searchbar .clear-btn {
+    display: none;
+    color: var(--background);
+    border-radius: 50%;
+    padding: 0.2rem;
+    background-color: var(--primary-colour);
+    margin-left: 1rem;
+}
+
+.searchbar:focus-within .clear-btn {
+    display: flex;
+}
+
+.searchbar:focus-within .searchbar-icon {
+    color: var(--primary-colour);
+}

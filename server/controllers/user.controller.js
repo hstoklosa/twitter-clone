@@ -17,6 +17,18 @@ const getUser = asyncHandler(async (req, res, next) => {
     return res.status(200).json(user);
 });
 
+const getQueryUsers = asyncHandler(async (req, res, next) => {
+    const { query: searchQuery } = req.query;
+
+    if (!searchQuery)
+        return next(new NotFoundError("No query provided!"));
+
+    const searchRegex = new RegExp(searchQuery, 'i');
+    const response = await userService.findFromQuery(searchRegex, req.pagination);
+
+    return res.status(200).json(response);
+});
+
 const getRecommendedUsers = asyncHandler(async (req, res, next) => {
     const { userId } = req.params;
 
@@ -121,7 +133,7 @@ const getLikesTimeline = asyncHandler(async (req, res, next) => {
             new NotFoundError("Can't retrieve tweets since the user does not exist!")
         );
 
-    const response = await userService.fetchLikeTimeline(userId, req.pagination);
+    const response = await userService.fetchLikeTimeline(new ObjectId(userId), req.pagination);
 
     return res.status(200).json(response);
 });
@@ -192,6 +204,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
 module.exports = {
     getUser,
     getRecommendedUsers,
+    getQueryUsers,
     getFollowing,
     getFollowers,
     getHomeFeed,

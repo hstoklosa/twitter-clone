@@ -37,22 +37,46 @@ const fetchByQuery = async (query, options) => {
             { $unwind: '$hashtags' },
             {
                 $match: {
-                    hashtags: { $regex: query }
+                    $or: [
+                        { hashtags: { $regex: query } },
+                        { content: { $regex: query } }
+                    ]
                 }
             },
+
             {
                 $group: {
-                    _id: '$hashtags', count: { $sum: 1 }
-                }
+                    _id: '$_id',
+                    uniqueData: { $first: '$$ROOT' }
+                },
+
             },
+
             {
-                $sort: {
-                    count: -1
+                $replaceRoot: { newRoot: '$uniqueData' }
+            },
+
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "author",
+                    foreignField: "_id",
+                    as: "author",
+                },
+            },
+
+            {
+                $unwind: {
+                    path: "$author",
+                    preserveNullAndEmptyArrays: true,
                 }
             },
+
+
+
             {
                 $project: {
-                    hashtag: '$_id', count: 1, _id: 0
+                    ...userTweetSelector
                 }
             }
         ],

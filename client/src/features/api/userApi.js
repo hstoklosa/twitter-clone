@@ -18,18 +18,10 @@ export const userApi = baseApi.injectEndpoints({
                     : ["User"],
         }),
         getSearchUsers: builder.query({
-            query: (searchQuery) => ({
-                url: `/users/search/recent?query=${searchQuery}`,
+            query: ({ searchQuery, page, limit }) => ({
+                url: `/users/search/recent?query=${searchQuery}&page=${page}&limit=${limit}`,
             }),
-            // providesTags: (result, err, arg) =>
-            //     result
-            //         ? [
-            //             {
-            //                 type: "User",
-            //                 id: result._id,
-            //             },
-            //         ]
-            //         : ["User"],
+            providesTags: (result) => providesList(result?.data, "User", "SEARCH_USERS"),
         }),
         getRecommendedUsers: builder.query({
             query: ({ id, page, limit }) => ({
@@ -140,7 +132,8 @@ export const userApi = baseApi.injectEndpoints({
                 { type: "User", id: "FOLLOWING" },
                 { type: "User", id: "FOLLOWERS" },
                 { type: "Post", id: "HOME_FEED" },
-                { type: "User", id: "RECOMMENDED" }
+                { type: "User", id: "RECOMMENDED" },
+                { type: "User", id: "SEARCH_USERS" }
             ],
         }),
         unfollowUser: builder.mutation({
@@ -157,7 +150,8 @@ export const userApi = baseApi.injectEndpoints({
                 { type: "User", id: "FOLLOWING" },
                 { type: "User", id: "FOLLOWERS" },
                 { type: "Post", id: "HOME_FEED" },
-                { type: "User", id: "RECOMMENDED" }
+                { type: "User", id: "RECOMMENDED" },
+                { type: "User", id: "SEARCH_USERS" }
             ],
         }),
         createRepost: builder.mutation({
@@ -180,7 +174,7 @@ export const userApi = baseApi.injectEndpoints({
                 url: `/tweets/${id}/like`,
                 method: "POST",
             }),
-            invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
+            invalidatesTags: (result, error, { id }) => [{ type: "Post", id }, { type: "Post", id: "TRENDING_TWEETS" }],
         }),
         unlikeTweet: builder.mutation({
             query: ({ id }) => ({

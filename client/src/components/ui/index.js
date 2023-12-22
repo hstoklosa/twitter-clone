@@ -9,3 +9,5 @@ export { default as TweetFormActions } from "./TweetFormActions";
 export { default as TweetInput } from "./TweetInput";
 export { default as TweetText } from "./TweetText";
 export { default as UserPreview } from "./UserPreview";
+export { default as SearchBar } from "./SearchBar";
+export { default as TweetContent } from "./TweetContent";

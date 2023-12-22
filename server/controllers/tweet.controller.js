@@ -284,8 +284,6 @@ const createTweet = asyncHandler(async (req, res, next) => {
     } catch (err) {
         let errors = Object.values(err.errors).map(el => el.message);
         let fields = Object.values(err.errors).map(el => el.path);
-
-        console.log(errors, fields);
     }
 
     return res.status(200).json({

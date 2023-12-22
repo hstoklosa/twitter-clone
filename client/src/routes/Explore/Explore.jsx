@@ -30,8 +30,6 @@ const Explore = () => {
         isError: isErrorUsers
     } = useGetRecommendedUsersQuery({ id: currentUser.id, page: 1, limit: 10 });
 
-    console.log(recommendedUsers);
-
     const {
         data: trendingHashtags,
         isFetching: isFetchingHashtags,
@@ -72,9 +70,7 @@ const Explore = () => {
                     routerBack={true}
                     className="explore-route_header"
                 >
-                    <SearchBar
-                    // onSubmit={() => navigate(`/search?q=${search}`)} 
-                    />
+                    <SearchBar defaultSearch={true} />
                 </ColumnHeader>
 
 

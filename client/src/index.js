@@ -2,7 +2,7 @@ import "./styles/App.css";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "./contexts/ThemeProvider.jsx"
 
@@ -20,6 +20,7 @@ import TweetEngagements from "./routes/Tweet/TweetEngagements";
 import Bookmarks from "./routes/Bookmarks";
 import Explore from "./routes/Explore";
 import ExploreTabList from "./routes/Explore/ExploreTabList";
+import Search from "./routes/Search";
 
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
-        // errorElement: <NotFound />,
+        errorElement: <NotFound />,
         children: [
             {
                 index: true,
@@ -125,6 +126,30 @@ const router = createBrowserRouter([
                         path: path,
                         element: <ExploreTabList />
                     })),
+
+
+                    {
+                        path: "/search",
+                        element: (
+                            <PrivateRoute>
+                                <Search />
+                            </PrivateRoute>
+                        ),
+                        children: [
+                            ...[
+                                '/search/tweets',
+                                '/search/people',
+                            ].map(path => ({
+                                path: path,
+                                element: (
+                                    <PrivateRoute>
+                                        <Search />
+                                    </PrivateRoute>
+                                )
+                            })),
+                        ],
+                    },
+
                 ]
             },
             {

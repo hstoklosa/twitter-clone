@@ -7,8 +7,6 @@ const InputAccentRadio = ({ type }) => {
     const { accent, changeAccent } = useTheme();
     const isChecked = type === accent;
 
-    console.log(type);
-
     return (
         <label
             className={`accent-radio ${type}`}

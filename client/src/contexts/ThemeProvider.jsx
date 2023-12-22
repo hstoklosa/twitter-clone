@@ -19,15 +19,6 @@ export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(savedTheme);
     const [accent, setAccent] = useState(savedAccent);
 
-
-    // useEffect(() => {
-    //     if (user && userTheme) setTheme(userTheme);
-    // }, [userId, userTheme]);
-
-    // useEffect(() => {
-    //     if (user && userAccent) setAccent(userAccent);
-    // }, [userId, userAccent]);
-
     useEffect(() => {
         const flipTheme = (theme) => {
             const root = document.documentElement;

@@ -26,11 +26,19 @@ export const tweetApi = baseApi.injectEndpoints({
             query: ({ page, limit }) => ({
                 url: `/tweets/trending/keywords?page=${page}&limit=${limit}`,
             }),
+            providesTags: (result) => providesList(result?.data, "Keyword", "TRENDING_KEYWORDS"),
         }),
         getTrendingTweets: builder.query({
             query: ({ page, limit }) => ({
                 url: `/tweets/trending/content?page=${page}&limit=${limit}`,
             }),
+            providesTags: (result) => providesList(result?.data, "Post", "TRENDING_TWEETS"),
+        }),
+        getSearchTweets: builder.query({
+            query: ({ searchQuery, page, limit }) => ({
+                url: `/tweets/search/recent?query=${searchQuery}&page=${page}&limit=${limit}`,
+            }),
+            providesTags: (result) => providesList(result?.data, "Post", "SEARCH_TWEETS"),
         }),
         getQuotes: builder.query({
             query: ({ id, page, limit }) => ({
@@ -77,5 +85,6 @@ export const {
     useGetRepostUsersQuery,
     useGetLikeUsersQuery,
     useGetTrendingTweetsQuery,
-    useGetRepliesQuery
+    useGetRepliesQuery,
+    useGetSearchTweetsQuery
 } = tweetApi;
