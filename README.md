@@ -124,9 +124,9 @@ git clone git@github.com:<username>/twitter-clone.git && cd twitter-clone
 
 #### ❌ Environmental Variables
 
-`env_file` options are set up in `docker-compose.yml` and `docker-compose.prod.yml`. All you have to do is: rename the desired file to exclude the `.sample` suffix and fill in the values accordingly to avoid any issues.
+`env_file` options are set up in `docker-compose.dev.yml` and `docker-compose.prod.yml`. All you have to do is: rename the desired file to exclude the `.sample` suffix and fill in the values accordingly to avoid any issues.
 
-Refer to `.env.sample` and `.env.prod.sample` for the required environmental variables.
+Refer to `.env.sample` for the required environmental variables.
 
 ### 💻 Development
 
@@ -135,7 +135,7 @@ The following commands will build the multi-container application in Docker for 
 Assuming it's your first time using the project, there is no don't need to use the `--build` flag. However, if you make any Docker-wise changes, you will need to use the previously mentioned flag to rebuild the container/s.
 
 ```
-docker-compose -f docker-compose.dev.yml up
+docker-compose --env-file .env.development -f docker-compose.dev.yml up
 ```
 
 > **_Note_**: Use the **[--build [service_name]]** argument whenever you make any Docker-wise changes to rebuild the images and containers, in order for the changes to take place.
@@ -172,37 +172,30 @@ In the second stage, we build the front-end and back-end images to run in the co
 
 2.  Build the images and run containers for the proxy and database.
 
-    **Note**: Incompatible with docker-compose v1.x
+    **Note**: Incompatible with docker-compose version less than v3
+
+    Starting the containers:
 
     ```
-    docker compose -f docker-compose.yml up -d
+    cd proxy
+
+    docker compose up -d
     ```
 
-    Rebuilding production images and containers:
+    Rebuilding production images and containers
+
+    -   **-v**: removes volumes):
+    -   **[-f docker-compose.yml]**: specifies the docker-compose file to use
+
+    <br />
 
     ```
-    docker compose build --no-cache
+    docker compose [-f COMPOSE_FILENAME] down [-v]
 
-    docker compose -f docker-compose.prod.yml down
+    docker compose [-f COMPOSE_FILENAME] build --no-cache
     ```
 
-3.  Build the images and run containers for the application.
-
-    **Note**: Incompatible with docker-compose v1.x and v2.x
-
-    ```
-    docker compose --env-file ./.env.prod -f docker-compose.prod.yml build --no-cache
-
-    docker compose --env-file ./.env.prod -f docker-compose.prod.yml up -d
-    ```
-
-    > **_Note_**: If you don't have enough memory on a machine (such as a VPS) to build the production images, consider setting up swap memory. [Here's a guide](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04) on how to do it.
-
-4.  Check the containers installed for both docker composes.
-
-    A detailed list of the containers found in the `docker-compose.yml` with deployment services and networks:
-
-    **First Layer of Services:**
+    2.1. Check the service of the containers from `proxy/docker-compose.yml`
 
     ```
     docker-compose ps
@@ -212,6 +205,20 @@ In the second stage, we build the front-end and back-end images to run in the co
     mongodb          mongo                       "docker-entrypoint.sh mongod"                            mongodb          2 hours ago    Up 9 minutes (unhealthy)   127.0.0.1:27017->27017/tcp
     nginx-proxy      nginxproxy/nginx-proxy      "/app/docker-entrypoint.sh forego start -r"              nginx-proxy      2 months ago   Up 9 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp
     ```
+
+3.  Build the images and run containers for the application.
+
+    **Note**: Incompatible with docker-compose version less than v3.5
+
+    ```
+    docker compose --env-file .env.production -f docker-compose.prod.yml build --no-cache
+
+    docker compose --env-file .env.production -f docker-compose.prod.yml up -d
+    ```
+
+    > **_Memory_**: If you don't have enough memory on a machine (such as a VPS) to build the production images, consider setting up swap memory. [Here's a guide](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04) on how to do it.
+
+    3.1. Check the status of the containers from `docker-compose.prod.yml`
 
     **Second Layer of Services (Production App):**
 
