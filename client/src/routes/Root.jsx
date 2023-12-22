@@ -16,7 +16,7 @@ const toastOptions = {
         color: 'white',
         borderRadius: '4px',
         backgroundColor: 'var(--primary-colour)',
-        zIndex: "999999999"
+        zIndex: 999999999
     },
     success: { duration: 4000 }
 };
@@ -35,6 +35,7 @@ const Root = () => {
     return (
         <div id="app" data-theme={theme} data-accent={accent}>
             <Toaster
+                containerStyle={{ zIndex: 99999999999 }}
                 position="bottom-center"
                 toastOptions={toastOptions}
                 reverseOrder={false}

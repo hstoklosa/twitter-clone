@@ -10,8 +10,6 @@ const useConditionalRender = ({
     renderError = () => <ErrorPlaceholder />,
     renderPlaceholder = () => <Placeholder />,
 }) => {
-    console.log(data);
-
     if (isError)
         return renderError();
 

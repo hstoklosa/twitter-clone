@@ -3,8 +3,7 @@ import { Sidebar } from "../index";
 
 import PrivateRoute from "../../routes/PrivateRoute";
 
-const AppLayout = ({ children }) => {
-
+const AppLayout = () => {
     return (
         <PrivateRoute>
             <Sidebar />

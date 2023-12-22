@@ -5,8 +5,6 @@ import { useTheme } from "../../contexts/ThemeProvider";
 const Loading = () => {
     const { theme } = useTheme();
 
-    console.log(theme);
-
     return (
         <div className="loading-route">
             <img
