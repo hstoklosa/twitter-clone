@@ -8,7 +8,6 @@
     border-radius: 50%;
     margin-right: 5px;
     cursor: pointer;
-    /* border: 1px solid #fff; */
 }
 
 .accent-radio::before {

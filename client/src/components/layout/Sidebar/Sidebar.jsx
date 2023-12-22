@@ -1,6 +1,3 @@
-import logo from "../../../assets/logo.svg";
-
-import classNames from "classnames";
 import { useState } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { IconContext } from "react-icons";
@@ -30,7 +27,7 @@ import { useAppSelector, useAppDispatch } from "../../../app/store";
 import { authActions } from "../../../features/slices/authSlice";
 import { useLazySignOutQuery } from "../../../features/api/authApi";
 
-import { FloatOptions, TweetModal, DisplayModal } from "../../index";
+import { FloatOptions, TweetModal, Logo, DisplayModal } from "../../index";
 
 
 const Sidebar = () => {
@@ -97,14 +94,7 @@ const Sidebar = () => {
                     to={`/`}
                     className="logo-container"
                 >
-                    <img
-                        src={logo}
-                        className={classNames("logo", {
-                            dark: theme === "dim" || theme === "dark",
-                            light: theme === "light"
-                        })}
-                        alt="Logo"
-                    />
+                    <Logo />
                 </NavLink>
 
 

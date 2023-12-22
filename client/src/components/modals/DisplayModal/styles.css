@@ -16,9 +16,10 @@
 .display-modal_preview {
     display: flex;
     width: 90%;
-    border: 1px solid rgba(239, 243, 244, 1);
+    border: 1px solid var(--grey);
     border-radius: 1rem;
     padding: 1rem;
+    user-select: none;
 }
 
 .display-modal_preview .display-name {
@@ -38,6 +39,8 @@
     color: var(--grey);
     margin-top: 0.5rem;
     margin-bottom: 1rem;
+    text-align: center;
+    width: 80%;
 }
 
 .display-modal_section {
@@ -68,4 +71,30 @@
 .display-modal .blue-btn {
     padding: 0.6rem 1rem;
     margin-top: 1rem;
+}
+
+.display-modal_preview .preview-container .display_name {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+.display-modal_preview .preview-container .preview-author {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 635px) {
+    .display-modal_preview {
+        width: 100% !important;
+    }
+    .display-modal_section-container.themes {
+        flex-direction: column;
+    }
+    .display-modal_section-container.themes .theme-radio {
+        width: 100%;
+    }
+    .display-modal_section-container.themes .theme-radio:not(:last-child) {
+        margin-bottom: 1rem;
+    }
 }

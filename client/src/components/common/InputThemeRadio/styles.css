@@ -3,14 +3,13 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 80px;
-    height: 40px;
+    width: 30%;
+    height: 70px;
     border-radius: 0.5rem;
     margin-right: 0.75rem;
     cursor: pointer;
     flex-grow: 1;
-    padding: 2.25rem 1rem;
-    /* border: 1px solid #fff; */
+    padding: 1rem;
 }
 
 .theme-radio.checked {
@@ -81,6 +80,7 @@
 
 .theme-radio.light .theme-radio_selected {
     border: 2px solid rgb(185, 202, 211);
+    color: #fff;
 }
 
 .theme-radio_input:checked + .theme-radio_selected .theme-radio_selected-icon {

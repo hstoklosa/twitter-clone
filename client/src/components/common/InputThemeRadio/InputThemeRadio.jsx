@@ -7,8 +7,6 @@ const InputThemeRadio = ({ type, label }) => {
     const { theme, changeTheme } = useTheme();
     const isChecked = type === theme;
 
-    console.log(type);
-
     return (
         <label
             className={`theme-radio ${type} ${isChecked ? 'checked' : ''}`}
