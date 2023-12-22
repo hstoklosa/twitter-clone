@@ -4,7 +4,7 @@ services:
     mongo:
         container_name: mongodb
         image: mongo
-        env_file: .env
+        env_file: .env.development
         ports:
             - 27017:27017
         volumes:
@@ -13,7 +13,7 @@ services:
     backend:
         container_name: backend
         image: xclone-backend
-        env_file: .env
+        env_file: .env.development
         build:
             context: server
             dockerfile: Dockerfile
@@ -22,13 +22,14 @@ services:
         volumes:
             - ./server/:/app
             - /app/node_modules
+
         depends_on:
             - mongo
 
     frontend:
         container_name: frontend
         image: xclone-frontend
-        env_file: .env
+        env_file: .env.development
         build:
             context: client
             dockerfile: Dockerfile

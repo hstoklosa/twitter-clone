@@ -9,7 +9,7 @@ services:
             context: server
             dockerfile: Dockerfile.prod
         env_file:
-            - .env.prod
+            - .env.production
         environment:
             - VIRTUAL_HOST=$NGINX_HOSTNAME
             - VIRTUAL_PORT=$API_PORT
@@ -33,7 +33,7 @@ services:
                 - API_URL=$API_URL
         restart: unless-stopped
         env_file:
-            - .env.prod
+            - .env.production
         environment:
             - VIRTUAL_HOST=$NGINX_HOSTNAME
             - VIRTUAL_PORT=$CLIENT_PORT

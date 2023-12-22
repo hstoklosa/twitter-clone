@@ -38,6 +38,8 @@ services:
     mongodb:
         container_name: mongodb
         image: mongo
+        env_file:
+            - .env
         restart: unless-stopped
         ports:
             - 127.0.0.1:27017:27017
