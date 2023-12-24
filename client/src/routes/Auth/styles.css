@@ -1,0 +1,54 @@
+.auth-route#app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-route .logo {
+    width: 200px;
+}
+
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 400px;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.signup-container .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.signup-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    padding: 0.5rem 1rem;
+}
+
+.signup-btn:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.signup-btn .signup_icon {
+    margin-right: 0.3rem;
+}
+
+@media screen and (max-width: 542px) {
+    .auth-route .logo {
+        margin-bottom: 2.5rem;
+    }
+    .auth-route .logo-text {
+        display: none;
+    }
+}

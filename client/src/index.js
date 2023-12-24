@@ -4,13 +4,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
-import { ThemeProvider } from "./contexts/ThemeProvider.jsx"
 
 import { AppLayout } from "./components";
+import { ThemeProvider } from "./contexts/ThemeProvider.jsx"
 
 import Root from "./routes/Root";
 import NotFound from "./routes/NotFound";
-import Login from "./routes/Login";
+import Auth from "./routes/Auth";
 import Home from "./routes/Home";
 import Profile from "./routes/Profile";
 import ProfileTabList from "./routes/Profile/ProfileTabList";
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
                 index: true,
                 element: (
                     <PublicRoute>
-                        <Login />
+                        <Auth />
                     </PublicRoute>
                 ),
             },
@@ -109,6 +109,7 @@ const router = createBrowserRouter([
                             </PrivateRoute>
                         ),
                     },
+
                     {
                         path: "/explore",
                         element: (

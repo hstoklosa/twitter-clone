@@ -6,7 +6,7 @@ export const authApi = baseApi.injectEndpoints({
             query: () => ({
                 url: "/auth/me",
             }),
-            providesTags: () => [{ type: "Auth" }],
+            providesTags: () => ["Auth"],
         }),
         signIn: builder.mutation({
             query: ({ identifier, password }) => ({
@@ -17,7 +17,7 @@ export const authApi = baseApi.injectEndpoints({
                     password,
                 },
             }),
-            invalidatesTags: () => [{ type: "Auth" }],
+            invalidatesTags: () => ["Auth"],
         }),
         signUp: builder.mutation({
             query: (formData) => ({

@@ -37,7 +37,8 @@
 
 .login-modal_form h1 {
     margin-top: 0.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
+    text-align: center;
 }
 
 .signin-methods {
@@ -102,7 +103,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 55%;
+    width: 60%;
 }
 
 .login-modal_form .page.p2 {
@@ -123,4 +124,10 @@
 
 .login-modal_form .page .input-wrapper {
     width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+    .login-modal_form .page {
+        width: 90%;
+    }
 }

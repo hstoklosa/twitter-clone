@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
 const Tweet = require("./Tweet.model");
 const Bookmark = require("./Tweet.model");
 
@@ -58,6 +60,15 @@ const userSchema = new Schema(
             type: String,
             required: false,
             minLength: [8, "Password must be at least 8 characters long!"],
+            validate: {
+                validator: (password) => {
+                    const m = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
+
+                    console.log(password, m);
+                    return m;
+                },
+                message: (props) => `A password must have at least 8 characters and include at least one number.`,
+            },
         },
         profileImageURL: String,
         bannerURL: String,
@@ -105,6 +116,53 @@ const userSchema = new Schema(
 
 // userSchema.index({ username: 1, email: 1 });
 
+
+/**
+ *
+ * Virtual fields
+ *
+ */
+
+userSchema.virtual("bookmarks", {
+    ref: "Bookmark",
+    localField: "_id",
+    foreignField: "user",
+});
+
+
+/**
+ *
+ * Middlewares (cascading delete...)
+ *
+ */
+
+userSchema.pre('save', async function (next) {
+
+    // hash the password if new/modified
+    if (!this.isModified('password'))
+        return next();
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+    } catch (err) {
+        return next(err);
+    }
+
+    next();
+});
+
+userSchema.pre('findOneAndDelete', async function (next) {
+    const userId = this.getQuery()['_id'];
+
+    await Tweet.deleteMany({ author: userId });
+    await Tweet.updateMany({ retweets: userId }, { $pull: { retweets: userId } });
+    await Tweet.updateMany({ likes: userId }, { $pull: { likes: userId } });
+    await Bookmark.deleteMany({ user: userId });
+
+    next();
+});
+
 /**
  *
  * Static methods
@@ -143,33 +201,9 @@ userSchema.methods.deleteRetweet = function (tweetId) {
     return Promise.resolve(this);
 };
 
-/**
- *
- * Virtual fields
- *
- */
-
-userSchema.virtual("bookmarks", {
-    ref: "Bookmark",
-    localField: "_id",
-    foreignField: "user",
-});
-
-
-/**
- *
- * Middlewares (cascading delete...)
- *
- */
-
-userSchema.pre('findOneAndDelete', async function (next) {
-    const userId = this.getQuery()['_id'];
-    await Tweet.deleteMany({ author: userId });
-    await Tweet.updateMany({ retweets: userId }, { $pull: { retweets: userId } });
-    await Tweet.updateMany({ likes: userId }, { $pull: { likes: userId } });
-    await Bookmark.deleteMany({ user: userId });
-    next();
-});
+userSchema.methods.comparePassword = async function (candidatePassword) {
+    return (await bcrypt.compare(candidatePassword, this.password));
+};
 
 
 // To ensure virtuals are included when you convert a document to JSON

@@ -1,7 +1,6 @@
 import "./styles.css";
 
-import { useState } from "react";
-
+import { toast } from "react-hot-toast";
 
 import { useAppSelector, useAppDispatch } from "../../../app/store";
 import { modalActions } from "../../../features/slices/modalSlice";
@@ -36,16 +35,10 @@ const SignupModal = ({ isOpen, closeModal }) => {
 
 
     const handleUsernameBlur = ({ target }) => {
-        // if (formState.username.length === 0)
-        // return dispatch(errorActions.clearError("auth/signUp/username"));
-
         validateUsername(formState.username)
     }
 
     const handleEmailBlur = ({ target }) => {
-        // if (formState.email.length === 0)
-        //     return dispatch(errorActions.clearError("auth/signUp/email"));
-
         validateEmail(formState.email);
     };
 
@@ -54,6 +47,10 @@ const SignupModal = ({ isOpen, closeModal }) => {
         e.preventDefault();
 
         const result = await signUp(formState);
+
+        if (result.error) {
+            return toast.error(result.error.message);
+        }
 
         if (result?.data?.id && !result.error) {
             closeSignUpModal();
@@ -156,18 +153,17 @@ const SignupModal = ({ isOpen, closeModal }) => {
                     />
                 </div>
 
-
                 <button
-                    className="btn-next"
+                    className="white-btn"
                     onClick={handleSignUp}
-                // disabled={
-                //     !formState.displayName ||
-                //     !formState.email ||
-                //     !formState.username ||
-                //     !formState.password ||
-                //     emailFetchError ||
-                //     usernameFetchError
-                // }
+                    disabled={
+                        !formState.displayName ||
+                        !formState.email ||
+                        !formState.username ||
+                        !formState.password ||
+                        emailFetchError ||
+                        usernameFetchError
+                    }
                 >
                     Next
                 </button>

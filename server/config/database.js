@@ -1,15 +1,49 @@
 const mongoose = require("mongoose");
+const User = require("../models/User.model");
 
 const connectDB = async (listener) => {
-    mongoose.connection
-        .on("error", console.error)
-        .on("disconnected", connectDB)
-        .once("open", listener);
+    try {
+        const dbConn = mongoose.connection;
 
-    return mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+        dbConn
+            .on("error", console.error)
+            .on("disconnected", connectDB)
+            .once("open", async () => {
+                const User = mongoose.model("User");
+
+                // create a bot user for showcasing purposes
+                if (!(await User.exists({ username: "XCloneBot" }))) {
+                    const adminUser = new User({
+                        username: "xclone",
+                        displayName: "XClone",
+                        email: "czaki.kopia@gmail.com",
+                        verified: true,
+
+                    });
+
+                    await adminUser.save();
+
+                    const Tweet = mongoose.model("Tweet");
+
+                    const tweet = new Tweet({
+                        author: adminUser._id,
+                        content: "Welcome to XClone. This is only a preview of a post, but feel free to dive into the rest of the app! :)"
+                    })
+
+
+                    await tweet.save();
+                }
+
+                listener && listener();
+            });
+
+        return mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+    } catch (err) {
+        console.error(err);
+    }
 };
 
 module.exports = connectDB;

@@ -1,4 +1,4 @@
-import "../routes/Login/styles.css";
+import "./Auth/styles.css";
 
 import { Outlet } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';

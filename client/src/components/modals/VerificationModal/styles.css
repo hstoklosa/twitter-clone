@@ -1,25 +1,50 @@
+.verification-modal .modal-content {
+    justify-content: center;
+    align-items: center;
+}
+
 .verification-modal .modal-content_wrapper {
-    height: 275px !important;
+    height: 400px !important;
+}
+
+.verification-modal_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    width: 80%;
 }
 
 .verification-modal_form h1 {
     margin-bottom: 0.25rem;
+    text-align: center;
 }
 
 .verification-modal_form p {
     font-size: 0.938rem;
     font-weight: 500;
     color: var(--grey);
-}
-
-.verification-modal_form {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    flex-grow: 1;
-    padding: 1rem 0;
+    text-align: center;
 }
 
 input#code {
+    margin-bottom: 1rem;
+}
+
+.verification-modal .logo-container {
+    width: 75px;
+    height: 75px;
+}
+
+.verification-modal .logo-container img {
+    width: 100%;
+    height: 100%;
+}
+
+.verification-modal_form .input-wrapper {
+    width: 100%;
+}
+
+.verification-modal_form .input-wrapper:first-child {
     margin-bottom: 1rem;
 }

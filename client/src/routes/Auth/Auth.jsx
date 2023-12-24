@@ -1,21 +1,22 @@
 import "./styles.css";
-import logo from "../../../src/assets/logo-blue.png";
 
 import { IconContext } from "react-icons";
 import { FcGoogle } from "react-icons/fc";
 
+import { useTheme } from "../../contexts/ThemeProvider";
 import { useAppSelector, useAppDispatch } from "../../app/store";
 import { modalActions } from "../../features/slices/modalSlice";
-import { SignupModal, LoginModal, VerificationModal } from "../../components";
+import { SignupModal, LoginModal, VerificationModal, Logo } from "../../components";
 
 
-const Login = () => {
+const Auth = () => {
     const { signInModal, signUpModal, verificationModal } = useAppSelector((state) => state.modal);
+    const { theme } = useTheme();
 
     const dispatch = useAppDispatch();
 
     return (
-        <main className="auth-route app-container">
+        <main id="app-container" className="auth-route">
             <SignupModal
                 isOpen={signUpModal}
                 closeModal={() => dispatch(modalActions.disableSignUpModal())}
@@ -31,18 +32,20 @@ const Login = () => {
                 closeModal={() => dispatch(modalActions.disableVerificationModal())}
             />
 
-            <img
-                src={logo}
-                className="twitter-logo"
-                alt="Twitter's Logo"
-            />
+            <Logo />
+
+            <h1
+                className="logo-text"
+                style={{
+                    fontSize: "15vmin",
+                    color: "var(--text-primary)",
+                    textAlign: "center"
+                }}
+            >
+                X/Twitter Clone
+            </h1>
 
             <div className="signup-container">
-                <div className="text wrapper">
-                    <h2>New to Twitter Clone?</h2>
-                    <p>Sign up now to give the clone a try!</p>
-                </div>
-
                 <div className="wrapper">
                     <a
                         href={`${process.env.REACT_APP_API_URL}/auth/google`}
@@ -62,28 +65,11 @@ const Login = () => {
                     >
                         Create Account
                     </button>
-                </div>
-            </div>
-
-            <div className="footer-login">
-                <div className="footer_text">
-                    <h2>Don't miss what's happening</h2>
-                    <p>People on Twitter are the first to know.</p>
-                </div>
-
-                <div className="footer_btns">
                     <button
-                        className="login"
+                        className="login btn-empty"
                         onClick={() => dispatch(modalActions.enableSignInModal())}
                     >
-                        Log In
-                    </button>
-
-                    <button
-                        className="white-btn signup"
-                        onClick={() => dispatch(modalActions.enableSignUpModal())}
-                    >
-                        Sign up
+                        Sign In
                     </button>
                 </div>
             </div>
@@ -91,4 +77,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Auth;

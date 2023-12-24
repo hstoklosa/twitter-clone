@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const { transporter } = require("../config/nodemailer");
 const User = require("../models/User.model");
 const EmailToken = require("../models/EmailToken.model");
@@ -6,7 +5,6 @@ const getKeyAsync = require("../helpers/getKeyAsync");
 const generateUsername = require("../helpers/generateUsername")
 
 const createLocalUser = async (data) => {
-    data.password = await bcrypt.hash(data.password, 10);
     return await User.addUser(data);
 };
 
@@ -44,11 +42,8 @@ const sendConfirmationEmail = async (userId, targetEmail) => {
     await transporter.sendMail(options);
 };
 
-const comparePassword = async (p1, p2) => await bcrypt.compareSync(p1, p2);
-
 module.exports = {
     createLocalUser,
     createGoogleUser,
     sendConfirmationEmail,
-    comparePassword,
 };

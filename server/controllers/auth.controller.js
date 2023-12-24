@@ -67,7 +67,6 @@ const signUp = asyncHandler(async (req, res, next) => {
             id: user._id,
         });
     } catch (err) {
-        console.log(err);
         if (err.errors?.['username'] instanceof Error.ValidatorError) {
             return next(new BadRequestError(err.errors['username']));
         }
@@ -81,7 +80,7 @@ const signUp = asyncHandler(async (req, res, next) => {
         }
 
         if (err.errors?.['password'] instanceof Error.ValidatorError) {
-            return next(new BadRequestError(err.errors['email']));
+            return next(new BadRequestError(err.errors['password']));
         }
 
         if (err.code === 11000)
@@ -100,8 +99,6 @@ const verifyToken = asyncHandler(async (req, res, next) => {
 
     if (!user)
         return next(new BadRequestError("The user doesn't exist!"));
-
-    console.log(user._id, codeParam);
 
     const token = await EmailToken.findOne({
         userId: user._id,

@@ -28,10 +28,7 @@ module.exports = new LocalStrategy(
                 });
             }
 
-            const isPasswordValid = await authService.comparePassword(
-                password,
-                fetchedPassword
-            );
+            const isPasswordValid = await user.comparePassword(password);
 
             if (!isPasswordValid) {
                 return cb(null, false, {

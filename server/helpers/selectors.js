@@ -11,6 +11,7 @@ exports.postDetailSelector = {
     retweets: 1,
     media: 1,
     createdAt: 1,
+
 };
 
 exports.postAuthorSelector = {

@@ -1,5 +1,4 @@
 import "./styles.css";
-import logo from "../../../assets/logo-white.png";
 
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,12 +7,14 @@ import { IconContext } from "react-icons";
 import { FcGoogle } from "react-icons/fc";
 
 import { useAppSelector } from "../../../app/store";
+import useDebounce from "../../../hooks/useDebounce";
 import useModalPagination from "../../../hooks/useModalPagination";
 
 import {
     BaseModal,
     ColumnHeader,
     TextInput,
+    Logo
 } from "../../index";
 
 import {
@@ -42,6 +43,7 @@ const LoginModal = ({ isOpen }) => {
         const result = await signIn(formState);
 
         if (!result.error && result.data.isEmailVerified === false) {
+            closeLoginModal();
             dispatch(modalActions.enableVerificationModal({ userId: result.data.id }));
         }
 
@@ -51,6 +53,17 @@ const LoginModal = ({ isOpen }) => {
             navigate("/home");
         }
     };
+
+    const debouncedOnChange = async ({ target }) => {
+        dispatch(
+            loginActions.updateForm({
+                name: "identifier",
+                value: target.value
+            })
+        )
+
+        formState.identifier.length > 0 && (await checkIdentifier(target.value));
+    }
 
     const handleIdentiferBlur = async ({ target }) => {
         formState.identifier.length > 0 && (await checkIdentifier(target.value));
@@ -84,10 +97,7 @@ const LoginModal = ({ isOpen }) => {
                         to={`/`}
                         className="logo-container"
                     >
-                        <img
-                            src={logo}
-                            alt="X Logo"
-                        />
+                        <Logo />
                     </Link>
                 </div>
             </ColumnHeader>
@@ -122,12 +132,7 @@ const LoginModal = ({ isOpen }) => {
                                 id="identifier"
                                 name="identifier"
                                 label="Username/email"
-                                onChange={({ target }) => dispatch(
-                                    loginActions.updateForm({
-                                        name: "identifier",
-                                        value: target.value
-                                    })
-                                )}
+                                onChange={debouncedOnChange}
                                 value={formState.identifier}
                                 error={!identifierExists}
                                 onBlur={handleIdentiferBlur}
@@ -189,7 +194,6 @@ const LoginModal = ({ isOpen }) => {
                         <button
                             type="submit"
                             className="white-btn next"
-                            disabled={!formState.password}
                         >
                             Log In
                         </button>

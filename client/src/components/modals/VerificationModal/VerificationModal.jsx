@@ -1,12 +1,13 @@
 import "./styles.css";
 
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import { registerActions } from "../../../features/slices/registerSlice";
 import { useAppSelector, useAppDispatch } from "../../../app/store";
 import { useLazyVerifyTokenQuery } from "../../../features/api/authApi";
 
-import { BaseModal, TextInput } from "../../index";
+import { BaseModal, TextInput, Logo } from "../../index";
 import { modalActions } from "../../../features/slices/modalSlice";
 
 
@@ -26,7 +27,12 @@ const VerificationModal = ({ isOpen, closeModal }) => {
             token,
         });
 
-        if (result?.data?.isEmailVerified && !result.error) {
+
+        if (result.error) {
+            return toast.error(result.error.message);
+        }
+
+        if (result?.data?.isEmailVerified) {
             closeVerificationModal();
         }
 
@@ -40,9 +46,15 @@ const VerificationModal = ({ isOpen, closeModal }) => {
     return (
         <BaseModal
             isOpen={isOpen}
-            onClose={closeModal}
+            onClose={() => ({})}
             className="verification-modal"
         >
+            <NavLink
+                to={`/`}
+                className="logo-container"
+            >
+                <Logo />
+            </NavLink>
             <form
                 className="verification-modal_form"
                 onSubmit={handleVerification}

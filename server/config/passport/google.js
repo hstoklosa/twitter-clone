@@ -36,9 +36,7 @@ module.exports = new GoogleStrategy(
                 }
 
                 // create the google user
-                await authService.createGoogleUser(data);
-
-                return cb(null, data);
+                return cb(null, await authService.createGoogleUser(data));
             }
 
             // users exists with a different provider

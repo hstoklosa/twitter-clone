@@ -13,7 +13,7 @@
 }
 
 .signup-modal_header h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     margin-bottom: 0;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .btn-close-modal:hover {
-    background-color: rgba(239, 243, 244, 0.1);
+    background-color: var(--item-hover);
 }
 
 .btn-close_icon {
