@@ -51,12 +51,21 @@
 }
 
 .display-modal_section-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    justify-items: center;
+    gap: 0.5rem;
+    row-gap: 1rem;
+    width: 100%;
     background-color: var(--sidebar-background);
     padding: 1rem;
     border-radius: 1rem;
+}
+
+.display-modal_section-container.themes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .display-modal_section-title {
@@ -68,7 +77,7 @@
     margin-bottom: 0.5rem;
 }
 
-.display-modal .blue-btn {
+.display-modal .accent-btn {
     padding: 0.6rem 1rem;
     margin-top: 1rem;
 }

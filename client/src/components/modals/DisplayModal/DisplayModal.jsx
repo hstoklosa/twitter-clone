@@ -34,9 +34,8 @@ const DisplayModal = ({ isOpen, onClose }) => {
             <div className="display-modal_preview">
                 <div className="pfp-container">
                     <div className="icon-container">
-
                         <img
-                            src="http://localhost:8080/api/uploads/default_pfp.png"
+                            src={`${process.env.REACT_APP_API_URL}/uploads/default_pfp.png`}
                             alt="User Pfp"
                             className="pfp"
                         />
@@ -85,7 +84,7 @@ const DisplayModal = ({ isOpen, onClose }) => {
             </div>
 
             <button
-                className="blue-btn"
+                className="accent-btn"
                 onClick={onClose}
             >
                 Done
