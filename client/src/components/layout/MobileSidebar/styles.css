@@ -1,0 +1,128 @@
+.mobile-sidebar {
+    position: relative;
+    z-index: 9999999;
+    overflow: hidden;
+    transition: transform 250ms ease;
+}
+
+.mobile-sidebar.open::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    min-height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(91, 112, 131, 0.4);
+    z-index: 99;
+}
+
+.mobile-sidebar .user-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+.mobile-sidebar .user-info .pfp-container {
+    margin-bottom: 0.5rem;
+}
+
+.mobile-sidebar .user-info .details-container {
+    margin-bottom: 0.75rem;
+}
+
+.mobile-sidebar .pfp-container {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.mobile-sidebar_content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70%;
+    max-width: 350px;
+    height: 100%;
+    min-height: 100vh;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 250ms ease;
+    z-index: 99999;
+    background-color: var(--background);
+    flex-direction: column;
+}
+
+.mobile-sidebar.open .mobile-sidebar_content {
+    display: flex;
+}
+
+.mobile-sidebar_button .pfp-container {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.mobile-sidebar.open .mobile-sidebar_content {
+    transform: translateX(0%);
+}
+
+.mobile-sidebar_content .navbar-link {
+    padding: 1rem;
+    border-radius: 0 !important;
+}
+
+.mobile-sidebar .navbar-link:hover {
+    border: 0;
+    background: 0;
+}
+
+.mobile-sidebar_content .navbar-account {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    padding: 0;
+    border-radius: 0;
+    cursor: initial;
+}
+
+.mobile-sidebar_content .navbar-account .account-details,
+.mobile-sidebar_content .navbar-account .float-btn {
+    width: 100%;
+    color: var(--text-primary);
+}
+
+.mobile-sidebar_content .navbar-account .float-btn {
+    padding: 1rem;
+}
+
+.mobile-sidebar_content .navbar-account .float-btn:hover {
+    background-color: var(--nav-item-hover);
+}
+
+.mobile-sidebar_content .navbar-account:hover {
+    border-radius: 0;
+    background: 0;
+}
+
+.mobile-sidebar .navbar-link {
+    width: 100%;
+}
+
+.mobile-sidebar .navbar-link:hover,
+.mobile-sidebar .navbar-link:active {
+    background-color: var(--nav-item-hover);
+}
+
+.mobile-sidebar_content .user-info {
+    padding: 1rem;
+}
+
+.mobile-sidebar .navbar-account {
+    margin-top: 1.5rem !important;
+    align-self: flex-end;
+    margin-bottom: 0;
+}
+
+.mobile-sidebar .display_name {
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}

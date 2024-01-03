@@ -1,12 +1,17 @@
 import { Outlet } from "react-router-dom";
-import { Sidebar } from "../index";
-
+import { useMediaQuery } from "@uidotdev/usehooks";
+import { Sidebar, MobileNavbar } from "../index";
 import PrivateRoute from "../../routes/PrivateRoute";
 
 const AppLayout = () => {
+    const isSmallDevice = useMediaQuery("only screen and (max-width : 420px)");
+
     return (
         <PrivateRoute>
-            <Sidebar />
+            {!isSmallDevice
+                ? <Sidebar />
+                : <MobileNavbar />
+            }
             <Outlet />
         </PrivateRoute>
     );

@@ -15,7 +15,9 @@ export const LeftColumn = ({ children, ...rest }) => {
             {...rest}
             id="widgets"
         >
-            {children}
+            <div className="sticky-wrapper">
+                {children}
+            </div>
         </div>
     );
 };

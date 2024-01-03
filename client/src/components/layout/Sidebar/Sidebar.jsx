@@ -39,8 +39,8 @@ const Sidebar = () => {
 
     const {
         isOpen: displayModal,
-        openModal: openDisplayModal,
-        closeModal: closeDisplayModal
+        open: openDisplayModal,
+        close: closeDisplayModal
     } = useModal();
 
     const { user: currentUser } = useAppSelector((state) => state.auth);
@@ -153,7 +153,7 @@ const Sidebar = () => {
                                     {isActive ? (
                                         <BiSolidEnvelope size="25" />
                                     ) : (
-                                        <BiEnvelope size="25" />
+                                        <BiEnvelope size="25" style={{ strokeWidth: "0" }} />
                                     )}
                                     <span className="text">Messages</span>
                                 </>
@@ -238,7 +238,7 @@ const Sidebar = () => {
 
                         <button
                             type="button"
-                            className="blue-btn navbar-btn"
+                            className="accent-btn navbar-btn"
                             onClick={openTweetModal}
                         >
                             <span className="text">Tweet</span>
@@ -248,8 +248,6 @@ const Sidebar = () => {
                                 <FaFeatherAlt size="15" />
                             </IconContext.Provider>
                         </button>
-
-
                     </nav>
                 </IconContext.Provider>
 
@@ -311,11 +309,8 @@ const Sidebar = () => {
                         <p className="username">@{currentUser.username}</p>
                     </div>
 
-                    <IconContext.Provider
-                        value={{ className: "navbar-account_icon" }}
-                    >
-                        <IoEllipsisHorizontal size="15" />
-                    </IconContext.Provider>
+
+                    <IoEllipsisHorizontal size="15" className="navbar-account_icon" />
                 </button>
             </div>
         </section >

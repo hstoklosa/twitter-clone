@@ -1,0 +1,45 @@
+.mobile-navbar {
+    position: fixed;
+    z-index: 999;
+    bottom: 0;
+    left: 0;
+    height: 55px;
+    background-color: var(--background);
+    border-top: 1px solid var(--border-2);
+    min-width: 100vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-navbar .navbar-link {
+    display: inline-block;
+    height: 100%;
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-navbar .accent-btn.navbar-btn {
+    position: fixed;
+    bottom: 75px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-navbar .accent-btn.navbar-btn .navbar-btn_icon {
+    display: flex;
+}
+
+.mobile-navbar_wrapper {
+    position: relative;
+    z-index: 999;
+}
