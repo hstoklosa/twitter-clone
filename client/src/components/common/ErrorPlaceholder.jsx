@@ -15,7 +15,7 @@ const ErrorPlaceholder = ({ error }) => (
         </span>
 
         <button
-            className="blue-btn"
+            className="accent-btn"
             style={{
                 padding: "0.5rem 1rem",
                 marginTop: "0.75rem"

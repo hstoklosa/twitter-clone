@@ -8,13 +8,14 @@ const BaseModal = ({ isOpen, onClose, className, children }) => {
 
     useEffect(() => {
         isOpen
-            ? (document.body.style.overflow = "hidden")
-            : (document.body.style.overflow = "unset");
+            ? (document.body.classList.add("modal-open"))
+            : (document.body.classList.remove("modal-open"));
 
         return () => {
-            document.body.style.overflow = "unset";
+            document.body.classList.remove("modal-open");
         };
     }, [isOpen]);
+
 
     return (
         <div className={`modal ${isOpen && "open"} ${className}`}>

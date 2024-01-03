@@ -1,14 +1,16 @@
 .tweet-details {
+    position: relative;
     display: flex;
     justify-content: flex-start;
-    /* align-items: center; */
     font-size: 0.95rem;
     margin-bottom: 0.2rem;
+    width: 100%;
 }
 
 .tweet-details .display_name {
-    margin-right: 0.3rem;
+    font-weight: 700;
     color: var(--text-primary);
+    margin-right: 0.3rem;
 }
 
 .tweet-details .display_name:hover {
@@ -29,4 +31,9 @@
 .separator {
     margin: 0 0.3rem;
     color: var(--grey);
+}
+
+.tweet-details .more-options {
+    right: -8px;
+    top: 3px;
 }

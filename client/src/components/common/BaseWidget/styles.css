@@ -23,12 +23,22 @@
     font-size: 0.9375rem;
     margin: 0.25rem 0;
     color: var(--text-primary);
+    /* width: 100%; */
+    /* width: 200px; */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .widget-item_subheader {
     font-size: 0.9375rem;
     color: var(--grey);
     font-weight: 500;
+
+    display: block;
+    overflow: hidden !important;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .widget-button {
@@ -89,6 +99,7 @@
     display: flex;
     align-items: center;
     flex-direction: row;
+    overflow: hidden;
 }
 
 .simple-card .pfp-container {

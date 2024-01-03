@@ -1,4 +1,4 @@
-const Placeholder = ({ title, subtitle, image }) => {
+const Placeholder = ({ title, subtitle, image, children }) => {
     return (
         <div className="placeholder">
             {image && (
@@ -8,12 +8,14 @@ const Placeholder = ({ title, subtitle, image }) => {
             )}
 
             <div className="placeholder-text__title">
-                {title || "Nothing to see here"}
+                {title ?? "Nothing to see here"}
             </div>
 
             <div className="placeholder-text__subtitle">
-                {subtitle || "Try again soon!"}
+                {subtitle ?? "Try again soon!"}
             </div>
+
+            {children}
         </div>
     );
 };
