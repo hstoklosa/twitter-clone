@@ -4,7 +4,7 @@ services:
     mongo:
         container_name: mongodb
         image: mongo
-        env_file: .env.development
+        env_file: .env
         ports:
             - 27017:27017
         volumes:
@@ -13,14 +13,14 @@ services:
     backend:
         container_name: backend
         image: xclone-backend
-        env_file: .env.development
+        env_file: .env
         build:
-            context: server
+            context: ../../server
             dockerfile: Dockerfile
         ports:
             - $API_PORT:$API_PORT
         volumes:
-            - ./server/:/app
+            - ../../server:/app
             - /app/node_modules
 
         depends_on:
@@ -29,16 +29,16 @@ services:
     frontend:
         container_name: frontend
         image: xclone-frontend
-        env_file: .env.development
+        env_file: .env
         build:
-            context: client
+            context: ../../client
             dockerfile: Dockerfile
             args:
                 - API_URL=$API_URL
         ports:
             - $CLIENT_PORT:$CLIENT_PORT
         volumes:
-            - ./client/:/app
+            - ../../client:/app
             - /app/node_modules
         depends_on:
             - backend
