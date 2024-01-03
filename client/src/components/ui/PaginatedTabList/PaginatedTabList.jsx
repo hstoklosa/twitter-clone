@@ -1,7 +1,7 @@
 import "./styles.css";
 
 import { useState, useEffect } from "react";
-import { Link, useLocation, useOutletContext } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { getPreviousPathname, removeTrailingSlash } from "../../../helpers/pathname";
 import { capitalize } from "../../../utils/capitalize";
 
@@ -15,7 +15,11 @@ const PaginatedTabList = ({
     const { tabs, index } = options;
 
     const [activeTab, setActiveTab] = useState(tabs[0]);
+    const [searchParams] = useSearchParams();
     const { state, pathname: initialPathname } = useLocation();
+
+    const query = searchParams.get("q");
+    const queryTab = searchParams.get("t");
 
     const pathname = removeTrailingSlash(initialPathname);
     const previousPathname = getPreviousPathname(pathname);
@@ -24,7 +28,6 @@ const PaginatedTabList = ({
     useEffect(() => {
         if (index === pathname)
             setActiveTab(tabs[0]);
-
 
         const newTab = pathname.split("/").pop();
 
@@ -38,7 +41,9 @@ const PaginatedTabList = ({
             <div className="tab-list_items">
                 {tabs.map((tab, idx) => {
                     const linkOptions = {
-                        to: `${previousPathname}/${tab}`,
+                        to: !query
+                            ? `${previousPathname}/${tab}`
+                            : `${previousPathname}/${tab}?q=${query}`,
                         state: state,
                         replace: true,
                     };
@@ -47,8 +52,8 @@ const PaginatedTabList = ({
 
                     if (index) {
                         linkOptions.to = isTabIndex
-                            ? `${index}`
-                            : `${index}/${tab}`;
+                            ? !query ? `${index}` : `${index}?q=${query}`
+                            : !query ? `${index}/${tab}` : `${index}/${tab}?q=${query}`;
                     }
 
                     const isActive = isTabIndex

@@ -83,7 +83,8 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
             if (isFetching) return;
             if (lastIntObserver.current) lastIntObserver.current.disconnect();
             lastIntObserver.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasNextPage && currentPage === remotePage) {
+                if (entries[0].isIntersecting && hasNextPage && currentPage === remotePage && !isFetching) {
+                    // console.log("next", isFetching, isLoading);
                     setCurrentPage(currentPage + 1);
                 }
             });
@@ -100,6 +101,7 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
 
             firstIntObserver.current = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && currentPage > 1) {
+                    // console.log("prev");
                     setCurrentPage(currentPage - 1);
                 }
             });

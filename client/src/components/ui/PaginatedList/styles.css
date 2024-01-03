@@ -1,6 +1,6 @@
 #preview-list {
     width: 100%;
-    /* min-height: 100vh; */
+    min-height: 100vh;
 }
 
 .first-element,
@@ -17,4 +17,8 @@
     overflow: visible !important;
     height: auto !important;
     max-height: unset !important;
+}
+
+.preview-list_loading {
+    min-height: 50vh;
 }
