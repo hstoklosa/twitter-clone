@@ -36,9 +36,14 @@ input#code {
     height: 75px;
 }
 
-.verification-modal .logo-container img {
-    width: 100%;
-    height: 100%;
+.verification-modal .logo-container:hover {
+    background: 0 !important;
+}
+
+.verification-modal .header_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .verification-modal_form .input-wrapper {
@@ -47,4 +52,17 @@ input#code {
 
 .verification-modal_form .input-wrapper:first-child {
     margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 500px) {
+    .signup-modal_header,
+    .signup-modal_form {
+        width: 100%;
+    }
+    .signup-modal_form {
+        padding: 0;
+    }
+    .verification-modal_form h1 {
+        font-size: 1.5rem;
+    }
 }

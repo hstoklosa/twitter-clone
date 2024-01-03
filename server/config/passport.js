@@ -14,7 +14,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
     done(
         null,
-        await User.findById(id).select("_id username displayName profileImageURL")
+        await User.findById(id).select("_id username displayName profileImageURL followers following")
     );
 });
 

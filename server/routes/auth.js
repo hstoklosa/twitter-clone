@@ -23,7 +23,7 @@ router.post("/signup", authController.signUp);
 
 router.post("/signin", authController.signIn);
 
-router.get("/verify/:id/:code", authController.verifyToken);
+router.post("/verify/:id/:code", authController.verifyToken);
 
 // General routes
 router.get("/check-identifier/:identifier", authController.checkIdentifier);

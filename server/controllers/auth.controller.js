@@ -63,7 +63,7 @@ const signUp = asyncHandler(async (req, res, next) => {
         await authService.sendConfirmationEmail(user._id, user.email);
 
         return res.status(200).json({
-            isUserCreated: true,
+            isAuthenticated: true,
             id: user._id,
         });
     } catch (err) {

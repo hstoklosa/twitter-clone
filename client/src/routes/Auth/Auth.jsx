@@ -38,11 +38,13 @@ const Auth = () => {
                 className="logo-text"
                 style={{
                     fontSize: "15vmin",
+                    fontWeight: "800",
                     color: "var(--text-primary)",
                     textAlign: "center"
                 }}
             >
-                X/Twitter Clone
+                X/Twitter
+                Clone
             </h1>
 
             <div className="signup-container">

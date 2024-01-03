@@ -5,7 +5,7 @@
     align-items: center;
 }
 
-.auth-route .logo {
+.auth-route > .logo {
     width: 200px;
 }
 
@@ -45,10 +45,10 @@
 }
 
 @media screen and (max-width: 542px) {
-    .auth-route .logo {
-        margin-bottom: 2.5rem;
+    .auth-route > .logo {
+        margin-bottom: 1.5rem;
     }
-    .auth-route .logo-text {
+    .auth-route > .logo-text {
         display: none;
     }
 }

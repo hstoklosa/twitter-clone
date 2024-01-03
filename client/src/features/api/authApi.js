@@ -1,4 +1,5 @@
 import { baseApi } from "./baseApi";
+import socketClient from "../../app/socketClient";
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -6,7 +7,11 @@ export const authApi = baseApi.injectEndpoints({
             query: () => ({
                 url: "/auth/me",
             }),
-            providesTags: () => ["Auth"],
+            providesTags: ["Auth"],
+            // async onQueryStarted(arg, { queryFulfilled }) {
+            //     await queryFulfilled
+            //     socketClient.connect();
+            // },
         }),
         signIn: builder.mutation({
             query: ({ identifier, password }) => ({
@@ -17,7 +22,7 @@ export const authApi = baseApi.injectEndpoints({
                     password,
                 },
             }),
-            invalidatesTags: () => ["Auth"],
+            invalidatesTags: ["Auth"],
         }),
         signUp: builder.mutation({
             query: (formData) => ({
@@ -26,27 +31,31 @@ export const authApi = baseApi.injectEndpoints({
                 body: formData
             }),
         }),
-        verifyToken: builder.query({
+        verifyToken: builder.mutation({
             query: ({ id, token }) => ({
                 url: `/auth/verify/${id}/${token}`,
+                method: "POST"
             }),
             async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
-                const data = await cacheDataLoaded;
+                const { data } = await cacheDataLoaded;
 
-                if (data.data?.isAuthenticated) {
-                    dispatch(baseApi.endpoints["checkAuth"].initiate());
+                if (data.isAuthenticated) {
+                    dispatch(baseApi.util.invalidateTags(["Auth"]));
                 }
             },
+            invalidatesTags: ["Auth"],
         }),
         signOut: builder.query({
             query: () => ({
                 url: "/auth/logout",
             }),
             async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
-                const data = await cacheDataLoaded;
+                // const isAuth = (await cacheDataLoaded).data?.isAuthenticated;
 
-                if (!data?.isAuthenticated)
-                    dispatch(baseApi.util.resetApiState());
+                // if (!isAuth) {
+                //     socketClient.disconnect();
+                //     dispatch(baseApi.util.resetApiState());
+                // }
             },
         }),
         identifierExists: builder.query({
@@ -79,5 +88,6 @@ export const {
     useLazyCheckUsernameQuery,
     useLazyCheckEmailQuery,
     useLazySignOutQuery,
-    useLazyVerifyTokenQuery,
+    useVerifyTokenMutation,
+    useLazyCheckAuthQuery
 } = authApi;

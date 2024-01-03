@@ -12,24 +12,22 @@ const connectDB = async (listener) => {
                 const User = mongoose.model("User");
 
                 // create a bot user for showcasing purposes
-                if (!(await User.exists({ username: "XCloneBot" }))) {
+                if (!(await User.exists({ username: "XClone" }))) {
                     const adminUser = new User({
                         username: "xclone",
                         displayName: "XClone",
                         email: "czaki.kopia@gmail.com",
+                        profileImageURL: `${process.env.API_URL}/uploads/default_pfp.png`,
                         verified: true,
-
                     });
 
                     await adminUser.save();
 
                     const Tweet = mongoose.model("Tweet");
-
                     const tweet = new Tweet({
                         author: adminUser._id,
-                        content: "Welcome to XClone. This is only a preview of a post, but feel free to dive into the rest of the app! :)"
-                    })
-
+                        content: "#Welcome to XClone. This is only a preview of a post, but feel free to dive into the rest of the app! :)"
+                    });
 
                     await tweet.save();
                 }

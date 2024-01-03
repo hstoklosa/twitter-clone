@@ -1,11 +1,11 @@
 import "./styles.css";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import { registerActions } from "../../../features/slices/registerSlice";
 import { useAppSelector, useAppDispatch } from "../../../app/store";
-import { useLazyVerifyTokenQuery } from "../../../features/api/authApi";
+import { useVerifyTokenMutation, useLazyCheckAuthQuery } from "../../../features/api/authApi";
 
 import { BaseModal, TextInput, Logo } from "../../index";
 import { modalActions } from "../../../features/slices/modalSlice";
@@ -16,8 +16,10 @@ const VerificationModal = ({ isOpen, closeModal }) => {
     const { userId } = useAppSelector((state) => state.modal.verificationModal);
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
-    const [verifyToken, { error: verifyTokenError = false }] = useLazyVerifyTokenQuery();
+    const [verifyToken, { error: verifyTokenError = false }] = useVerifyTokenMutation();
+    const [checkAuth] = useLazyCheckAuthQuery();
 
     const handleVerification = async (e) => {
         e.preventDefault();
@@ -32,10 +34,10 @@ const VerificationModal = ({ isOpen, closeModal }) => {
             return toast.error(result.error.message);
         }
 
-        if (result?.data?.isEmailVerified) {
+        if (result?.data?.isAuthenticated) {
             closeVerificationModal();
+            // dispatch(checkAuth(undefined));
         }
-
     }
 
     const closeVerificationModal = () => {
@@ -55,6 +57,7 @@ const VerificationModal = ({ isOpen, closeModal }) => {
             >
                 <Logo />
             </NavLink>
+
             <form
                 className="verification-modal_form"
                 onSubmit={handleVerification}

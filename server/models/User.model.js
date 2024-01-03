@@ -62,12 +62,9 @@ const userSchema = new Schema(
             minLength: [8, "Password must be at least 8 characters long!"],
             validate: {
                 validator: (password) => {
-                    const m = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
-
-                    console.log(password, m);
-                    return m;
+                    return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#\$%\^&*\(\)_\+\-\[\]{};':"\\|,.<>\/?]{8,}$/.test(password);
                 },
-                message: (props) => `A password must have at least 8 characters and include at least one number.`,
+                message: (props) => `A password must have at least 8 characters, including letters and numbers.`,
             },
         },
         profileImageURL: String,
@@ -81,14 +78,14 @@ const userSchema = new Schema(
             type: String,
             default: null,
             maxLength: 100,
-            validate: {
-                validator: (url) => {
-                    return String(url)
-                        .toLowerCase()
-                        .match(/^((http|https):\/\/)?[^ "]+$/);
-                },
-                message: (props) => `${props.value} is not a valid URL!`,
-            },
+            // validate: {
+            //     validator: (url) => {
+            //         return String(url)
+            //             .toLowerCase()
+            //             .match(/^((http|https):\/\/)?[^ "]+$/);
+            //     },
+            //     message: (props) => `${props.value} is not a valid URL!`,
+            // },
         },
         location: {
             type: String,
