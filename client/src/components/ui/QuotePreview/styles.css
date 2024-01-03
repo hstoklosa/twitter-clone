@@ -7,13 +7,13 @@
     justify-content: flex-start;
     align-items: flex-start;
     overflow: hidden;
-    margin-bottom: 1rem;
+    margin-bottom: 0.25rem;
 }
 
 .quote-preview .details-wrapper {
     padding: 0.75rem 0.75rem 0 0.75rem;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
     margin-bottom: 0.3rem !important;
@@ -21,12 +21,14 @@
 
 .quote-preview .details-wrapper .pfp-container {
     padding: 0;
+    width: 20px;
+    height: unset;
     margin-right: 0.5rem !important;
 }
 
-.quote-preview .details-wrapper .pfp-container .pfp {
-    width: 20px;
-    height: 20px;
+.quote-preview .details-wrapper .pfp {
+    width: 100% !important;
+    height: auto !important;
 }
 
 .quote-preview .tweet-details {
@@ -73,7 +75,18 @@
 }
 
 .quote-preview .replyingTo {
-    color: var(--border-2);
+    /* color: var(--border-2); */
+    color: var(--primary-colour);
     font-size: 0.975rem;
     margin-bottom: 0.5rem;
+}
+
+.quote-preview .display_name {
+    margin-right: 0.3rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.quote-preview .date {
+    color: var(--grey);
 }

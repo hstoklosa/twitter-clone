@@ -6,7 +6,7 @@
 }
 
 .tweet-input-wrapper .tweet-text span {
-    color: var(--white);
+    color: var(--text-primary);
 }
 
 .tweet-input-wrapper textarea {
@@ -49,8 +49,8 @@
 
 .media-preview {
     position: relative;
-    margin-bottom: 2rem;
-    padding-top: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 0.5rem;
 }
 
 .media-preview .media-preview_close {

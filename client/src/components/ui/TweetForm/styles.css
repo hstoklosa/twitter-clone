@@ -1,6 +1,6 @@
 .tweet-form {
     display: flex;
-    padding: 0.5rem 1rem 0 1rem;
+    padding: 0.5rem 0.8rem 0 1rem;
     width: 100% !important;
 }
 
@@ -55,7 +55,7 @@
 .media-preview .media-preview_close {
     position: absolute;
     right: 8px;
-    top: 20px;
+    top: 20px !important;
 }
 
 .media-preview img {
@@ -79,6 +79,7 @@
 
 .audience,
 .reply_label {
+    font-weight: 500;
     width: auto;
 }
 
@@ -143,4 +144,20 @@
 
 .tweet-form .tweet-actions {
     padding: 0.5rem 0 !important;
+}
+
+.tweet-submit .progressbar-container {
+    width: 23px;
+    height: 23px;
+}
+
+@media screen and (max-width: 500px) {
+    .tweet-submit .progressbar-container {
+        margin-right: 0.5rem;
+        width: 20px;
+        height: 20px;
+    }
+    .tweet-submit .separator {
+        display: none !important;
+    }
 }

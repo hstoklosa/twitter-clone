@@ -1,6 +1,7 @@
 import "./styles.css";
 
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { IconContext } from "react-icons";
 import { IoMdClose } from "react-icons/io";
@@ -16,9 +17,10 @@ import { useCreateTweetMutation } from "../../../features/api/tweetApi";
 const TweetForm = ({
     replyTo,
     forceExpand,
+    buttonValue,
+    placeholder,
     maxLength = 280,
-    buttonText = "Tweet",
-    placeholder = "What's happening?",
+    showPfp = true,
 }) => {
     const [tweet, setTweet] = useState("");
     const [media, setMedia] = useState(null);
@@ -29,7 +31,7 @@ const TweetForm = ({
     const inputRef = useRef();
 
     const {
-        user: { id, profileImageURL },
+        user: { id, username, profileImageURL },
     } = useAppSelector((state) => state.auth);
 
     const [createTweet] = useCreateTweetMutation();
@@ -40,16 +42,32 @@ const TweetForm = ({
         formData.append("content", tweet);
         formData.append("author", id);
         formData.append("media", media);
-        replyTo && formData.append("replyTo", replyTo);
+
+        if (replyTo) formData.append("replyTo", replyTo);
+
 
         const result = await createTweet(formData).unwrap();
 
         if (result.error) {
-            toast.error("Error creating tweet")
+            toast.error("Error creating tweet!")
         }
 
-        if (!result.error) {
-            toast.success("Tweet created!")
+        if (!result.error && result?.tweetId) {
+            toast.success(
+                () => (
+                    <span>
+                        <span>Your Tweet was sent  </span>
+                        <Link
+                            to={`/${username}/status/${result.tweetId}`}
+                            className="toast-view-link"
+                        >
+                            View
+                        </Link>
+                    </span >
+                ),
+                { duration: 6000 }
+            );
+
             closeInput();
         }
     };
@@ -71,13 +89,15 @@ const TweetForm = ({
             className={`tweet-form ${forceExpand && "force-expand"}`}
             ref={ref}
         >
-            <div className="pfp-container">
-                <img
-                    src={profileImageURL}
-                    className="pfp"
-                    alt="User PFP"
-                />
-            </div>
+            {showPfp && (
+                <div className="pfp-container">
+                    <img
+                        src={profileImageURL}
+                        className="pfp"
+                        alt="User PFP"
+                    />
+                </div>
+            )}
 
             <div className="tweet-input">
                 <div className={`tweet-input_container ${expanded && "expanded"}`}>
@@ -92,11 +112,12 @@ const TweetForm = ({
                     )}
 
                     <TweetInput
+                        placeholder={placeholder}
                         inputRef={inputRef}
                         maxLength={maxLength}
                         tweet={tweet}
                         setTweet={setTweet}
-                        setExpanded={setExpanded}
+                        onFocus={() => setExpanded(true)}
                     />
 
                     {mediaPreview && (
@@ -137,11 +158,11 @@ const TweetForm = ({
                 </div>
 
                 <TweetFormActions
-                    maxLength={maxLength}
                     tweet={tweet}
                     setMedia={setMedia}
                     setMediaPreview={setMediaPreview}
                     handleTweet={handleTweet}
+                    buttonValue={buttonValue}
                 />
             </div>
         </section>

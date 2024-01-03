@@ -1,5 +1,6 @@
 .reply-modal .modal-content_wrapper {
-    height: 800px !important;
+    max-height: 800px !important;
+    overflow: scroll;
     position: absolute !important;
     top: 45px;
 }
@@ -9,6 +10,7 @@
     height: auto;
     padding: 0;
     overflow: auto;
+    max-height: calc(100vh - 100px);
 }
 
 .reply-modal header {
@@ -38,7 +40,9 @@
     content: "";
     position: absolute;
     top: 5px;
-    width: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid var(--border-2);
     height: 100vh;
     z-index: -11;
     background-color: var(--border-2);
@@ -117,4 +121,17 @@
 
 .reply-modal .quote-preview {
     margin-top: 0.75rem;
+}
+
+.reply-modal .user-info .more {
+    display: none;
+}
+
+.reply-modal .tweet-input .pfp-container::after {
+    content: "";
+    all: unset !important;
+}
+
+.reply-modal .tweet-details .blue_round-btn.more {
+    display: none;
 }

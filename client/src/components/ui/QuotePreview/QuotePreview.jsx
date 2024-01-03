@@ -1,13 +1,15 @@
 import "./styles.css";
 
 import { Link, useLocation } from "react-router-dom";
-import { TweetDetails } from "../../index";
 import { isObjEmpty } from "../../../utils/object";
+import { getTimeDifference } from "../../../helpers/date";
 
 const QuotePreview = ({ tweet }) => {
     const { pathname } = useLocation();
 
+
     const isReply = tweet.replyTo && !isObjEmpty(tweet.replyTo);
+    const formattedDate = getTimeDifference(tweet.createdAt);
     const media = tweet.media?.[0];
 
     return (
@@ -25,7 +27,19 @@ const QuotePreview = ({ tweet }) => {
                     />
                 </div>
 
-                <TweetDetails tweet={tweet} />
+                <Link
+                    className="display_name"
+                    to={`/${tweet.author.username}`}
+                >
+                    {tweet.author.displayName}
+                </Link>
+
+                <p className="username">@{tweet.author.username}</p>
+
+                <p className="date">
+                    <span className="separator">·</span>
+                    {formattedDate}
+                </p>
             </div>
 
             <div className="tweet-content">

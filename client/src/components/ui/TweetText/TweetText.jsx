@@ -21,8 +21,8 @@ const TweetText = ({ text, textRef, highlight = " " }) => {
                 if (isHashtag(part))
                     return (
                         <Link
-                            to={`/hashtag/${part}`}
                             key={idx}
+                            to={`/search?q=${part}`}
                             className="highlighted-text"
                         >
                             {part}
@@ -32,8 +32,8 @@ const TweetText = ({ text, textRef, highlight = " " }) => {
                 if (isMention(part)) {
                     return (
                         <Link
-                            to={`/${part}`}
                             key={idx}
+                            to={`/${part}`}
                             className="highlighted-text"
                         >
                             {part}

@@ -6,13 +6,14 @@ import { IoMdClose } from "react-icons/io";
 import { TweetText } from "../../index";
 
 const TweetInput = ({
-    inputRef,
-    maxLength,
     tweet,
     setTweet,
     mediaPreview,
     clearMedia,
-    setExpanded,
+    maxLength,
+    inputRef,
+    onFocus,
+    placeholder = "What's happening?",
 }) => {
     const textInputRef = useRef();
     const textRef = useRef();
@@ -29,6 +30,10 @@ const TweetInput = ({
         textRef.current.style.height = `${textRef.current.scrollHeight}px`;
     }, [tweet]);
 
+    const handleFocus = (e) => {
+        onFocus && onFocus(e);
+    }
+
     return (
         <>
             <div
@@ -43,12 +48,12 @@ const TweetInput = ({
                 <textarea
                     type="text"
                     id="tweet"
-                    placeholder="What's happening?!"
+                    placeholder={placeholder}
                     ref={inputRef}
                     maxLength={maxLength}
                     value={tweet}
                     onChange={({ target }) => setTweet(target.value)}
-                    onFocus={() => setExpanded && setExpanded(true)}
+                    onFocus={handleFocus}
                 />
             </div>
 

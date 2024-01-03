@@ -1,12 +1,10 @@
 .tweet-modal .modal-content_wrapper {
-    position: absolute !important;
-    top: 45px;
-    height: 800px !important;
+    top: 75px;
 }
 
 .tweet-modal .modal-content {
     padding: 0 !important;
-    height: auto;
+    max-height: calc(100vh - 100px);
 }
 
 .tweet-modal .modal-content .quote-preview {

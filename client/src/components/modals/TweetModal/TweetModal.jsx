@@ -2,7 +2,8 @@ import "./styles.css";
 import "../../ui/TweetForm/styles.css";
 
 import { useState, useRef } from "react";
-
+import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { IconContext } from "react-icons";
 import { IoEarth } from "react-icons/io5";
 
@@ -26,7 +27,7 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
     const inputRef = useRef();
 
     const {
-        user: { id, profileImageURL },
+        user: { id, profileImageURL, username },
     } = useAppSelector((state) => state.auth);
 
     const [createTweet] = useCreateTweetMutation();
@@ -42,6 +43,21 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
         const result = await createTweet(formData).unwrap();
 
         if (!result.error) {
+            toast.success(
+                () => (
+                    <span>
+                        <span>Your Tweet was sent  </span>
+                        <Link
+                            to={`/${username}/status/${result.tweetId}`}
+                            className="toast-view-link"
+                        >
+                            View
+                        </Link>
+                    </span >
+                ),
+                { duration: 6000 }
+            );
+
             closeInput();
         }
     };

@@ -9,18 +9,17 @@ import { TbCalendarTime, TbMoodSmile } from "react-icons/tb";
 import { MdOutlinePoll, MdOutlineGifBox } from "react-icons/md";
 import { PiImageSquareBold } from "react-icons/pi";
 
-const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPreview }) => {
+const TweetFormActions = ({ tweet, setMedia, setMediaPreview, buttonValue = "Tweet", handleTweet }) => {
 
     const handleFileChange = ({ target }) => {
         const types = ["image/png", "image/jpeg", "image/jpg"];
+
         const files = target.files;
         const image = files?.[0];
 
         if (image && types.includes(image.type)) {
-            const blob = URL.createObjectURL(image);
-
             setMedia(image);
-            setMediaPreview(blob);
+            setMediaPreview(URL.createObjectURL(image)); // assign blob
         }
     };
 
@@ -41,6 +40,7 @@ const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPre
                             }}
                             onChange={handleFileChange}
                         />
+
                         <div className="icon-container">
                             <PiImageSquareBold size="16" />
                         </div>
@@ -75,26 +75,6 @@ const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPre
                             <TbMoodSmile size="16" />
                         </div>
                     </button>
-
-                    <button
-                        type="button"
-                        className="tweet-attachments_button blue_round-btn"
-                        disabled
-                    >
-                        <div className="icon-container">
-                            <TbCalendarTime size="16" />
-                        </div>
-                    </button>
-
-                    <button
-                        type="button"
-                        className="tweet-attachments_button blue_round-btn"
-                        disabled
-                    >
-                        <div className="icon-container">
-                            <HiOutlineLocationMarker size="16" />
-                        </div>
-                    </button>
                 </IconContext.Provider>
             </div>
 
@@ -103,18 +83,14 @@ const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPre
                     <>
                         <div
                             className="progressbar-container"
-                            style={{
-                                width: 23,
-                                height: 23,
-                            }}
                         >
                             <CircularProgressbar
                                 value={(tweet.length / 280) * 100}
                                 styles={buildStyles({
-                                    pathColor: tweet.length === maxLength
+                                    pathColor: tweet.length === 280
                                         ? "red"
                                         : "var(--primary-colour)",
-                                    trailColor: "var(--border-2)",
+                                    trailColor: "var(--border)",
                                     backgroundColor: "var(--primary-colour)",
                                 })}
                             />
@@ -126,14 +102,14 @@ const TweetFormActions = ({ maxLength, tweet, handleTweet, setMedia, setMediaPre
 
                 <button
                     type="button"
-                    className="blue-btn post-btn"
+                    className="accent-btn post-btn"
                     disabled={tweet.length <= 0}
                     onClick={handleTweet}
                 >
-                    Tweet
+                    {buttonValue}
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 
