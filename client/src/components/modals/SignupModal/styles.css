@@ -1,14 +1,20 @@
 .signup-modal .modal-content {
-    padding: 1rem 1.5rem;
-    height: 650px;
+    padding: 1rem 1;
+}
+
+.signup-modal .input-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.signup-modal .input-wrapper:last-child {
+    margin-bottom: 2rem;
 }
 
 .signup-modal_header {
-    width: 80%;
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding-top: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -27,8 +33,8 @@
 }
 
 .signup-modal_form {
-    height: 85%;
-    width: 80%;
+    height: 100%;
+    width: 75%;
     padding: 0.5rem 0.5rem;
     display: flex;
     flex-direction: column;
@@ -72,7 +78,8 @@
 }
 
 .btn-next {
-    display: flex;
+    margin-bottom: 1rem;
+    /* display: flex;
     justify-content: center;
     align-items: center;
     font-size: 15px;
@@ -83,12 +90,12 @@
     border-radius: 9999rem;
     width: 100%;
     padding: 1.1rem 1.2rem;
-    transition: background-color 0.2s linear;
+    transition: background-color 0.2s linear; */
 }
 
-.btn-next:hover {
+/* .btn-next:hover {
     background-color: rgb(230, 230, 230);
-}
+} */
 
 .dob-container h4 {
     margin: 1rem 0 0.6rem 0;
@@ -107,14 +114,38 @@
     justify-content: space-between;
 }
 
-.select-container .month-select {
-    width: 45%;
+@media screen and (max-width: 500px) {
+    .verification-modal_form {
+        width: 100% !important;
+    }
 }
 
-.day-select {
-    width: 20%;
+.signup-modal_header {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.year-select {
-    width: 30%;
+.signup-modal_header .header-btn .icon-container {
+    width: 25px !important;
+    height: 25px !important;
+}
+
+.signup-modal_header .logo-container:hover {
+    background: 0 !important;
+}
+
+.signup-modal_header .header-btn .icon-container .icon {
+    width: 100% !important;
+}
+
+.signup-modal_header .header_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup-modal_header .header-btn {
+    align-self: flex-start;
 }

@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 600px;
 }
 
 .login-modal_header {
@@ -18,11 +17,20 @@
 }
 
 .login-modal_header .header-btn .icon-container .icon {
-    width: 80% !important;
+    width: 100% !important;
+    /* 
+    width: 100%;
+    height: auto;
+    object-fit: contain; */
+}
+
+.login-modal .logo-container:hover {
+    background: 0;
 }
 
 .login-modal_header .header_container {
     display: flex;
+    align-items: center;
     justify-content: center;
 }
 
@@ -37,7 +45,7 @@
 
 .login-modal_form h1 {
     margin-top: 0.5rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     text-align: center;
 }
 
@@ -106,10 +114,6 @@
     width: 60%;
 }
 
-.login-modal_form .page.p2 {
-    width: 70%;
-}
-
 .login-modal_form .p2 .password-input {
     margin-bottom: 0.5rem;
 }
@@ -128,6 +132,9 @@
 
 @media screen and (max-width: 500px) {
     .login-modal_form .page {
-        width: 90%;
+        width: 100%;
+    }
+    .login-modal_form h1 {
+        /* width: 70%; */
     }
 }

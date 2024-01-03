@@ -7,7 +7,6 @@ import { IconContext } from "react-icons";
 import { FcGoogle } from "react-icons/fc";
 
 import { useAppSelector } from "../../../app/store";
-import useDebounce from "../../../hooks/useDebounce";
 import useModalPagination from "../../../hooks/useModalPagination";
 
 import {
@@ -87,6 +86,7 @@ const LoginModal = ({ isOpen }) => {
         <BaseModal
             isOpen={isOpen}
             onClose={closeLoginModal}
+            className="login-modal"
         >
             <ColumnHeader
                 className="login-modal_header"

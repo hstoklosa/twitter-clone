@@ -1,5 +1,6 @@
 import "./styles.css";
 
+import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import { useAppSelector, useAppDispatch } from "../../../app/store";
@@ -15,6 +16,7 @@ import {
     BaseModal,
     ColumnHeader,
     TextInput,
+    Logo
 } from "../../index";
 
 const SignupModal = ({ isOpen, closeModal }) => {
@@ -73,9 +75,18 @@ const SignupModal = ({ isOpen, closeModal }) => {
                 className="signup-modal_header"
                 close={closeModal}
             >
-                <h2 className="signup-modal_form-header">Create your account</h2>
+                <div className="header_container">
+                    <Link
+                        to={`/`}
+                        className="logo-container"
+                    >
+                        <Logo />
+                    </Link>
+                </div>
             </ColumnHeader>
 
+
+            <h2 className="signup-modal_form-header">Create your account</h2>
 
             <form
                 onSubmit={handleSignUp}
@@ -154,7 +165,7 @@ const SignupModal = ({ isOpen, closeModal }) => {
                 </div>
 
                 <button
-                    className="white-btn"
+                    className="white-btn btn-next"
                     onClick={handleSignUp}
                     disabled={
                         !formState.displayName ||
