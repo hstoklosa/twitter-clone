@@ -1,5 +1,6 @@
-<p align="center" style="border-radius: 1rem;"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/xclone-readme.jpg?raw=true" style="width: 100%; border-radius: 1rem;" /></p>
-<p align="center" style="">A simplified version of X/Twitter built in React and Node.js using Express & MongoDB.</p>
+<p align="center" style="border-radius: 1rem;"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/xclone-img.png?raw=true" style="width: 100%; border-radius: 1rem;" /></p>
+
+<!-- <p align="center" style="">A simplified version of X/Twitter built in React and Node.js using Express & MongoDB.</p> -->
 
 ## Roadmap 🎉
 
@@ -11,15 +12,19 @@ Over the summer of 2023 (or longer if neccessary), I will be working on this pro
 
 ### 🔍 Features
 
--   [x] User Authentication
--   [x] Profile page & management options
+-   [x] User Authentication (Local & Google Auth)
+-   [x] Profile Management
 -   [x] Following/Followers
--   [x] Tweeting (text & images)
--   [x] Commenting, retweeting, quoting, liking
+-   [x] Tweeting: Text and Images
+-   [x] Commenting, retweeting, quoting, and liking
 -   [x] Algorithmic feed
--   [x] Search Functionality (user/tweets/hashtags)
--   [x] Real-time direct messaging (currently only in development)
--   [x] Real-time notifications (currently only in development)
+-   [x] Search Functionality: User/Tweets/Hashtags
+-   [x] Real-time direct messaging (only in **_development_**)
+-   [x] Real-time notifications (only in **_development_**)
+
+### 🎥 Preview
+
+**_<h3 style="text-align: center;">COMING SOON</h3>_**
 
 ## 🔌 Technologies
 
@@ -29,7 +34,7 @@ MongoDB, a key component of this stack, stands out due to its widespread acclaim
 
 The choice of MongoDB is further solidified by its growing prominence across multiple domains, not just limited to social media. Its scalability, combined with user-friendly features, positions it as a strategic choice for developers eager to explore and leverage the full potential of NoSQL databases in modern web development.
 
-**NOTES**
+### Additional information
 
 -   `MongoDB` a document-orientated & NoSQL data storage
 -   `Mongoose` for ODM modelling and easier data access/manipulation
@@ -128,24 +133,41 @@ git clone git@github.com:<username>/twitter-clone.git && cd twitter-clone
 
 Refer to `.env.sample` for the required environmental variables.
 
+#### 📐 Production Architecture
+
+The first stage builds the necessary images and containers for the reverse proxy and the database, which are located on the `x-proxy-network` and `x-database-network` networks, respectively.
+
+In the second stage, we build the front-end and back-end images to run in the container, and they will be located on the `x-network` network. The frontend and backend containers will be able to communicate with the reverse proxy, and only the backend container will be able to communicate with the database container over the `x-database-network` network.
+
+<p align="center"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/AWS1.jpg?raw=true" style="width: 100%;" /></p>
+
 ### 💻 Development
 
 The following commands will build the multi-container application in Docker for local development. Volumes have been defined for client and server to create bind mounts for hot-reloading.
 
-Assuming it's your first time using the project, there is no don't need to use the `--build` flag. However, if you make any Docker-wise changes, you will need to use the previously mentioned flag to rebuild the container/s.
+1. Enter the development directory
 
-```
-docker-compose --env-file .env.development -f docker-compose.dev.yml up
-```
+    ```
+    cd twitter-clone/docker/development
+    ```
 
-> **_Note_**: Use the **[--build [service_name]]** argument whenever you make any Docker-wise changes to rebuild the images and containers, in order for the changes to take place.
+2. Create containers from images and run them.
 
-A detailed list of the containers found in the `docker-compose.dev.yml` file:
+    ```
+    docker compose up
+    ```
+
+    > **_Note_**:
+    > In order for Docker-wise changes to take place, use the **[--build [service_name]]** argument to rebuild the images and containers. <br> <br>The **[service_name]** sub-argument is the name of the `.yml` file, which is `docker-compose.yml` by default for both dev and prod.
+
+<br>
 
 **Development App Services:**
 
+A detailed list of the containers found in the `docker/development/docker-compose.yml` file:
+
 ```
-docker-compose -f docker-compose.dev.yml ps
+docker-compose ps
 
 NAME       IMAGE             COMMAND                  SERVICE   CREATED       STATUS       PORTS
 backend    xclone-backend    "docker-entrypoint.s…"   server    2 hours ago   Up 2 hours   0.0.0.0:8080->8080/tcp
@@ -157,12 +179,6 @@ mongodb    mongo             "docker-entrypoint.s…"   mongo     2 hours ago   
 
 The project uses a multi-stage build with containers communicating over networks to create a production-ready deployement.
 
-The first stage builds the necessary images and containers for the reverse proxy and the database, which are located on the `x-proxy-network` and `x-database-network` networks, respectively.
-
-In the second stage, we build the front-end and back-end images to run in the container, and they will be located on the `x-network` network. The frontend and backend containers will be able to communicate with the reverse proxy, and only the backend container will be able to communicate with the database container over the `x-database-network` network.
-
-<p align="center" style="border-radius: 1rem;"><img src="https://github.com/hstoklosa/hstoklosa/blob/main/assets/AWS1.jpg?raw=true" style="width: 85%; border-radius: 1rem;" /></p>
-
 1.  Create the necessary networks.
 
     ```
@@ -172,22 +188,24 @@ In the second stage, we build the front-end and back-end images to run in the co
 
 2.  Build the images and run containers for the proxy and database.
 
-    **Note**: Incompatible with docker-compose version less than v3
-
-    Starting the containers:
+    2.1 Enter the proxy directory
 
     ```
-    cd proxy
+    cd twitter-clone/docker/proxy
+    ```
 
+    2.2 Starting the containers (incompatible with docker-compose version less than v3)
+
+    ```
     docker compose up -d
     ```
 
     Rebuilding production images and containers
 
-    -   **-v**: removes volumes):
+    -   **-v**: removes volumes:
     -   **[-f docker-compose.yml]**: specifies the docker-compose file to use
 
-    <br />
+     <br />
 
     ```
     docker compose [-f COMPOSE_FILENAME] down [-v]
@@ -195,7 +213,9 @@ In the second stage, we build the front-end and back-end images to run in the co
     docker compose [-f COMPOSE_FILENAME] build --no-cache
     ```
 
-    2.1. Check the service of the containers from `proxy/docker-compose.yml`
+    2.3. Check the service of the containers from `proxy/docker-compose.yml`
+
+    **First Layer of Services (Proxy):**
 
     ```
     docker-compose ps
@@ -208,22 +228,28 @@ In the second stage, we build the front-end and back-end images to run in the co
 
 3.  Build the images and run containers for the application.
 
-    **Note**: Incompatible with docker-compose version less than v3.5
+    3.1 Enter the production directory
 
     ```
-    docker compose --env-file .env.production -f docker-compose.prod.yml build --no-cache
-
-    docker compose --env-file .env.production -f docker-compose.prod.yml up -d
+    cd twitter-clone/docker/production
     ```
 
-    > **_Memory_**: If you don't have enough memory on a machine (such as a VPS) to build the production images, consider setting up swap memory. [Here's a guide](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04) on how to do it.
-
-    3.1. Check the status of the containers from `docker-compose.prod.yml`
-
-    **Second Layer of Services (Production App):**
+    3.2 Create containers from images and run them (ncompatible with docker-compose version less than v3.5)
 
     ```
-    docker-compose -f docker-compose.prod.yml ps
+    docker compose build --no-cache
+
+    docker compose up -d
+    ```
+
+    > **Memory Note**: If you don't have enough memory on a machine (such as a VPS) to build the production images, consider setting up swap memory. [Here's a guide](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04) on how to do it.
+
+    3.3. Check the status of the containers from `docker-compose.prod.yml`
+
+    **Second Layer of Services (App):**
+
+    ```
+    docker compose ps
 
     NAME       IMAGE             COMMAND                                          SERVICE    CREATED        STATUS              PORTS
     backend    xclone-backend    "docker-entrypoint.sh npm run prod"              backend    11 hours ago   Up About a minute   0.0.0.0:33566->8080/tcp, :::33566->8080/tcp
