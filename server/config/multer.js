@@ -1,8 +1,7 @@
 const multer = require("multer");
 const path = require("path");
-
-const getMetadata = require("../helpers/metadata");
 const { BadRequestError } = require("../utils/errors");
+
 
 // handle file uploads
 const generateFileName = (req, file, cb) => {
@@ -13,10 +12,15 @@ const generateFileName = (req, file, cb) => {
 };
 
 const fileFilter = (req, file, cb) => {
-    const { extname, mimetype } = getMetadata(file);
+    const extname = path.extname(file.originalname);
+    const mimetype = file.mimetype;
 
     if (!extname || !mimetype) {
         return cb(new BadRequestError("Invalid file type!"));
+    }
+
+    if (extname !== '.png' && extname !== '.jpg' && extname !== '.gif' && extname !== '.jpeg') {
+        return cb(new BadRequestError('Only images are allowed'))
     }
 
     cb(null, true);
@@ -26,14 +30,14 @@ const fileFilter = (req, file, cb) => {
 const storage = multer.diskStorage({
     destination: "uploads/",
     filename: generateFileName,
-    fileFilter: fileFilter,
-    limits: {
-        fileSize: 1024 * 1024 * 5,
-    },
 });
 
 const upload = multer({
     storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 1024 * 1024 * 5,
+    },
 });
 
 module.exports = upload;
