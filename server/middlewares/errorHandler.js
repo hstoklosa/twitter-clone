@@ -1,4 +1,5 @@
 const { ApplicationError } = require("../utils/errors");
+const logger = require("../utils/logger");
 
 const errorHandler = (err, req, res, next) => {
     const errorResponse = {
@@ -14,6 +15,8 @@ const errorHandler = (err, req, res, next) => {
     if (process.env.NODE_ENV !== "production") {
         errorResponse.stack = err.stack;
     }
+
+    logger.error(err, err.message);
 
     return res.status(errorResponse.status).json({
         error: errorResponse,

@@ -1,4 +1,4 @@
-const session = require("express-session");
+const session = require("express-session"); // Simple cookie-based session middleware.
 const MongoStore = require("connect-mongo");
 
 const sessionStore = new MongoStore({
@@ -14,7 +14,7 @@ const sessionMiddleware = session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 24 * 60 * 60 * 1000, // 1d
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
 });
 
