@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("./config/passport");
 const sessionMiddleware = require("./config/session");
+const loggerMiddleware = require("./middlewares/loggerMiddleware");
 const errorHandler = require("./middlewares/errorHandler");
 const routes = require("./routes/index");
 
@@ -15,6 +16,8 @@ const cookieParser = require("cookie-parser"); // Parse Cookie header and popula
 
 
 const app = express();
+
+app.use(loggerMiddleware);
 
 app.use(
     cors({
