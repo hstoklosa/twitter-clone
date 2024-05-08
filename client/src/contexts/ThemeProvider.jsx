@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, createContext } from 'react';
-
 import useLocalStroage from '../hooks/useLocalStorage';
+
 
 export const ThemeContext = createContext();
 
@@ -8,7 +8,7 @@ export const ThemeProvider = ({ children }) => {
     const {
         value: savedTheme,
         setValue: saveTheme
-    } = useLocalStroage('theme', "light");
+    } = useLocalStroage('theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light");
 
     const {
         value: savedAccent,
@@ -38,7 +38,6 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         const flipAccent = (accent) => {
             const root = document.documentElement;
-
             root.style.setProperty('--main-accent', `var(--accent-${accent})`);
 
             saveAccent(accent);
