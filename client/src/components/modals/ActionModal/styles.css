@@ -1,0 +1,64 @@
+.action-modal .modal-content_wrapper {
+    max-width: 80vw;
+    width: 320px;
+}
+
+.action-modal .modal-content {
+    padding: 2rem !important;
+}
+
+.action-modal .action-modal_content h2 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    text-align: start;
+    margin-bottom: 0.5rem;
+}
+
+.action-modal .action-modal_content p {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--grey);
+    text-align: start;
+}
+
+.action-modal_btns {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+.action-modal_btns button {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    width: 100%;
+    min-height: 44px;
+    border-radius: 99999rem;
+    color: var(--background);
+    background-color: var(--text-primary);
+}
+
+.action-modal_btns button:not(:last-child) {
+    margin-bottom: 0.75rem;
+}
+
+.action-modal button.action-focused {
+    background-color: red;
+    color: #fff;
+}
+
+.action-modal_btns button:last-child {
+    background-color: var(--background);
+    color: var(--text-primary);
+    border: 1px solid rgb(207, 217, 222);
+    border-radius: 99999rem;
+    transition-property: background-color, box-shadow;
+    transition-duration: 0.2s;
+}
+
+.action-modal_btns button:last-child:hover {
+    background-color: var(--item-hover);
+}
+
+@media screen and (max-width: 620px) {
+}
