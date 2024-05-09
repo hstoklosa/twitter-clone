@@ -14,7 +14,7 @@ const Links = () => {
             {linkLabels.map((label, idx) => (
                 <a
                     key={idx}
-                    href="https://twitter.com/"
+                    href="https://x.com/"
                     target="__blank"
                     className="link-grey"
                 >

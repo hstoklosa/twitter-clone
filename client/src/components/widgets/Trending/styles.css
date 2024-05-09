@@ -1,4 +1,5 @@
 .explore-route .widget-item .subheader_container {
     display: flex;
     justify-content: space-between;
+    overflow: visible !important;
 }
