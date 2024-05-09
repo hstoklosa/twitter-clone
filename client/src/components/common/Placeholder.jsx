@@ -1,4 +1,10 @@
-const Placeholder = ({ title, subtitle, image, children }) => {
+const Placeholder = ({
+    title = "",
+    subtitle = "",
+    image,
+    icon: IconComponent,
+    children
+}) => {
     return (
         <div className="placeholder">
             {image && (
@@ -7,13 +13,21 @@ const Placeholder = ({ title, subtitle, image, children }) => {
                 </div>
             )}
 
-            <div className="placeholder-text__title">
-                {title ?? "Nothing to see here"}
-            </div>
+            {IconComponent && (
+                <IconComponent className="placeholder__icon" size={36} />
+            )}
 
-            <div className="placeholder-text__subtitle">
-                {subtitle ?? "Try again soon!"}
-            </div>
+            {title && (
+                <p className="placeholder-text__title">
+                    {title}
+                </p>
+            )}
+
+            {subtitle && (
+                <p className="placeholder-text__subtitle">
+                    {subtitle}
+                </p>
+            )}
 
             {children}
         </div>

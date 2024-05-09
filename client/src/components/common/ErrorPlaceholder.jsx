@@ -10,7 +10,7 @@ const ErrorPlaceholder = ({ error }) => (
             alignItems: "center",
         }}
     >
-        <span style={{ fontSize: "1.5rem" }}>
+        <span style={{ fontSize: "1.5rem", textAlign: "center" }}>
             Something went wrong. Try reloading.
         </span>
 

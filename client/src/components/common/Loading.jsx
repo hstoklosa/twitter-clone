@@ -14,7 +14,7 @@ const Loading = () => {
                     light: theme === "light"
                 })}
                 style={{ width: "100px" }}
-                alt="Twitter Icon"
+                alt="X Icon"
             />
         </div>
     );

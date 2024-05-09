@@ -1,16 +1,10 @@
 import { Link } from "react-router-dom";
 
-const isHashtag = (text) => {
-    return /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi.test(text);
-};
-
-const isMention = (text) => {
-    return /\B@\w+/g.test(text);
-};
+const isHashtag = (text) => /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi.test(text);
+const isMention = (text) => /\B@\w+/g.test(text);
 
 const TweetText = ({ text, textRef, highlight = " " }) => {
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
-
 
     return (
         <div
@@ -21,9 +15,9 @@ const TweetText = ({ text, textRef, highlight = " " }) => {
                 if (isHashtag(part))
                     return (
                         <Link
-                            key={idx}
                             to={`/search?q=${part}`}
                             className="highlighted-text"
+                            key={idx}
                         >
                             {part}
                         </Link>
@@ -32,16 +26,20 @@ const TweetText = ({ text, textRef, highlight = " " }) => {
                 if (isMention(part)) {
                     return (
                         <Link
-                            key={idx}
                             to={`/${part}`}
                             className="highlighted-text"
+                            key={idx}
                         >
                             {part}
                         </Link>
                     )
                 };
 
-                return <span key={idx}>{part}</span>;
+                return (
+                    <span key={idx}>
+                        {part}
+                    </span>
+                );
             })}
         </div>
     );
