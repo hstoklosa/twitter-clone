@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { useMediaQuery } from "@uidotdev/usehooks";
-import { Sidebar, MobileNavbar } from "../index";
+import { Sidebar, MobileNavbar, MobileSidebar } from "../index";
 import PrivateRoute from "../../routes/PrivateRoute";
 
 const AppLayout = () => {
@@ -10,7 +10,10 @@ const AppLayout = () => {
         <PrivateRoute>
             {!isSmallDevice
                 ? <Sidebar />
-                : <MobileNavbar />
+                : (<>
+                    <MobileSidebar />
+                    <MobileNavbar />
+                </>)
             }
             <Outlet />
         </PrivateRoute>

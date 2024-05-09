@@ -1,7 +1,7 @@
 import "./styles.css";
 
-import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { createSelector } from "@reduxjs/toolkit";
 import { IconContext } from "react-icons";
 import {
     BiHomeCircle,
@@ -16,35 +16,42 @@ import {
     BiUser,
     BiSolidUser,
 } from "react-icons/bi";
-import { IoMdCheckmark } from "react-icons/io";
+import { TbLogout } from "react-icons/tb";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 
-import useModal from "../../../hooks/useModal";
 import useOutsideClick from "../../../hooks/useOutsideClick";
 
 import { useAppSelector, useAppDispatch } from "../../../app/store";
 import { useLazySignOutQuery } from "../../../features/api/authApi";
 import { authActions } from "../../../features/slices/authSlice";
+import { modalActions } from "../../../features/slices/modalSlice";
 
-import { DisplayModal } from "../../index";
+import { PfpContainer } from "../../index";
 
-const MobileSidebar = ({ }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const stateSelector = createSelector(
+    (state) => state.modal,
+    (state) => state.auth,
+    (modal, auth) => ({
+        currentUser: auth.user,
+        mobileSidebar: modal.mobileSidebar
+    })
+);
 
-    const {
-        isOpen: displayModal,
-        open: openDisplayModal,
-        close: closeDisplayModal
-    } = useModal();
-    const ref = useOutsideClick(() => setIsOpen(false));
-
+const MobileSidebar = () => {
+    const { currentUser, mobileSidebar } = useAppSelector(stateSelector);
     const dispatch = useAppDispatch();
-    const { user: currentUser } = useAppSelector((state) => state.auth);
+
+    const ref = useOutsideClick(() => dispatch(modalActions.disableMobileSidebar()));
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
+
     const [signOut] = useLazySignOutQuery();
+
+    const onNavClick = () => {
+        dispatch(modalActions.disableMobileSidebar());
+    }
 
     const handleSignOut = async () => {
         const result = await signOut();
@@ -56,40 +63,32 @@ const MobileSidebar = ({ }) => {
     };
 
     return (
-        <div className={`mobile-sidebar ${isOpen ? "open" : ""}`}>
-            {displayModal && (
-                <DisplayModal
-                    isOpen={displayModal}
-                    onClose={closeDisplayModal}
-                />
-            )}
-
-            <div className="mobile-sidebar_button" onClick={() => setIsOpen(true)}>
-                <div className="pfp-container">
-                    <img
-                        src={currentUser.profileImageURL}
-                        className="pfp"
-                        alt="User Pfp"
-                    />
-                </div>
-            </div>
-
+        <div className={`mobile-sidebar ${mobileSidebar ? "open" : ""}`}>
             <div className={`mobile-sidebar_content`} ref={ref}>
                 <div className="user-info">
-                    <Link to={`/${currentUser.username}`}>
-                        <div className="pfp-container">
-                            <img
-                                src={currentUser.profileImageURL}
-                                className="pfp"
-                                alt="User Pfp"
-                            />
-                        </div>
+                    <Link
+                        to={`/${currentUser.username}`}
+                        onClick={onNavClick}
+                    >
+                        <PfpContainer src={currentUser.profileImageURL} />
                     </Link>
 
+                    <div className="details-container truncate">
+                        <Link
+                            to={`/${currentUser.username}`}
+                            onClick={onNavClick}
+                            className="display_name truncate"
+                        >
+                            {currentUser.displayName}
+                        </Link>
 
-                    <div className="details-container">
-                        <p className="display_name">{currentUser.displayName}</p>
-                        <p className="username">@{currentUser.username}</p>
+                        <Link
+                            to={`/${currentUser.username}`}
+                            onClick={onNavClick}
+                            className="username truncate"
+                        >
+                            @{currentUser.username}
+                        </Link>
                     </div>
 
 
@@ -97,6 +96,7 @@ const MobileSidebar = ({ }) => {
                         <Link
                             to={`/${currentUser.username}/following`}
                             state={{ previousPath: pathname }}
+                            onClick={onNavClick}
                             className="count"
                         >
                             <span>
@@ -108,6 +108,7 @@ const MobileSidebar = ({ }) => {
                         <Link
                             to={`/${currentUser.username}/followers`}
                             state={{ previousPath: pathname }}
+                            onClick={onNavClick}
                             className="count"
                         >
                             <span>
@@ -123,6 +124,7 @@ const MobileSidebar = ({ }) => {
                         <NavLink
                             to={`/home`}
                             className="navbar-link"
+                            onClick={onNavClick}
                             children={({ isActive }) => (
                                 <>
                                     {isActive ? (
@@ -139,6 +141,7 @@ const MobileSidebar = ({ }) => {
                         <NavLink
                             to={`/explore`}
                             className="navbar-link"
+                            onClick={onNavClick}
                             children={({ isActive }) => (
                                 <>
                                     <BiSearch size="25" />
@@ -151,6 +154,7 @@ const MobileSidebar = ({ }) => {
                         <NavLink
                             to={`/notifications`}
                             className="navbar-link"
+                            onClick={onNavClick}
                             children={({ isActive }) => (
                                 <>
                                     {isActive ? (
@@ -168,6 +172,7 @@ const MobileSidebar = ({ }) => {
                         <NavLink
                             to={`/messages`}
                             className="navbar-link"
+                            onClick={onNavClick}
                             children={({ isActive }) => (
                                 <>
                                     {isActive ? (
@@ -185,6 +190,7 @@ const MobileSidebar = ({ }) => {
                         <NavLink
                             to={`/bookmarks`}
                             className="navbar-link"
+                            onClick={onNavClick}
                             children={({ isActive }) => (
                                 <>
                                     {isActive ? (
@@ -201,6 +207,7 @@ const MobileSidebar = ({ }) => {
                         <NavLink
                             to={`/${currentUser.username} `}
                             className="navbar-link"
+                            onClick={onNavClick}
                             children={({ isActive }) => (
                                 <>
                                     {isActive ? (
@@ -217,55 +224,38 @@ const MobileSidebar = ({ }) => {
                         <button
                             type="button"
                             className="navbar-link"
-                            onClick={openDisplayModal}
+                            onClick={() => {
+                                onNavClick();
+                                dispatch(modalActions.openModal({
+                                    name: "DisplayModal"
+                                }));
+                            }}
                         >
-
-                            <HiOutlinePencilAlt size="25" style={{ strokeWidth: "2px" }} />
+                            <HiOutlinePencilAlt
+                                size="25"
+                                style={{ strokeWidth: "2px" }}
+                            />
 
                             <span className="text">Display</span>
-
                         </button>
 
+                        <button
+                            type="button"
+                            className="navbar-link"
+                            onClick={() => {
+                                onNavClick();
+                                handleSignOut();
+                            }}
+                        >
+                            <TbLogout
+                                size="25"
+                                style={{ strokeWidth: "2px" }}
+                            />
+
+                            <span className="text">Log out</span>
+                        </button>
                     </nav>
                 </IconContext.Provider>
-
-                <button
-                    className="navbar-account"
-                >
-
-                    <section className="account-details">
-                        <div className="wrapper">
-                            <div className="pfp-container">
-                                <img
-                                    src={currentUser.profileImageURL}
-                                    className="pfp"
-                                    alt="User PFP"
-                                />
-                            </div>
-
-                            <div className="navbar-account_names">
-                                <p className="display_name">
-                                    {currentUser.displayName}
-                                </p>
-                                <p className="username">
-                                    @{currentUser.username}
-                                </p>
-                            </div>
-                        </div>
-
-                        <IoMdCheckmark size="20" className="account-checkmark" />
-                    </section>
-
-                    <button
-                        type="button"
-                        className="float-btn"
-                        onClick={handleSignOut}
-                    >
-                        Log out @{currentUser.username}
-                    </button>
-
-
-                </button>
             </div>
         </div>
     )
