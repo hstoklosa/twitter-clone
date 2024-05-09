@@ -1,4 +1,7 @@
+import "./styles.css"
 import { useState } from "react";
+import ReactDOMServer from 'react-dom/server';
+
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { IconContext } from "react-icons";
 import {
@@ -15,50 +18,43 @@ import {
     BiSolidUser,
 } from "react-icons/bi";
 import { FaFeatherAlt } from "react-icons/fa";
-import { IoEllipsisHorizontal } from "react-icons/io5";
+import { IoEllipsisHorizontal, IoEarthOutline } from "react-icons/io5";
 import { PiDotsThreeCircle } from "react-icons/pi";
 import { IoMdCheckmark } from "react-icons/io";
 import { HiOutlinePencilAlt } from "react-icons/hi";
-import { FaEarthAmericas } from "react-icons/fa6";
+// import { FaEarthAmericas } from "react-icons/fa6";
 
 import useModal from "../../../hooks/useModal";
-import { useTheme } from "../../../contexts/ThemeProvider";
+
 import { useAppSelector, useAppDispatch } from "../../../app/store";
+import { modalActions } from "../../../features/slices/modalSlice";
 import { authActions } from "../../../features/slices/authSlice";
 import { useLazySignOutQuery } from "../../../features/api/authApi";
 
-import { FloatOptions, TweetModal, Logo, DisplayModal } from "../../index";
+import { Float, Logo, PfpContainer } from "../../index";
 
 
 const Sidebar = () => {
-    const [tweetModal, setTweetModal] = useState(false);
-    const [moreFloat, setMoreFloat] = useState(false);
-    const [accountFloat, setAccountFloat] = useState(false);
-
-    const { theme } = useTheme();
-
-    const {
-        isOpen: displayModal,
-        open: openDisplayModal,
-        close: closeDisplayModal
-    } = useModal();
-
     const { user: currentUser } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
+    const {
+        isOpen: isAccountFloatOpen,
+        open: openAccountFloat,
+        close: closeAccountFloat
+    } = useModal();
+
+    const {
+        isOpen: isMoreFloatOpen,
+        open: openMoreFloat,
+        close: closeMoreFloat
+    } = useModal();
+
     const [signOut] = useLazySignOutQuery();
 
-    const openTweetModal = () => setTweetModal(true);
-    const closeTweetModal = () => setTweetModal(false);
-    const openAccountFloat = () => setAccountFloat(true);
-    const closeAccountFloat = () => setAccountFloat(false);
-    const openMoreFloat = () => setMoreFloat(true);
-    const closeMoreFloat = () => {
-        setMoreFloat(false);
-    };
 
     const handleSignOut = async () => {
         const result = await signOut();
@@ -75,28 +71,17 @@ const Sidebar = () => {
             className="column"
             id="navbar"
         >
-            {tweetModal && (
-                <TweetModal
-                    isOpen={tweetModal}
-                    onClose={closeTweetModal}
-                />
-            )}
-
-            {displayModal && (
-                <DisplayModal
-                    isOpen={displayModal}
-                    onClose={closeDisplayModal}
-                />
-            )}
-
             <div className="sticky-wrapper">
-                <NavLink
-                    to={`/`}
-                    className="logo-container"
-                >
-                    <Logo />
-                </NavLink>
+                <div className="dark_round-btn sidebar-logo">
+                    <NavLink
+                        to={`/home`}
+                        className="logo-container icon-container"
+                        state={{ previousPath: pathname }}
+                    >
+                        <Logo />
+                    </NavLink>
 
+                </div>
 
                 <IconContext.Provider value={{ className: "navbar_icon" }}>
                     <nav className="navbar">
@@ -105,11 +90,13 @@ const Sidebar = () => {
                             className="navbar-link"
                             children={({ isActive }) => (
                                 <>
-                                    {isActive ? (
-                                        <BiSolidHomeCircle size="25" />
-                                    ) : (
-                                        <BiHomeCircle size="25" />
-                                    )}
+                                    <div className="navbar-link_container">
+                                        {isActive ? (
+                                            <BiSolidHomeCircle />
+                                        ) : (
+                                            <BiHomeCircle />
+                                        )}
+                                    </div>
                                     <span className="text">Home</span>
                                 </>
                             )}
@@ -121,7 +108,9 @@ const Sidebar = () => {
                             className="navbar-link"
                             children={({ isActive }) => (
                                 <>
-                                    <BiSearch size="25" />
+                                    <div className="navbar-link_container">
+                                        <BiSearch />
+                                    </div>
                                     <span className="text">Explore</span>
                                 </>
                             )}
@@ -133,11 +122,13 @@ const Sidebar = () => {
                             className="navbar-link"
                             children={({ isActive }) => (
                                 <>
-                                    {isActive ? (
-                                        <BiSolidBell size="25" />
-                                    ) : (
-                                        <BiBell size="25" />
-                                    )}
+                                    <div className="navbar-link_container">
+                                        {isActive ? (
+                                            <BiSolidBell />
+                                        ) : (
+                                            <BiBell />
+                                        )}
+                                    </div>
                                     <span className="text">Notifications</span>
                                 </>
                             )}
@@ -150,11 +141,13 @@ const Sidebar = () => {
                             className="navbar-link"
                             children={({ isActive }) => (
                                 <>
-                                    {isActive ? (
-                                        <BiSolidEnvelope size="25" />
-                                    ) : (
-                                        <BiEnvelope size="25" style={{ strokeWidth: "0" }} />
-                                    )}
+                                    <div className="navbar-link_container">
+                                        {isActive ? (
+                                            <BiSolidEnvelope />
+                                        ) : (
+                                            <BiEnvelope />
+                                        )}
+                                    </div>
                                     <span className="text">Messages</span>
                                 </>
                             )}
@@ -167,11 +160,9 @@ const Sidebar = () => {
                             className="navbar-link"
                             children={({ isActive }) => (
                                 <>
-                                    {isActive ? (
-                                        <BiSolidBookmark size="25" />
-                                    ) : (
-                                        <BiBookmark size="25" />
-                                    )}
+                                    <div className="navbar-link_container">
+                                        {isActive ? <BiSolidBookmark /> : <BiBookmark />}
+                                    </div>
                                     <span className="text">Bookmarks</span>
                                 </>
                             )}
@@ -183,40 +174,33 @@ const Sidebar = () => {
                             className="navbar-link"
                             children={({ isActive }) => (
                                 <>
-                                    {isActive ? (
-                                        <BiSolidUser size="25" />
-                                    ) : (
-                                        <BiUser size="25" />
-                                    )}
+                                    <div className="navbar-link_container">
+                                        {isActive ? (
+                                            <BiSolidUser />
+                                        ) : (
+                                            <BiUser />
+                                        )}
+                                    </div>
                                     <span className="text">Profile</span>
                                 </>
                             )}
                             state={{ previousPath: pathname }}
                         />
 
-                        <button
-                            type="button"
-                            className="navbar-link"
-                            onClick={openMoreFloat}
-                        >
-                            <IconContext.Provider value={{ className: "navbar_icon settings" }}>
-                                <PiDotsThreeCircle size="25" />
-                            </IconContext.Provider>
-
-                            <span className="text">More</span>
-
-                            {moreFloat && (
-                                <FloatOptions
-                                    isOpen={moreFloat}
-                                    onClose={closeMoreFloat}
-                                    className="more-options"
-                                >
+                        <Float
+                            isOpen={isMoreFloatOpen}
+                            open={openMoreFloat}
+                            close={closeMoreFloat}
+                            // defaultPositions={["bottom", "right"]}
+                            className="more-options"
+                            renderContent={() => (
+                                <div className="more-options">
                                     <Link
                                         to={`/explore/people`}
                                         className="float-btn"
                                     >
                                         <div className="wrapper">
-                                            <FaEarthAmericas />
+                                            <IoEarthOutline style={{ strokeWidth: "7" }} />
                                         </div>
                                         Connect
                                     </Link>
@@ -224,7 +208,11 @@ const Sidebar = () => {
                                     <button
                                         type="button"
                                         className="float-btn"
-                                        onClick={openDisplayModal}
+                                        onClick={() => dispatch(
+                                            modalActions.openModal({
+                                                name: "DisplayModal"
+                                            })
+                                        )}
                                     >
                                         <div className="wrapper">
                                             <HiOutlinePencilAlt style={{ strokeWidth: "2" }} />
@@ -232,16 +220,30 @@ const Sidebar = () => {
 
                                         Display
                                     </button>
-                                </FloatOptions>
+                                </div>
                             )}
-                        </button>
+                        >
+                            <button
+                                type="button"
+                                className="navbar-link"
+                                onClick={openMoreFloat}
+                            >
+                                <IconContext.Provider value={{ className: "navbar_icon settings" }}>
+                                    <PiDotsThreeCircle size="25" style={{ strokeWidth: "2" }} />
+                                </IconContext.Provider>
+
+                                <span className="text">More</span>
+                            </button>
+                        </Float>
 
                         <button
                             type="button"
                             className="accent-btn navbar-btn"
-                            onClick={openTweetModal}
+                            onClick={() => dispatch(modalActions.openModal({
+                                name: "TweetModal"
+                            }))}
                         >
-                            <span className="text">Tweet</span>
+                            <span className="text">Post</span>
                             <IconContext.Provider
                                 value={{ className: "navbar-btn_icon" }}
                             >
@@ -251,37 +253,31 @@ const Sidebar = () => {
                     </nav>
                 </IconContext.Provider>
 
-                <button
-                    className="navbar-account"
-                    onClick={openAccountFloat}
-                >
-                    {accountFloat && (
-                        <FloatOptions
-                            isOpen={accountFloat}
-                            onClose={closeAccountFloat}
-                            className="account-settings"
-                        >
-                            <section className="account-details">
-                                <div className="wrapper">
-                                    <div className="pfp-container">
-                                        <img
-                                            src={currentUser.profileImageURL}
-                                            className="pfp"
-                                            alt="User PFP"
-                                        />
-                                    </div>
+                <Float
+                    isOpen={isAccountFloatOpen}
+                    open={openAccountFloat}
+                    close={closeAccountFloat}
+                    className="account-settings"
+                    renderContent={({ floatRef }) => (
+                        <>
+                            <section className="account-details" ref={floatRef}>
+                                <div className="wrapper truncate">
+                                    <PfpContainer src={currentUser.profileImageURL} />
 
-                                    <div className="navbar-account_names">
-                                        <p className="display_name">
+                                    <div className="navbar-account_names truncate">
+                                        <p className="display_name truncate">
                                             {currentUser.displayName}
                                         </p>
-                                        <p className="username">
+                                        <p className="username truncate">
                                             @{currentUser.username}
                                         </p>
                                     </div>
                                 </div>
 
-                                <IoMdCheckmark size="20" className="account-checkmark" />
+                                <IoMdCheckmark
+                                    size="20"
+                                    className="account-checkmark"
+                                />
                             </section>
 
                             <button
@@ -291,27 +287,31 @@ const Sidebar = () => {
                             >
                                 Log out @{currentUser.username}
                             </button>
-                        </FloatOptions>
+                        </>
                     )}
+                >
+                    <button
+                        className="navbar-account"
+                        onClick={openAccountFloat}
+                    >
+                        <PfpContainer src={currentUser.profileImageURL} />
 
-                    <div className="pfp-container">
-                        <img
-                            src={currentUser.profileImageURL}
-                            className="pfp"
-                            alt="User PFP"
+
+                        <div className="navbar-account_names truncate">
+                            <p className="display_name truncate">
+                                {currentUser.displayName}
+                            </p>
+                            <p className="username truncate">
+                                @{currentUser.username}
+                            </p>
+                        </div>
+
+                        <IoEllipsisHorizontal
+                            size="16"
+                            className="navbar-account_icon"
                         />
-                    </div>
-
-                    <div className="navbar-account_names">
-                        <p className="display_name">
-                            {currentUser.displayName}
-                        </p>
-                        <p className="username">@{currentUser.username}</p>
-                    </div>
-
-
-                    <IoEllipsisHorizontal size="15" className="navbar-account_icon" />
-                </button>
+                    </button>
+                </Float>
             </div>
         </section >
     );
