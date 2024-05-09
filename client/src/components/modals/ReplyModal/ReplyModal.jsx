@@ -13,6 +13,7 @@ import {
     TweetFormActions,
     TweetDetails,
     QuotePreview,
+    PfpContainer
 } from "../../index";
 
 import { useAppSelector } from "../../../app/store";
@@ -20,7 +21,7 @@ import { useCreateTweetMutation } from "../../../features/api/tweetApi";
 
 import { isObjEmpty } from "../../../utils/object";
 
-const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
+const ReplyModal = ({ replyingTo, isOpen, closeModal, maxLength = 280 }) => {
     const [tweet, setTweet] = useState("");
     const [media, setMedia] = useState(null);
     const [mediaPreview, setMediaPreview] = useState(null);
@@ -47,8 +48,7 @@ const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
 
         if (!result?.error) {
             closeInput();
-
-            toast.success(
+            toast(
                 () => (
                     <span>
                         <span>Your Tweet was sent  </span>
@@ -79,22 +79,16 @@ const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
     return (
         <BaseModal
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={closeModal}
             className="reply-modal"
         >
-            <ColumnHeader close={onClose} />
+            <ColumnHeader closeModal={true} />
 
             <section className="recipient-tweet">
-                <div className="pfp-container">
-                    <img
-                        src={replyingTo.author.profileImageURL}
-                        className="pfp"
-                        alt="User PFP"
-                    />
-                </div>
+                <PfpContainer src={replyingTo.author.profileImageURL} />
 
                 <div className="tweet-container">
-                    <TweetDetails tweet={replyingTo} date={false} />
+                    <TweetDetails tweet={replyingTo} />
 
                     <div className="tweet-content">
                         <TweetText text={replyingTo.content} />
@@ -115,13 +109,9 @@ const ReplyModal = ({ replyingTo, isOpen, onClose, maxLength = 280 }) => {
             </section>
 
             <section className="tweet-input">
-                <div className="pfp-container">
-                    <img
-                        src={profileImageURL}
-                        className="pfp"
-                        alt="User PFP"
-                    />
-                </div>
+                <PfpContainer src={profileImageURL} />
+
+
                 <div className="input-container">
                     <TweetInput
                         tweet={tweet}

@@ -34,7 +34,8 @@
     color: var(--primary-colour);
 }
 
-.tweet-attachments_button:disabled:hover .icon-container::after {
+.tweet-attachments_button:disabled:hover .icon-container::after,
+.tweet-attachments_button:disabled:active .icon-container::after {
     background-color: var(--accent-hover);
 }
 

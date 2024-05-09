@@ -3,11 +3,13 @@ import "../../ui/TweetForm/styles.css";
 
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { createSelector } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
 import { IconContext } from "react-icons";
 import { IoEarth } from "react-icons/io5";
 
 import { useAppSelector } from "../../../app/store";
+import { useCreateTweetMutation } from "../../../features/api/tweetApi";
 
 import {
     ColumnHeader,
@@ -15,21 +17,26 @@ import {
     TweetFormActions,
     TweetInput,
     QuotePreview,
+    PfpContainer
 } from "../../index";
 
-import { useCreateTweetMutation } from "../../../features/api/tweetApi";
 
-const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
+const stateSelector = createSelector(
+    (state) => state.modal,
+    (state) => state.auth,
+    (modal, auth) => ({
+        currentUser: auth.user,
+    })
+);
+
+const TweetModal = ({ maxLength = 280, placeholder, quote = null, isOpen, closeModal = () => { } }) => {
     const [tweet, setTweet] = useState("");
     const [media, setMedia] = useState();
     const [mediaPreview, setMediaPreview] = useState();
 
     const inputRef = useRef();
 
-    const {
-        user: { id, profileImageURL, username },
-    } = useAppSelector((state) => state.auth);
-
+    const { currentUser: { id, profileImageURL, username } } = useAppSelector(stateSelector);
     const [createTweet] = useCreateTweetMutation();
 
     const handleTweet = async () => {
@@ -38,25 +45,23 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
         formData.append("content", tweet);
         formData.append("author", id);
         formData.append("media", media);
+
         !!quote?._id && formData.append("quoteTo", quote._id);
 
         const result = await createTweet(formData).unwrap();
 
         if (!result.error) {
-            toast.success(
-                () => (
-                    <span>
-                        <span>Your Tweet was sent  </span>
-                        <Link
-                            to={`/${username}/status/${result.tweetId}`}
-                            className="toast-view-link"
-                        >
-                            View
-                        </Link>
-                    </span >
-                ),
-                { duration: 6000 }
-            );
+            toast.success(() => (
+                <span>
+                    <span>Your Tweet was sent  </span>
+                    <Link
+                        to={`/${username}/status/${result.tweetId}`}
+                        className="toast-view-link"
+                    >
+                        View
+                    </Link>
+                </span>
+            ), { duration: 6000 });
 
             closeInput();
         }
@@ -76,20 +81,14 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
     return (
         <BaseModal
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={closeModal}
             className="tweet-modal"
         >
-            <ColumnHeader close={onClose} />
+            <ColumnHeader closeModal={true} />
 
             <section className="tweet-input">
                 <div className="tweet-input_container">
-                    <div className="pfp-container">
-                        <img
-                            src={profileImageURL}
-                            className="pfp"
-                            alt="User PFP"
-                        />
-                    </div>
+                    <PfpContainer src={profileImageURL} />
 
                     <div className="input-wrap">
                         <button
@@ -107,6 +106,7 @@ const TweetModal = ({ maxLength = 280, quote = null, isOpen, onClose }) => {
                             inputRef={inputRef}
                             mediaPreview={mediaPreview}
                             clearMedia={clearMedia}
+                            placeholder={placeholder}
                         />
 
                         {quote && <QuotePreview tweet={quote} />}

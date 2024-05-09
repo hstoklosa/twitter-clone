@@ -7,12 +7,12 @@ import { IconContext } from "react-icons";
 import { IoMdClose } from "react-icons/io";
 import { IoEarth } from "react-icons/io5";
 
-import useOutsideClick from "../../../hooks/useOutsideClick";
-
-import { TweetInput, TweetFormActions } from "../../index";
-
 import { useAppSelector } from "../../../app/store";
 import { useCreateTweetMutation } from "../../../features/api/tweetApi";
+import useOutsideClick from "../../../hooks/useOutsideClick";
+
+import { TweetInput, TweetFormActions, PfpContainer } from "../../index";
+
 
 const TweetForm = ({
     replyTo,
@@ -44,7 +44,6 @@ const TweetForm = ({
         formData.append("media", media);
 
         if (replyTo) formData.append("replyTo", replyTo);
-
 
         const result = await createTweet(formData).unwrap();
 
@@ -89,15 +88,7 @@ const TweetForm = ({
             className={`tweet-form ${forceExpand && "force-expand"}`}
             ref={ref}
         >
-            {showPfp && (
-                <div className="pfp-container">
-                    <img
-                        src={profileImageURL}
-                        className="pfp"
-                        alt="User PFP"
-                    />
-                </div>
-            )}
+            {showPfp && <PfpContainer src={profileImageURL} />}
 
             <div className="tweet-input">
                 <div className={`tweet-input_container ${expanded && "expanded"}`}>
@@ -123,7 +114,7 @@ const TweetForm = ({
                     {mediaPreview && (
                         <div className="media-preview">
                             <button
-                                className="media-preview_close dark_round-btn"
+                                className="dark_round-btn media-preview_close"
                                 onClick={clearMedia}
                             >
                                 <div className="icon-container">
@@ -133,10 +124,8 @@ const TweetForm = ({
                                     />
                                 </div>
                             </button>
-                            <img
-                                src={mediaPreview}
-                                alt="Media Preview"
-                            />
+
+                            <img src={mediaPreview} alt="Media Preview" />
                         </div>
                     )}
 

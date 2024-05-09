@@ -4,22 +4,30 @@ import "./styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 import { IconContext } from "react-icons";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { TbCalendarTime, TbMoodSmile } from "react-icons/tb";
+import { TbMoodSmile } from "react-icons/tb";
 import { MdOutlinePoll, MdOutlineGifBox } from "react-icons/md";
 import { PiImageSquareBold } from "react-icons/pi";
 
-const TweetFormActions = ({ tweet, setMedia, setMediaPreview, buttonValue = "Tweet", handleTweet }) => {
+const TweetFormActions = ({
+    tweet,
+    setMedia,
+    setMediaPreview,
+    buttonValue = "Post",
+    handleTweet = () => { }
+}) => {
 
     const handleFileChange = ({ target }) => {
-        const types = ["image/png", "image/jpeg", "image/jpg"];
+        const types = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
 
         const files = target.files;
         const image = files?.[0];
 
         if (image && types.includes(image.type)) {
+            // media to transfer
             setMedia(image);
-            setMediaPreview(URL.createObjectURL(image)); // assign blob
+
+            // assign blob for preview
+            setMediaPreview(URL.createObjectURL(image));
         }
     };
 
@@ -32,13 +40,11 @@ const TweetFormActions = ({ tweet, setMedia, setMediaPreview, buttonValue = "Twe
                         className="tweet-attachments_button blue_round-btn"
                     >
                         <input
-                            type="file"
                             id="image"
-                            accept=".jpg, .jpeg, .png"
-                            style={{
-                                display: "none",
-                            }}
+                            type="file"
+                            accept="image/*"
                             onChange={handleFileChange}
+                            style={{ display: "none" }}
                         />
 
                         <div className="icon-container">
@@ -103,8 +109,8 @@ const TweetFormActions = ({ tweet, setMedia, setMediaPreview, buttonValue = "Twe
                 <button
                     type="button"
                     className="accent-btn post-btn"
-                    disabled={tweet.length <= 0}
                     onClick={handleTweet}
+                    disabled={tweet.length <= 0}
                 >
                     {buttonValue}
                 </button>

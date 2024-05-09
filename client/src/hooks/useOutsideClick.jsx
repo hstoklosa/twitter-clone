@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 
-const useOutsideClick = (callback, options = { click: true, escape: true }) => {
+const defaultOptions = { click: true, escape: true };
+
+const useOutsideClick = (callback, options = defaultOptions) => {
     const ref = useRef();
 
     const handleClick = (e) => {
         if (options.click && ref.current && !ref.current.contains(e.target))
             callback();
-
     };
 
     const handleEscape = (e) => {
