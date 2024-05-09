@@ -1,5 +1,6 @@
 import "./styles.css";
-import { BaseModal, InputAccentRadio, InputThemeRadio, TweetText } from "../../index";
+import { BaseModal, InputAccentRadio, InputThemeRadio, TweetText, PfpContainer } from "../../index";
+
 
 const themes = [
     ['light', 'Default'],
@@ -16,13 +17,13 @@ const accentsColor = [
     'green'
 ];
 
-const previewText = "At the heart of X are short messages called posts — just like this one — which can include photos, videos, links, text, hashtags, and mentions like @X."
+const previewText = "At the heart of X are short messages called posts — just like this one — which can include photos, videos, links, text, hashtags, and mentions like @X"
 
-const DisplayModal = ({ isOpen, onClose }) => {
+const DisplayModal = ({ isOpen, closeModal }) => {
     return (
         <BaseModal
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={closeModal}
             className="display-modal"
         >
             <div className="display-modal_header">
@@ -32,15 +33,7 @@ const DisplayModal = ({ isOpen, onClose }) => {
 
 
             <div className="display-modal_preview">
-                <div className="pfp-container">
-                    <div className="icon-container">
-                        <img
-                            src={`${process.env.REACT_APP_API_URL}/uploads/default_pfp.png`}
-                            alt="User Pfp"
-                            className="pfp"
-                        />
-                    </div>
-                </div>
+                <PfpContainer src={`${process.env.REACT_APP_API_URL}/uploads/x_pfp.jpg`} />
 
                 <div className="preview-container">
                     <div className="preview-author">
@@ -85,12 +78,10 @@ const DisplayModal = ({ isOpen, onClose }) => {
 
             <button
                 className="accent-btn"
-                onClick={onClose}
+                onClick={closeModal}
             >
                 Done
             </button>
-
-
         </BaseModal>
     )
 }

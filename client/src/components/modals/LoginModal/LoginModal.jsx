@@ -1,20 +1,15 @@
 import "./styles.css";
 
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 import { IconContext } from "react-icons";
 import { FcGoogle } from "react-icons/fc";
 
 import { useAppSelector } from "../../../app/store";
 import useModalPagination from "../../../hooks/useModalPagination";
-
-import {
-    BaseModal,
-    ColumnHeader,
-    TextInput,
-    Logo
-} from "../../index";
 
 import {
     useSignInMutation,
@@ -24,14 +19,21 @@ import {
 import { modalActions } from "../../../features/slices/modalSlice";
 import { loginActions } from "../../../features/slices/loginSlice";
 
+import {
+    BaseModal,
+    ColumnHeader,
+    TextInput,
+    Logo
+} from "../../index";
 
-const LoginModal = ({ isOpen }) => {
-    const formState = useAppSelector((state) => state.login.form);
+
+const LoginModal = ({ isOpen, closeModal }) => {
+    const { currentPage, setCurrentPage, nextPage } = useModalPagination(3);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { currentPage, setCurrentPage, nextPage } = useModalPagination(3);
+    const formState = useAppSelector((state) => state.login.form);
 
     const [checkIdentifier, { data: identifierExists }] = useLazyIdentifierExistsQuery();
     const [signIn, { error: signInError }] = useSignInMutation();
@@ -41,15 +43,21 @@ const LoginModal = ({ isOpen }) => {
 
         const result = await signIn(formState);
 
+        if (result.error) {
+            return toast.error(result.error.message);
+        }
+
         if (!result.error && result.data.isEmailVerified === false) {
             closeLoginModal();
-            dispatch(modalActions.enableVerificationModal({ userId: result.data.id }));
+            dispatch(modalActions.openModal({
+                name: "VerificationModal",
+                props: { userId: result.data.id }
+            }))
         }
 
         if (!result.error && result.data.isAuthenticated) {
+            // navigate("/home");
             closeLoginModal();
-            dispatch(modalActions.disableVerificationModal());
-            navigate("/home");
         }
     };
 
@@ -59,28 +67,16 @@ const LoginModal = ({ isOpen }) => {
                 name: "identifier",
                 value: target.value
             })
-        )
+        );
 
-        formState.identifier.length > 0 && (await checkIdentifier(target.value));
+        target.value.length > 0 && (await checkIdentifier(target.value));
     }
-
-    const handleIdentiferBlur = async ({ target }) => {
-        formState.identifier.length > 0 && (await checkIdentifier(target.value));
-    };
-
 
     const closeLoginModal = () => {
         setCurrentPage(1);
         dispatch(loginActions.clearForm());
-        dispatch(modalActions.disableSignInModal())
-
+        closeModal();
     };
-
-    const switchToSignup = () => {
-        dispatch(modalActions.disableSignInModal())
-        dispatch(modalActions.enableSignUpModal());
-    }
-
 
     return (
         <BaseModal
@@ -90,15 +86,12 @@ const LoginModal = ({ isOpen }) => {
         >
             <ColumnHeader
                 className="login-modal_header"
-                close={closeLoginModal}
+                closeModal={true}
             >
                 <div className="header_container">
-                    <Link
-                        to={`/`}
-                        className="logo-container"
-                    >
+                    <div className="logo-container">
                         <Logo />
-                    </Link>
+                    </div>
                 </div>
             </ColumnHeader>
 
@@ -108,7 +101,7 @@ const LoginModal = ({ isOpen }) => {
             >
                 {currentPage === 1 && (
                     <div className="page">
-                        <h1>Sign in to Twitter</h1>
+                        <h1>Sign in to X</h1>
 
                         <div className="signin-methods">
                             <a
@@ -135,7 +128,6 @@ const LoginModal = ({ isOpen }) => {
                                 onChange={debouncedOnChange}
                                 value={formState.identifier}
                                 error={!identifierExists}
-                                onBlur={handleIdentiferBlur}
                             />
                         </div>
 
@@ -206,7 +198,11 @@ const LoginModal = ({ isOpen }) => {
                     <button
                         type="button"
                         className="link-blue"
-                        onClick={switchToSignup}
+                        onClick={() => dispatch(
+                            modalActions.openModal({
+                                name: "RegisterModal"
+                            })
+                        )}
                     >
                         Sign up
                     </button>

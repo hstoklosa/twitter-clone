@@ -1,5 +1,8 @@
 .signup-modal .modal-content {
-    padding: 1rem 1;
+    padding: 0;
+}
+
+.signup-modal_form {
 }
 
 .signup-modal .input-wrapper {
@@ -16,6 +19,7 @@
     justify-content: flex-start;
     align-items: center;
     margin-bottom: 1rem;
+    padding: 1rem;
 }
 
 .signup-modal_header h2 {
@@ -25,6 +29,7 @@
 
 .signup-modal_form-header {
     margin-bottom: 1.5rem;
+    font-size: clamp(1.6rem, 5vw, 2rem);
 }
 
 .signup-modal_header h3 {
@@ -33,9 +38,9 @@
 }
 
 .signup-modal_form {
+    padding: 1rem !important;
     height: 100%;
     width: 75%;
-    padding: 0.5rem 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -63,7 +68,8 @@
     transition: background-color 0.2s linear;
 }
 
-.btn-close-modal:hover {
+.btn-close-modal:hover,
+.btn-close-modal:active {
     background-color: var(--item-hover);
 }
 
@@ -132,7 +138,8 @@
     height: 25px !important;
 }
 
-.signup-modal_header .logo-container:hover {
+.signup-modal_header .logo-container:hover,
+.signup-modal_header .logo-container:active {
     background: 0 !important;
 }
 

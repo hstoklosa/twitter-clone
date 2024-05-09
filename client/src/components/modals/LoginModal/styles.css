@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    padding: 0.25rem 0.25rem 0 0.25rem;
 }
 
 .login-modal_header .header-btn .icon-container {
@@ -24,7 +25,8 @@
     object-fit: contain; */
 }
 
-.login-modal .logo-container:hover {
+.login-modal .logo-container:hover,
+.login-modal .logo-container:active {
     background: 0;
 }
 
@@ -47,6 +49,7 @@
     margin-top: 0.5rem;
     margin-bottom: 2rem;
     text-align: center;
+    font-size: clamp(1.6rem, 5vw, 2rem);
 }
 
 .signin-methods {
@@ -123,7 +126,7 @@
 }
 
 .login-modal_form .p2 .next {
-    margin-bottom: 0.8rem;
+    margin-bottom: 4rem;
 }
 
 .login-modal_form .page .input-wrapper {
@@ -137,4 +140,13 @@
     .login-modal_form h1 {
         /* width: 70%; */
     }
+}
+
+.login-modal .header-btn {
+    width: 25px;
+}
+
+.login-modal .header-btn .icon-container::after {
+    width: 35px;
+    height: 35px;
 }

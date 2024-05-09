@@ -3,17 +3,16 @@ import "./styles.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-import { registerActions } from "../../../features/slices/registerSlice";
 import { useAppSelector, useAppDispatch } from "../../../app/store";
 import { useVerifyTokenMutation, useLazyCheckAuthQuery } from "../../../features/api/authApi";
+import { registerActions } from "../../../features/slices/registerSlice";
 
 import { BaseModal, TextInput, Logo } from "../../index";
-import { modalActions } from "../../../features/slices/modalSlice";
 
 
 const VerificationModal = ({ isOpen, closeModal }) => {
     const { token } = useAppSelector((state) => state.register);
-    const { userId } = useAppSelector((state) => state.modal.verificationModal);
+    const { userId } = useAppSelector((state) => state.modal.componentProps);
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -42,7 +41,7 @@ const VerificationModal = ({ isOpen, closeModal }) => {
 
     const closeVerificationModal = () => {
         dispatch(registerActions.clearToken());
-        dispatch(modalActions.disableVerificationModal());
+        closeModal();
     }
 
     return (

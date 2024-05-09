@@ -33,6 +33,11 @@
 
 .display-modal_preview .pfp-container {
     margin-right: 1rem;
+    min-width: 40px;
+}
+
+.display-modal_header h1 {
+    text-align: center;
 }
 
 .display-modal_header p {
@@ -52,7 +57,10 @@
 
 .display-modal_section-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+
+    grid-template-columns: repeat(auto-fit, minmax(min(70px, 15vw), 2fr));
+
+    align-content: center;
     justify-items: center;
     gap: 0.5rem;
     row-gap: 1rem;

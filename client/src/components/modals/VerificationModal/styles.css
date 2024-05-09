@@ -36,7 +36,8 @@ input#code {
     height: 75px;
 }
 
-.verification-modal .logo-container:hover {
+.verification-modal .logo-container:hover,
+.verification-modal .logo-container:active {
     background: 0 !important;
 }
 

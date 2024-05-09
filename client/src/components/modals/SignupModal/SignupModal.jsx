@@ -1,11 +1,11 @@
 import "./styles.css";
 
-import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import { useAppSelector, useAppDispatch } from "../../../app/store";
 import { modalActions } from "../../../features/slices/modalSlice";
 import { registerActions } from "../../../features/slices/registerSlice";
+
 import {
     useLazyCheckUsernameQuery,
     useLazyCheckEmailQuery,
@@ -44,7 +44,6 @@ const SignupModal = ({ isOpen, closeModal }) => {
         validateEmail(formState.email);
     };
 
-
     const handleSignUp = async (e) => {
         e.preventDefault();
 
@@ -56,13 +55,16 @@ const SignupModal = ({ isOpen, closeModal }) => {
 
         if (result?.data?.id && !result.error) {
             closeSignUpModal();
-            dispatch(modalActions.enableVerificationModal({ userId: result.data.id }));
+            dispatch(modalActions.openModal({
+                name: "VerificationModal",
+                props: { userId: result.data.id }
+            }))
         }
     };
 
     const closeSignUpModal = () => {
         dispatch(registerActions.clearForm());
-        dispatch(modalActions.disableSignUpModal());
+        closeModal();
     }
 
     return (
@@ -73,15 +75,12 @@ const SignupModal = ({ isOpen, closeModal }) => {
         >
             <ColumnHeader
                 className="signup-modal_header"
-                close={closeModal}
+                closeModal={true}
             >
                 <div className="header_container">
-                    <Link
-                        to={`/`}
-                        className="logo-container"
-                    >
+                    <div className="logo-container">
                         <Logo />
-                    </Link>
+                    </div>
                 </div>
             </ColumnHeader>
 
@@ -122,7 +121,6 @@ const SignupModal = ({ isOpen, closeModal }) => {
                     onBlur={handleEmailBlur}
                 />
 
-
                 <div className="signup-modal_input-container">
                     <p>Your @username is unique. You can always change it later.</p>
 
@@ -143,10 +141,8 @@ const SignupModal = ({ isOpen, closeModal }) => {
                     />
                 </div>
 
-
-
                 <div className="signup-modal_input-container">
-                    <p>Make sure it's 8 characters or more.</p>
+                    <p>Make sure the password is 8 characters or more.</p>
 
                     <TextInput
                         type="password"
