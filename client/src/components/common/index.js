@@ -12,3 +12,6 @@ export { default as InputAccentRadio } from "./InputAccentRadio";
 export { default as InputThemeRadio } from "./InputThemeRadio";
 export { default as BaseWidget } from "./BaseWidget";
 export { default as Logo } from "./Logo";
+export { default as Tooltip } from "./Tooltip";
+export { default as ModalRoot } from "./ModalRoot";
+export { default as Float } from "./Float";

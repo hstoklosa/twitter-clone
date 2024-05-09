@@ -1,0 +1,34 @@
+.modal {
+    position: fixed;
+    z-index: 999999999;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: none;
+}
+
+.modal.open header {
+    z-index: 9999999999 !important;
+}
+
+.modal-content_wrapper {
+    width: 90%;
+    /* max-height: 80%; */
+    max-width: 600px;
+    border-radius: 1rem;
+    overflow: hidden !important;
+    position: absolute !important;
+}
+
+.modal-content {
+    max-height: 80vh;
+    padding: 1rem;
+    width: 100%;
+    background-color: var(--background);
+    border-radius: 1rem;
+    overflow-y: auto !important;
+}

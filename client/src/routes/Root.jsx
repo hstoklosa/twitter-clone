@@ -8,7 +8,8 @@ import { useTheme } from "../contexts/ThemeProvider";
 import { useAppSelector } from "../app/store";
 import { useCheckAuthQuery } from "../features/api/authApi";
 import { useGetUserInfoQuery } from "../features/api/userApi";
-import { Loading } from "../components";
+import { Loading, Tooltip, ModalRoot } from "../components";
+
 
 const toastOptions = {
     style: {
@@ -21,17 +22,15 @@ const toastOptions = {
 };
 
 const Root = () => {
-    const auth = useAppSelector((state) => state.auth);
-
-    const { theme, accent } = useTheme();
-    const currDevice =
-        useMediaQuery("only screen and (max-width : 420px)") ? "mobile" : "desktop";
+    const { user, isAuth } = useAppSelector((state) => state.auth);
 
     const { isLoading: isAuthLoading } = useCheckAuthQuery();
-    const { isLoading: isUserLoading } = useGetUserInfoQuery(auth.user?.username, {
-        skip: !auth.isAuth,
+    const { isLoading: isUserLoading } = useGetUserInfoQuery(user?.username, {
+        skip: !isAuth,
     });
 
+    const { theme, accent } = useTheme();
+    const currDevice = useMediaQuery("only screen and (max-width : 420px)") ? "mobile" : "desktop";
 
     return (
         <div id="app"
@@ -41,18 +40,30 @@ const Root = () => {
         >
             <Toaster
                 toastOptions={toastOptions}
-                containerStyle={{ zIndex: 99999999999 }}
                 position="bottom-center"
+                containerStyle={{ zIndex: 99999999999 }}
                 reverseOrder={false}
             />
 
-            <ScrollRestoration
-                getKey={(location, matches) => {
-                    return location.key;
-                }}
-            />
+            {/* <ScrollRestoration getKey={(location, matches) => location.pathname} /> */}
+
+            <ScrollRestoration getKey={(location, matches) => {
+                let scrollByPathname = matches.some(
+                    (m) => (m.handle)?.scrollMode === 'pathname'
+                );
+
+                if (scrollByPathname && !location.state?.preventRestore) {
+                    return location.pathname;
+                }
+
+                return location.key;
+            }} />
+
+            <Tooltip />
 
             <div id="app-container">
+                <ModalRoot />
+
                 <div id="app-container_wrapper">
                     {(isAuthLoading || isUserLoading)
                         ? <Loading />
