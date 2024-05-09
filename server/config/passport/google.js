@@ -40,7 +40,7 @@ module.exports = new GoogleStrategy(
             }
 
             // users exists with a different provider
-            if (user.provider.providerName != "google") {
+            if (user.provider?.providerName != "google") {
                 return cb(null, false, {
                     message: `You have previously signed up with a different sign-in method`,
                 });

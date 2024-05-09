@@ -31,7 +31,6 @@ const paginate = async (modelName = null, pipeline = [], options = {}) => {
     }
 
     const { data, totalCount: tempCount } = result;
-
     const totalCount = tempCount.length ? tempCount[0].count : 0;
     const totalPages = Math.ceil(totalCount / limit);
 

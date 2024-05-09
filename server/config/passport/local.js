@@ -10,7 +10,7 @@ module.exports = new LocalStrategy(
     async (identifier, password, cb) => {
         try {
             const user = await userService.findByIdentifier(identifier, {
-                select: "id username password displayName profileImageURL verified email followers following",
+                select: "id username password displayName profileImageURL verified email followers following provider",
             });
 
             const { password: fetchedPassword, ...rest } = user;
