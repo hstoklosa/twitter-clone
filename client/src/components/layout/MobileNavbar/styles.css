@@ -11,6 +11,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    transition: opacity 170ms cubic-bezier(0, 0, 1, 1);
+}
+
+.mobile-navbar.scroll {
+    opacity: 0.3;
 }
 
 .mobile-navbar .navbar-link {

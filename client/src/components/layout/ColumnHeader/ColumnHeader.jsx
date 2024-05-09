@@ -1,32 +1,52 @@
-import { Link, useLocation } from "react-router-dom";
+import classNames from "classnames";
+import { Link } from "react-router-dom";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { IconContext } from "react-icons";
 import { BiArrowBack } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
-import { MobileSidebar } from "../../index";
+
+import useScrollDirection from "../../../hooks/useScrollDirection";
+
+import { useAppSelector, useAppDispatch } from "../../../app/store";
+import { modalActions } from "../../../features/slices/modalSlice";
+import { PfpContainer } from "../../index";
 
 const ColumnHeader = ({
     className,
     sidebarButton = false,
-    close,
+    closeModal,
     modalBack,
     routerBack,
     children
 }) => {
+    const { user: currentUser } = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
+
     const isSmallDevice = useMediaQuery("only screen and (max-width : 420px)");
-    const { state } = useLocation();
+    const scrollDirection = useScrollDirection();
+
+    const headerClasses = classNames(className || "column-header", {
+        scroll: scrollDirection === "down",
+    });
 
     return (
         <IconContext.Provider value={{ className: "header-btn_icon" }}>
-            <header className={className}>
+            <header className={headerClasses}>
                 {(sidebarButton && isSmallDevice) && (
-                    <MobileSidebar />
+                    <div
+                        className="mobile-sidebar_button"
+                        onClick={() => dispatch(modalActions.enableMobileSidebar())}
+                    >
+                        <PfpContainer src={currentUser.profileImageURL} />
+                    </div>
                 )}
 
-                {close && (
+                {closeModal && (
                     <button
                         className="header-btn dark_round-btn"
-                        onClick={close}
+                        onClick={() => dispatch(modalActions.closeModal())}
+                        data-tooltip-id="action-tooltip"
+                        data-tooltip-content="Close"
                     >
                         <div className="icon-container">
                             <IoMdClose
@@ -50,8 +70,11 @@ const ColumnHeader = ({
 
                 {routerBack && (
                     <Link
-                        to={state?.previousPath || "/home"}
+                        // to={state?.previousPath || "/home"}
+                        to={-1}
                         className="header-btn dark_round-btn"
+                        data-tooltip-id="action-tooltip"
+                        data-tooltip-content="Back"
                     >
                         <div className="icon-container">
                             <BiArrowBack
