@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("./config/passport");
 const sessionMiddleware = require("./config/session");
+const rateLimitHandler = require("./middlewares/rateLimitHandler");
 const loggerMiddleware = require("./middlewares/loggerMiddleware");
 const errorHandler = require("./middlewares/errorHandler");
 const routes = require("./routes/index");
@@ -12,6 +13,7 @@ const helmet = require("helmet"); // Helmet helps you secure your Express apps b
 const mongoSanitize = require('express-mongo-sanitize'); // This module searches for any keys in objects that begin with a $ sign or contain a ., from req.body, req.query or req.params.
 
 const cors = require("cors"); // CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
+
 const cookieParser = require("cookie-parser"); // Parse Cookie header and populate req.cookies with an object keyed by the cookie names.
 
 
@@ -30,28 +32,31 @@ app.use(
 app.use(cookieParser());
 
 app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
-})); // Returns middleware that only parses urlencoded bodies
+app.use(express.urlencoded({ extended: true })); // Returns middleware that only parses urlencoded bodies
 
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: false,
+    crossOriginEmbedderPolicy: false,
+}));
 
 const limiter = rateLimit({
     max: 3000,
     windowMs: 60 * 60 * 1000, // In one hour
-    message: "Too many requests from this IP, please try again in an hour!",
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: rateLimitHandler
 });
 
-app.use("/tawk", limiter);
+app.use(limiter);
 
 app.use(mongoSanitize());
 
-app.use(errorHandler); // Error-handling middleware
-
 app.use(routes);
+
+app.use(errorHandler);
 
 module.exports = app;
