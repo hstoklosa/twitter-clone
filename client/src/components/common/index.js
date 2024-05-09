@@ -15,3 +15,5 @@ export { default as Logo } from "./Logo";
 export { default as Tooltip } from "./Tooltip";
 export { default as ModalRoot } from "./ModalRoot";
 export { default as Float } from "./Float";
+export { default as FloatButton } from "./Float/FloatButton";
+export { default as PfpContainer } from "./PfpContainer";
