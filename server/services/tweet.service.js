@@ -8,7 +8,7 @@ const {
 } = require("../helpers/selectors");
 
 const fetchById = async (tweetId) => {
-    const tweet = await Tweet.findById(tweetId).populate({
+    return (await Tweet.findById(tweetId).populate({
         path: "author",
         select: userInfoSelector,
     }).populate({
@@ -25,13 +25,11 @@ const fetchById = async (tweetId) => {
             path: "author",
             select: userInfoSelector,
         }
-    });
-
-    return tweet;
+    }));
 };
 
 const fetchByQuery = async (query, options) => {
-    return await paginate(
+    return (await paginate(
         "Tweet",
         [
             { $unwind: '$hashtags' },
@@ -81,11 +79,11 @@ const fetchByQuery = async (query, options) => {
             }
         ],
         options
-    )
+    ));
 }
 
 const fetchReplies = async (tweetId, options) => {
-    return await paginate(
+    return (await paginate(
         "Tweet",
         [
             { $match: { replyTo: tweetId } },
@@ -166,7 +164,7 @@ const fetchReplies = async (tweetId, options) => {
             { $replaceRoot: { newRoot: "$document" } },
         ],
         options
-    );
+    ));
 };
 
 const fetchEngagement = async (req, res, next) => {
@@ -206,7 +204,6 @@ const fetchEngagement = async (req, res, next) => {
 const createTweet = async (data) => {
     return (await new Tweet(data).save());
 }
-
 
 const createLike = async (tweetId, userId) => {
     return await Tweet.findByIdAndUpdate(tweetId, {

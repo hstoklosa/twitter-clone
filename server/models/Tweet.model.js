@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const User = require("./User.model");
-const Bookmark = require("./Bookmark.model");
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
@@ -34,6 +32,14 @@ const tweetSchema = new Schema(
                     enum: ["image", "gif"],
                     message: "Invalid media type.",
                 },
+                width: {
+                    type: String,
+                    required: true
+                },
+                height: {
+                    type: String,
+                    required: true
+                }
             },
         ],
         mentions: {
@@ -76,12 +82,13 @@ const tweetSchema = new Schema(
 
 // tweetSchema.index({author: 1, hashtags: 1});
 
+
 tweetSchema.methods.updateRepliesCount = async function () {
     this.repliesCount = await mongoose.model("Tweet").countDocuments({
         replyTo: this._id,
     });
 
-    return this.save();
+    this.save();
 };
 
 tweetSchema.methods.addRetweet = function (userId) {
@@ -112,9 +119,13 @@ tweetSchema.methods.deleteRetweet = function (userId) {
  *
  */
 
-tweetSchema.pre('deleteOne', async function (next) {
+
+tweetSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
     const Tweet = this.model('Tweet');
-    const tweetId = this.getQuery()['_id'];
+    const User = this.model('User');
+    const Bookmark = this.model('Bookmark');
+
+    const tweetId = this._id;
 
     await Tweet.deleteMany({
         $or: [

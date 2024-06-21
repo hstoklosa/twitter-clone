@@ -1,4 +1,6 @@
 const { ObjectId } = require("mongoose").Types;
+const sizeOf = require("image-size");
+
 const User = require("../models/User.model");
 const Tweet = require("../models/Tweet.model");
 const asyncHandler = require("../middlewares/asyncHandler");
@@ -7,9 +9,10 @@ const tweetService = require("../services/tweet.service");
 const paginate = require("../helpers/paginatePlugin");
 const { engagementSelector } = require("../helpers/selectors");
 
+const pick = require("../utils/pick");
 const { NotFoundError, ForbiddenError } = require("../utils/errors");
 const { isObjEmpty } = require("../utils/object");
-const pick = require("../utils/pick");
+
 
 const getTweet = asyncHandler(async (req, res, next) => {
     const { tweetId } = req.params;
@@ -258,22 +261,17 @@ const createTweet = asyncHandler(async (req, res, next) => {
         return next(new NotFoundError("Tweet being quoted is not found!"));
 
     if (replyTo && !(await Tweet.exists({ _id: replyTo })))
-        return next(new NotFoundError("Tweet being quoted is not found!"));
-
-    if (replyTo) {
-        const originalTweet = await Tweet.findById(replyTo);
-
-        if (!originalTweet)
-            return next(new NotFoundError("Tweet being replied to is not found!"));
-
-        await originalTweet.updateRepliesCount();
-    }
+        return next(new NotFoundError("Tweet being replied to is not found!"));
 
     // Attach incoming files
     if (req.file) {
+        const dimensions = sizeOf(req.file.path)
+
         data.media = {
             url: `${process.env.API_URL}/${req.file.path}`,
             mediaType: req.file.mimetype.split("/")[0],
+            height: dimensions.height.toString(),
+            width: dimensions.width.toString()
         };
     }
 
@@ -286,6 +284,10 @@ const createTweet = asyncHandler(async (req, res, next) => {
         let fields = Object.values(err.errors).map(el => el.path);
     }
 
+    if (replyTo)
+        await Tweet.findByIdAndUpdate(replyTo, { $inc: { repliesCount: 1 } });
+
+
     return res.status(200).json({
         success: true,
         tweetId: tweet._id
@@ -295,7 +297,7 @@ const createTweet = asyncHandler(async (req, res, next) => {
 const deleteTweet = asyncHandler(async (req, res, next) => {
     const { tweetId } = req.params;
 
-    const tweet = await Tweet.findById(tweetId);
+    const tweet = await Tweet.findOne({ _id: tweetId });
     const tweetAuthorId = tweet.author._id.toString();
     const authUserId = req.user._id.toString();
 
@@ -306,6 +308,7 @@ const deleteTweet = asyncHandler(async (req, res, next) => {
         return next(new ForbiddenError("You are not authorized to delete this tweet!"));
 
     await tweet.deleteOne();
+    // await Tweet.findByIdAndRemove(tweetId);
 
     return res.status(200).json({
         isTweetDeleted: true,
@@ -351,8 +354,8 @@ const deleteRepost = asyncHandler(async (req, res, next) => {
 });
 
 const likeTweet = asyncHandler(async (req, res, next) => {
-    const userId = req.user._id;
     const tweetId = req.params.tweetId;
+    const userId = req.body.userId;
 
     const tweet = await tweetService.createLike(tweetId, userId);
 
@@ -361,12 +364,13 @@ const likeTweet = asyncHandler(async (req, res, next) => {
 
     return res.status(200).json({
         isLiked: true,
+        userId
     });
 });
 
 const unlikeTweet = asyncHandler(async (req, res, next) => {
-    const userId = req.user._id;
     const tweetId = req.params.tweetId;
+    const userId = req.body.userId;
 
     const tweet = await tweetService.removeLike(tweetId, userId);
 
@@ -375,8 +379,10 @@ const unlikeTweet = asyncHandler(async (req, res, next) => {
 
     return res.status(200).json({
         isLiked: false,
+        userId
     });
 });
+
 
 module.exports = {
     getTweet,
