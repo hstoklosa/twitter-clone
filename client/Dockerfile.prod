@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --silent
+RUN npm ci --silent
 
 ARG API_URL
 ENV REACT_APP_API_URL=$API_URL
