@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    signUpModal: false,
-    signInModal: false,
+    isOpen: false,
+    componentName: null,
+    componentProps: {},
+    mobileSidebar: false,
     verificationModal: {
         isOpen: false,
-        userId: "",
+        userId: null,
     },
 };
 
@@ -13,17 +15,15 @@ const modalSlice = createSlice({
     name: "login",
     initialState,
     reducers: {
-        enableSignUpModal(state) {
-            state.signUpModal = true;
+        openModal(state, action) {
+            state.isOpen = true;
+            state.componentName = action.payload.name;
+            state.componentProps = action.payload.props;
         },
-        disableSignUpModal(state) {
-            state.signUpModal = false;
-        },
-        enableSignInModal(state) {
-            state.signInModal = true;
-        },
-        disableSignInModal(state) {
-            state.signInModal = false;
+        closeModal(state, action) {
+            state.isOpen = false;
+            state.componentName = null;
+            state.componentProps = {};
         },
         enableVerificationModal(state, { payload }) {
             state.verificationModal.isOpen = true;
@@ -31,6 +31,13 @@ const modalSlice = createSlice({
         },
         disableVerificationModal(state) {
             state.verificationModal.isOpen = false;
+            state.verificationModal.userId = null;
+        },
+        enableMobileSidebar(state) {
+            state.mobileSidebar = true;
+        },
+        disableMobileSidebar(state) {
+            state.mobileSidebar = false;
         },
     },
 });
