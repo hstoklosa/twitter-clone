@@ -4,6 +4,7 @@ const EmailToken = require("../models/EmailToken.model");
 const getKeyAsync = require("../helpers/getKeyAsync");
 const generateUsername = require("../helpers/generateUsername")
 
+
 const createLocalUser = async (data) => {
     return await User.addUser(data);
 };
@@ -34,9 +35,9 @@ const sendConfirmationEmail = async (userId, targetEmail) => {
 
     const options = {
         to: targetEmail,
-        from: '"Twitter Clone" <' + process.env.MAIL_USER + ">",
-        subject: "Email Verification",
-        text: "Thanks for giving my app a try! \nYour verification code is: " + toSend,
+        from: '"X Clone" <' + process.env.MAIL_USER + ">",
+        subject: "X Clone",
+        text: "Thank you for exploring my application! \nYour verification code is: " + toSend,
     };
 
     await transporter.sendMail(options);

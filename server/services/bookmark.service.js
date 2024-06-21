@@ -1,8 +1,8 @@
 const User = require("../models/User.model");
 const Bookmark = require("../models/Bookmark.model");
 const paginate = require("../helpers/paginatePlugin");
-
 const { userTweetSelector } = require("../helpers/selectors");
+
 
 const fetchUserBookmarks = async (userId, options) => {
     return await paginate(
@@ -19,18 +19,14 @@ const fetchUserBookmarks = async (userId, options) => {
                     as: "tweetDetails",
                 },
             },
-
-
             {
                 $unwind: "$tweetDetails",
             },
-
             {
                 $addFields: {
                     bookmarkCreatedAt: "$createdAt"
                 }
             },
-
             {
                 $replaceRoot: {
                     newRoot: {
@@ -38,7 +34,6 @@ const fetchUserBookmarks = async (userId, options) => {
                     }
                 }
             },
-
 
             {
                 $lookup: {

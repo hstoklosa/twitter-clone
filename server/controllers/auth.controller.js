@@ -17,6 +17,7 @@ const {
     UnauthenticatedError,
 } = require("../utils/errors");
 
+
 const checkIdentifier = asyncHandler(async (req, res, next) => {
     const query = pick(req.query, ["username", "email", "identifier"]);
 
@@ -58,7 +59,6 @@ const signUp = asyncHandler(async (req, res, next) => {
             password,
             profileImageURL: `${process.env.API_URL}/uploads/default_pfp.png`,
         });
-
 
         await authService.sendConfirmationEmail(user._id, user.email);
 
@@ -125,8 +125,9 @@ const verifyToken = asyncHandler(async (req, res, next) => {
 
 const signIn = (req, res, next) => {
     passport.authenticate("local", async (err, user, info) => {
-        if (err) return next(new InternalServerError()); // local strategy error
+        if (err) return next(new BadRequestError(info.message)); // local strategy error
         if (!user) return next(new BadRequestError(info.message)); // no user error
+
 
         if (!user.verified) {
             await authService.sendConfirmationEmail(user._id, user.email);
@@ -165,6 +166,7 @@ const isAuth = (req, res, next) => {
 
     return next(new UnauthenticatedError("You are not authenticated!"));
 };
+
 
 module.exports = {
     checkIdentifier,

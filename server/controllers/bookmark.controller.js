@@ -12,10 +12,9 @@ const {
     BadRequestError,
 } = require("../utils/errors");
 
-const getBookmarks = asyncHandler(async (req, res, next) => {
-    const authUserId = new ObjectId("64b2c9b8acd7c63679fe9c76");
 
-    // const { _id: authUserId } = req.user;
+const getBookmarks = asyncHandler(async (req, res, next) => {
+    const { _id: authUserId } = req.user;
     const { userId } = req.params;
 
     if (!(await User.exists({ _id: userId })))
@@ -98,6 +97,7 @@ const deleteAllBookmarks = asyncHandler(async (req, res, next) => {
         bookmarksCleared: true,
     });
 });
+
 
 module.exports = {
     getBookmarks,

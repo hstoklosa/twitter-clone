@@ -1,23 +1,15 @@
 const express = require("express");
 
 const userController = require("../controllers/user.controller");
-const authenticate = require("../middlewares/authenticate");
 const bookmarkController = require("../controllers/bookmark.controller");
-
+const authenticate = require("../middlewares/authenticate");
 const paginate = require("../middlewares/paginate");
 const upload = require("../config/multer");
 
-// File upload fields
-const updateUserFields = [
-    { name: "profileImage", maxCount: 1 },
-    { name: "bannerImage", maxCount: 1 },
-];
 
-// Routes
 const router = express.Router();
 
 router.use(authenticate);
-
 
 router.get("/:username", userController.getUser);
 
@@ -43,7 +35,12 @@ router.get("/search/recent", paginate, userController.getQueryUsers);
 
 router.post("/:userId/bookmarks", bookmarkController.createBookmark);
 
-router.put("/:userId", upload.fields(updateUserFields), userController.updateUser);
+router.post("/:userId/pin/:tweetId", userController.pinTweet);
+
+router.put("/:userId", upload.fields([
+    { name: "profileImage", maxCount: 1 },
+    { name: "bannerImage", maxCount: 1 },
+]), userController.updateUser);
 
 router.put("/:userId/following", userController.followUser);
 
@@ -52,5 +49,8 @@ router.delete("/:userId/following", userController.unfollowUser);
 router.delete("/:userId/bookmarks/:tweetId", bookmarkController.deleteBookmark);
 
 router.delete("/:userId/bookmarks", bookmarkController.deleteAllBookmarks);
+
+router.delete("/:userId/pin/:tweetId", userController.unpinTweet);
+
 
 module.exports = router;

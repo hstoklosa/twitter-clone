@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongoose").Types;
 
 const User = require("../models/User.model");
+const Tweet = require("../models/Tweet.model");
 const asyncHandler = require("../middlewares/asyncHandler");
 const userService = require("../services/user.service");
 const { NotFoundError, UnauthorizedError } = require("../utils/errors");
@@ -77,7 +78,10 @@ const getHomeFeed = asyncHandler(async (req, res, next) => {
     if (!(await User.exists({ _id: userId })))
         return next(new NotFoundError("User not found!"));
 
-    const response = await userService.fetchHomeFeed(new ObjectId(userId), req.pagination);
+    const response = await userService.fetchHomeFeed(
+        new ObjectId(userId),
+        req.pagination
+    );
 
     return res.status(200).json(response);
 });
@@ -129,9 +133,7 @@ const getLikesTimeline = asyncHandler(async (req, res, next) => {
     const { userId } = req.params;
 
     if (!(await User.exists({ _id: userId })))
-        return next(
-            new NotFoundError("Can't retrieve tweets since the user does not exist!")
-        );
+        return next(new NotFoundError("Can't retrieve tweets since the user does not exist!"));
 
     const response = await userService.fetchLikeTimeline(new ObjectId(userId), req.pagination);
 
@@ -179,20 +181,24 @@ const updateUser = asyncHandler(async (req, res, next) => {
     if (currentUserId.toString() !== userId)
         return next(new UnauthorizedError("You're not allowed to alter this user."));
 
-    const { displayName, bio, location, website } = req.body;
+    const { username, displayName, bio, location, website } = req.body;
 
     const updateData = {
+        username,
         displayName,
         bio,
         location,
         website,
     };
 
-    if (req.files["profileImage"])
+    if (req.files["profileImage"]) {
         updateData.profileImageURL = `${process.env.API_URL}/${req.files.profileImage[0].path}`;
+    }
 
-    if (req.files["bannerImage"])
+    if (req.files["bannerImage"]) {
         updateData.bannerURL = `${process.env.API_URL}/${req.files.bannerImage[0].path}`;
+    }
+    // console.log(username)
 
     await User.findByIdAndUpdate(userId, updateData);
 
@@ -200,6 +206,49 @@ const updateUser = asyncHandler(async (req, res, next) => {
         isUpdated: true,
     });
 });
+
+const pinTweet = asyncHandler(async (req, res, next) => {
+    const { userId, tweetId } = req.params;
+    const { _id: currentUserId } = req.user;
+
+    if (!(await User.exists({ _id: userId })))
+        return next(new NotFoundError("User with that id wasn't found!"));
+
+    if (!(await Tweet.exists({ _id: tweetId })))
+        return next(new NotFoundError("Tweet with that id wasn't found!"));
+
+    if (currentUserId.toString() !== userId)
+        return next(new UnauthorizedError("You're not allowed to alter this user."));
+
+
+    await User.findByIdAndUpdate(userId, { pin: tweetId });
+
+    return res.status(200).json({
+        success: true,
+    });
+});
+
+const unpinTweet = asyncHandler(async (req, res, next) => {
+    const { userId, tweetId } = req.params;
+    const { _id: currentUserId } = req.user;
+
+    if (!(await User.exists({ _id: userId })))
+        return next(new NotFoundError("User with that id wasn't found!"));
+
+    if (!(await Tweet.exists({ _id: tweetId })))
+        return next(new NotFoundError("Tweet with that id wasn't found!"));
+
+    if (currentUserId.toString() !== userId)
+        return next(new UnauthorizedError("You're not allowed to alter this user."));
+
+
+    await User.findByIdAndUpdate(userId, { pin: null });
+
+    return res.status(200).json({
+        success: true,
+    });
+});
+
 
 module.exports = {
     getUser,
@@ -215,4 +264,6 @@ module.exports = {
     followUser,
     unfollowUser,
     updateUser,
+    pinTweet,
+    unpinTweet
 };
