@@ -30,19 +30,13 @@ export const authApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: formData
             }),
+            invalidatesTags: ["Auth"],
         }),
         verifyToken: builder.mutation({
             query: ({ id, token }) => ({
                 url: `/auth/verify/${id}/${token}`,
                 method: "POST"
             }),
-            async onCacheEntryAdded(arg, { dispatch, cacheDataLoaded }) {
-                const { data } = await cacheDataLoaded;
-
-                if (data.isAuthenticated) {
-                    dispatch(baseApi.util.invalidateTags(["Auth"]));
-                }
-            },
             invalidatesTags: ["Auth"],
         }),
         signOut: builder.query({

@@ -52,7 +52,7 @@ const customBaseQuery =
 export const baseApi = createApi({
     baseQuery: customBaseQuery(),
     reducerPath: "baseApi",
-    tagTypes: ["Auth", "User", "Post"],
+    tagTypes: ["Auth", "User", "Post", "UserWidget", "Bookmark"],
     keepUnusedDataFor: 30,
     endpoints: (builder) => ({}),
 });
