@@ -3,12 +3,17 @@
     justify-content: space-between !important;
     align-items: center !important;
     border-bottom: 0 !important;
-
-    height: auto !important;
+    /* height: auto !important; */
     border: 0 !important;
     padding: 0.75rem 1rem !important;
 }
 
 .home-column-header button.dark_round-btn {
     margin: 0 !important;
+}
+
+.home-route .placeholder .accent-btn {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    color: #fff;
 }

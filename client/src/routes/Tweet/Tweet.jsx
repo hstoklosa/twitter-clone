@@ -1,11 +1,11 @@
 import "./styles.css";
 
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { IoEllipsisHorizontal } from "react-icons/io5";
+import { useEffect, useState, useRef } from "react";
+import { createSelector } from "@reduxjs/toolkit";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
-import useInfiniteScroll from "../../hooks/useInfiniteScroll";
-import { useAppSelector } from "../../app/store";
+import { useAppSelector, useAppDispatch } from "../../app/store";
+
 import { useGetUserInfoQuery } from "../../features/api/userApi";
 import { useGetTweetQuery, useGetRepliesQuery } from "../../features/api/tweetApi";
 
@@ -14,40 +14,54 @@ import {
     MiddleColumn,
     ColumnHeader,
     TweetForm,
-    TweetText,
+    TweetDetails,
     Spinner,
     Links,
-    MediaModal,
     PaginatedList,
     ErrorPlaceholder,
     TweetPreview,
     QuotePreview,
     TweetActions,
     TweetContent,
-    ReplyModal,
-    TweetModal,
+    SearchBar,
     Trending,
-    Connect
+    Connect,
+    PfpContainer
 } from "../../components";
 
 import { formatDate, formatTime } from "../../helpers/date";
 import { isObjEmpty } from "../../utils/object";
 
+
 const Tweet = () => {
+    const scrollRef = useRef(null);
     const { tweetId } = useParams();
+    const navigate = useNavigate();
 
-    const [replyModal, setReplyModal] = useState(false);
-    const [quoteModal, setQuoteModal] = useState(false);
-    const [mediaModal, setMediaModal] = useState(false);
-
-    const { isAuth, user: currentUser } = useAppSelector((state) => state.auth);
-
+    const { user: currentUser } = useAppSelector((state) => state.auth);
     const { data: currentUserInfo } = useGetUserInfoQuery(currentUser?.username, {
         skip: !currentUser?.username,
     });
-    const { data: tweet, isLoading, isFetching, isError } = useGetTweetQuery(tweetId);
 
-    const queryResult = useInfiniteScroll(useGetRepliesQuery, { id: tweetId })
+    const {
+        data: tweet,
+        isLoading,
+        isFetching,
+        isError
+    } = useGetTweetQuery(tweetId);
+
+    const {
+        data: originalTweet,
+        isLoading: isOriginalLoading,
+        isFetching: isOriginalFetching,
+        isError: isOriginalError
+    } = useGetTweetQuery(tweet?.replyTo?._id);
+
+    // useEffect(() => {
+    //     scrollRef.current && scrollRef.current.scrollIntoView({
+    //         behavior: 'smooth',
+    //     });
+    // }, [scrollRef]);
 
     const isQuote = tweet?.quoteTo && !isObjEmpty(tweet.quoteTo);
     const media = tweet?.media?.[0];
@@ -62,44 +76,9 @@ const Tweet = () => {
         year: "numeric"
     });
 
-    const openReplyModal = () => setReplyModal(true);
-    const closeReplyModal = () => setReplyModal(false);
-
-    const openQuoteModal = () => setQuoteModal(true);
-    const closeQuoteModal = () => setQuoteModal(false);
-
-    const openMediaModal = () => setMediaModal(true);
-    const closeMediaModal = () => setMediaModal(false);
-
-
-    console.log(tweet, isLoading, isFetching, isError);
 
     return (
         <main className="tweet-route">
-            {replyModal && (
-                <ReplyModal
-                    isOpen={replyModal}
-                    onClose={closeReplyModal}
-                    replyingTo={tweet}
-                />
-            )}
-
-            {quoteModal && (
-                <TweetModal
-                    isOpen={quoteModal}
-                    onClose={closeQuoteModal}
-                    quote={tweet}
-                />
-            )}
-
-            {media && (
-                <MediaModal
-                    isOpen={mediaModal}
-                    closeMediaModal={closeMediaModal}
-                    mediaUrl={media.url}
-                />
-            )}
-
             <MiddleColumn className="tweet-route_general">
                 <ColumnHeader
                     className="tweet-route-header"
@@ -108,110 +87,105 @@ const Tweet = () => {
                     <h1>Post</h1>
                 </ColumnHeader>
 
-                {isLoading && <Spinner />}
-                {isError && <ErrorPlaceholder />}
+                <div className="route_wrapper">
+                    {(!isLoading && !isError) && (
+                        <>
+                            <section className="relevant-tweets">
+                                {tweet?.replyTo && (
+                                    <div className="relevant-tweet original-tweet">
+                                        {isOriginalLoading && <Spinner />}
+                                        {isOriginalError && <ErrorPlaceholder />}
 
-                {(!isLoading && !isError) && (
-                    <>
-                        <section className="relevant-tweets">
-                            {tweet.replyTo && (
-                                <div className="original-tweet">
-                                    <TweetPreview tweet={tweet.replyTo} />
-                                </div>
-                            )}
+                                        {(originalTweet && !isOriginalLoading && !isOriginalError) && (
+                                            <TweetPreview
+                                                tweet={originalTweet}
+                                                onDelete={() => navigate("/home")}
+                                            />
+                                        )}
+                                    </div>
+                                )}
 
-                            <div className="current-tweet">
-                                <div className="tweet-details">
-                                    <div className="user-info">
-                                        <div className="pfp-container">
-                                            <div className="icon-container">
-                                                <img
-                                                    src={tweet?.author.profileImageURL}
-                                                    className="pfp"
-                                                    alt="Profile Pfp"
+
+                                <div
+                                    className="relevant-tweet current-tweet"
+                                    ref={scrollRef}
+                                >
+                                    {isLoading && <Spinner />}
+                                    {isError && <ErrorPlaceholder />}
+
+                                    {(tweet && !isLoading && !isError) && (
+                                        <>
+                                            <div className="tweet-details_wrapper">
+                                                <PfpContainer src={tweet?.author.profileImageURL} />
+
+                                                <TweetDetails
+                                                    tweet={tweet}
+                                                    date={false}
+                                                    onDelete={() => navigate("/home")}
                                                 />
                                             </div>
-                                        </div>
-                                        <div className="wrapper">
-                                            <h2 className="displayName">{tweet.author.displayName}</h2>
-                                            <p className="username">@{tweet.author.username}</p>
-                                        </div>
-                                    </div>
 
-                                    <button className="blue_round-btn">
-                                        <div className="icon-container">
-                                            <IoEllipsisHorizontal className="icon" />
-                                        </div>
-                                    </button>
-                                </div>
-
-                                {/* <div className="tweet-content">
-                                    <TweetText text={tweet.content} />
-
-                                    {media && (
-                                        <div className="media-container">
-                                            <img
-                                                className="tweet_media"
-                                                src={media.url}
-                                                alt="Tweet Media"
+                                            <TweetContent
+                                                content={tweet.content}
+                                                media={media}
                                             />
-                                        </div>
+
+                                            {isQuote && <QuotePreview tweet={tweet.quoteTo} />}
+
+                                            <div className="tweet-stats">
+                                                <Link className="link">
+                                                    <span className="stat date">
+                                                        {timeCreatedAt}
+                                                    </span>
+
+                                                    <span className="separator">
+                                                        ·
+                                                    </span>
+
+                                                    <span className="stat date">
+                                                        {dateCreatedAt}
+                                                    </span>
+                                                </Link>
+
+                                                <span className="separator">·</span>
+
+                                                <span className="views">
+                                                    {0} <span className="stat">Views</span>
+                                                </span>
+                                            </div>
+                                        </>
                                     )}
-                                </div> */}
-
-                                <TweetContent
-                                    openMediaModal={openMediaModal}
-                                    content={tweet.content}
-                                    media={media}
-                                />
-
-                                {isQuote && <QuotePreview tweet={tweet.quoteTo} />}
 
 
-                                <div className="tweet-stats">
-                                    <Link className="link">
-                                        <span className="stat date">
-                                            {timeCreatedAt}
-                                        </span>
-                                        <span className="separator">·</span>
-                                        <span className="stat date">
-                                            {dateCreatedAt}
-                                        </span>
-                                    </Link>
-
-                                    <span className="separator">·</span>
-
-                                    <span className="views">
-                                        {1} <span className="stat">Views</span>
-                                    </span>
                                 </div>
-                            </div>
-                        </section>
+                            </section>
 
-                        <TweetActions
-                            tweet={tweet}
-                            currentUser={currentUserInfo}
-                            openReplyModal={openReplyModal}
-                            openQuoteModal={openQuoteModal}
-                        />
+                            <TweetActions
+                                tweet={tweet}
+                                currentUser={currentUserInfo}
+                            />
 
-                        <TweetForm
-                            replyTo={tweet._id}
-                            forceExpand={true}
-                            maxLength={280}
-                            button="Reply"
-                            placeholder="Post your reply"
-                        />
+                            <TweetForm
+                                replyTo={tweet._id}
+                                forceExpand={true}
+                                maxLength={280}
+                                placeholder="Post your reply"
+                                buttonValue="Reply"
+                            />
 
-                        <PaginatedList
-                            queryResult={queryResult}
-                            component={TweetPreview}
-                        />
-                    </>
-                )}
+                            <PaginatedList
+                                queryHook={useGetRepliesQuery}
+                                args={{ id: tweetId }}
+                                renderItem={(data) => <TweetPreview tweet={data} />}
+                                renderPlaceholder={() => { }}
+                            />
+                        </>
+                    )}
+                </div>
             </MiddleColumn>
 
             <LeftColumn>
+                <SearchBar />
                 <Trending />
                 <Connect />
                 <Links />

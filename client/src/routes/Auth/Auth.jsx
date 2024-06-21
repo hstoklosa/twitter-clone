@@ -2,50 +2,56 @@ import "./styles.css";
 
 import { IconContext } from "react-icons";
 import { FcGoogle } from "react-icons/fc";
-
-import { useTheme } from "../../contexts/ThemeProvider";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../app/store";
 import { modalActions } from "../../features/slices/modalSlice";
 import { SignupModal, LoginModal, VerificationModal, Logo } from "../../components";
 
+import {
+    useSignInMutation,
+    useLazyCheckAuthQuery
+} from "../../features/api/authApi";
+import { useEffect } from "react";
 
 const Auth = () => {
-    const { signInModal, signUpModal, verificationModal } = useAppSelector((state) => state.modal);
-    const { theme } = useTheme();
+    // const isAuth = useAppSelector((state) => state.auth.isAuth);
+    const navigate = useNavigate();
+
+    const [checkAuth] = useLazyCheckAuthQuery();
+    const [_, { data: signInResult }] = useSignInMutation({
+        fixedCacheKey: 'shared-sign-in',
+    });
+
+    useEffect(() => {
+        const fetchAuth = async () => await checkAuth();
+
+        if (signInResult?.isAuthenticated) {
+            fetchAuth()
+        }
+    }, [signInResult]);
+
 
     const dispatch = useAppDispatch();
 
     return (
         <main id="app-container" className="auth-route">
-            <SignupModal
-                isOpen={signUpModal}
-                closeModal={() => dispatch(modalActions.disableSignUpModal())}
-            />
+            <div className="logo-wrapper">
+                <Logo />
 
-            <LoginModal
-                isOpen={signInModal}
-                closeModal={() => dispatch(modalActions.disableSignInModal())}
-            />
+                <h1
+                    className="logo-text"
+                    style={{
+                        fontSize: "15vmin",
+                        fontWeight: "800",
+                        color: "var(--text-primary)",
+                        textAlign: "center"
+                    }}
+                >
+                    CLONE
+                </h1>
 
-            <VerificationModal
-                isOpen={verificationModal.isOpen}
-                closeModal={() => dispatch(modalActions.disableVerificationModal())}
-            />
+            </div>
 
-            <Logo />
-
-            <h1
-                className="logo-text"
-                style={{
-                    fontSize: "15vmin",
-                    fontWeight: "800",
-                    color: "var(--text-primary)",
-                    textAlign: "center"
-                }}
-            >
-                X/Twitter
-                Clone
-            </h1>
 
             <div className="signup-container">
                 <div className="wrapper">
@@ -62,14 +68,17 @@ const Auth = () => {
                     <button
                         className="white-btn signup-btn"
                         onClick={() => dispatch(
-                            modalActions.enableSignUpModal()
+                            modalActions.openModal({ name: "RegisterModal" })
                         )}
                     >
                         Create Account
                     </button>
+
                     <button
                         className="login btn-empty"
-                        onClick={() => dispatch(modalActions.enableSignInModal())}
+                        onClick={() => dispatch(
+                            modalActions.openModal({ name: "LoginModal" })
+                        )}
                     >
                         Sign In
                     </button>

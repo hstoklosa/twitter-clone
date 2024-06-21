@@ -6,68 +6,71 @@ import {
     MiddleColumn,
     LeftColumn,
     Placeholder,
-    PaginatedTabList,
+    TabList,
     PaginatedList,
     UserPreview,
+    Trending,
+    Connect,
+    SearchBar,
+    Links,
+    TabPanel
 } from "../../../components";
 
-import withQuery from "../../../hoc/withQuery";
-
-const FollowersList = withQuery(useGetUserFollowersQuery)(PaginatedList);
-const FollowingList = withQuery(useGetUserFollowingQuery)(PaginatedList);
 
 const ProfileConnections = () => {
     const { username } = useParams();
 
-    const renderPanel = (currTab) => {
-        switch (currTab) {
-            case 'followers':
-                return (
-                    <FollowersList
-                        component={UserPreview}
-                        renderPlaceholder={() => (
-                            <Placeholder
-                                title="Looking for followers?"
-                                subtitle="When someone follows this account, they'll show up here. Tweeting and interacting with others helps boost followers."
-                            />
-                        )}
-                        args={{ username: username }}
-                    />
-                )
-            case 'following':
-                return (
-                    <FollowingList
-                        component={UserPreview}
-                        renderPlaceholder={() => (
-                            <Placeholder
-                                title="The user isn't following anyone"
-                                subtitle="Once they follow accounts, they'll show up here."
-                            />
-                        )}
-                        args={{ username: username }}
-                    />
-                )
-            default:
-                break;
-        }
-    }
-
     return (
         <main>
             <MiddleColumn>
-                <ColumnHeader
-                    routerBack={true}
-                />
-                <PaginatedTabList
+                <ColumnHeader routerBack={true}>
+                    <h1>Connections</h1>
+                </ColumnHeader>
+
+                <TabList
                     options={{
                         tabs: ["followers", "following"]
                     }}
-                    renderPanel={renderPanel}
-                />
+                >
+                    <TabPanel name="followers">
+                        <PaginatedList
+                            queryHook={useGetUserFollowersQuery}
+                            args={{ username: username }}
+                            renderItem={(data) =>
+                                <UserPreview user={data} />
+                            }
+                            renderPlaceholder={() => (
+                                <Placeholder
+                                    title="Looking for followers?"
+                                    subtitle="When someone follows this account, they'll show up here. Tweeting and interacting with others helps boost followers."
+                                />
+                            )}
+                        />
+                    </TabPanel>
+
+                    <TabPanel name="following">
+                        <PaginatedList
+                            queryHook={useGetUserFollowingQuery}
+                            args={{ username: username }}
+                            renderItem={(data) =>
+                                <UserPreview user={data} />
+                            }
+                            renderPlaceholder={() => (
+                                <Placeholder
+                                    title="The user isn't following anyone"
+                                    subtitle="Once they follow accounts, they'll show up here."
+                                />
+                            )}
+                        />
+                    </TabPanel>
+                </TabList>
             </MiddleColumn>
 
             <LeftColumn>
-
+                <SearchBar />
+                <Trending />
+                <Connect />
+                <Links />
             </LeftColumn>
         </main>
     );

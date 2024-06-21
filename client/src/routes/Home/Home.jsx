@@ -1,11 +1,12 @@
 import "./styles.css";
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { useMediaQuery } from "@uidotdev/usehooks";
 import { BiCog } from "react-icons/bi";
 
-import { useAppSelector } from "../../app/store";
-import { useLazyGetSearchUsersQuery } from "../../features/api/userApi";
+import { useAppSelector, useAppDispatch } from "../../app/store";
+import { modalActions } from "../../features/slices/modalSlice";
 import { useGetHomeTimelineQuery } from "../../features/api/tweetApi";
 
 import {
@@ -16,40 +17,35 @@ import {
     PaginatedList,
     TweetPreview,
     SearchBar,
-    FloatOptions,
+    Placeholder,
     Links,
     Trending,
     Connect,
 } from "../../components";
 
-import withQuery from "../../hoc/withQuery";
-
-const PaginatedHomeList = withQuery(useGetHomeTimelineQuery)(PaginatedList);
 
 const Home = () => {
-    const [searchQuery, setSearchQuery] = useState("");
     const { user: currentUser } = useAppSelector((state) => state.auth);
-
-    const [triggerUserSearch, { data: users }] = useLazyGetSearchUsersQuery();
-
-    const handleDebounceChange = (search) => {
-        triggerUserSearch(search);
-        setSearchQuery(search)
-    }
-
-    const handleSettingClick = () => {
-        triggerUserSearch();
-    };
+    const dispatch = useAppDispatch();
+    const isSmallDevice = useMediaQuery("only screen and (max-width : 420px)");
 
     return (
         <main>
-            <MiddleColumn>
-                <ColumnHeader className="home-column-header">
+            <Helmet>
+                <title>Home / X</title>
+            </Helmet>
+
+            <MiddleColumn className="home-route">
+                <ColumnHeader className="home-column-header" sidebarButton={true}>
                     <h1>Home</h1>
 
                     <button
                         className="dark_round-btn"
-                        onClick={handleSettingClick}
+                        onClick={() => dispatch(modalActions.openModal(
+                            { name: "EditUsernameModal" }
+                        ))}
+                        data-tooltip-id="action-tooltip"
+                        data-tooltip-content="Change your username"
                     >
                         <div className="icon-container">
                             <BiCog
@@ -60,33 +56,26 @@ const Home = () => {
                     </button>
                 </ColumnHeader>
 
-                <TweetForm maxLength={280} />
+                <TweetForm maxLength={280} showPfp={!isSmallDevice} />
 
-                <PaginatedHomeList
-                    component={TweetPreview}
+                <PaginatedList
+                    queryHook={useGetHomeTimelineQuery}
                     args={{ id: currentUser.id }}
+                    component={TweetPreview}
+                    renderItem={(data) => <TweetPreview tweet={data} />}
+                    renderPlaceholder={() => (
+                        <Placeholder
+                            title="No tweets found"
+                            subtitle="Try following some people!"
+                        >
+                            <Link to={`/explore`} className="accent-btn">Explore</Link>
+                        </Placeholder>
+                    )}
                 />
             </MiddleColumn>
 
             <LeftColumn>
-                <SearchBar onChange={handleDebounceChange}>
-                    <>
-                        <Link
-                            type="button"
-                            className="float-btn search-tweets_btn"
-                        >
-                            Search for "{searchQuery}"
-                        </Link>
-
-                        <Link
-                            to={`/status/${searchQuery}`}
-                            className="float-btn search-tweets_btn"
-                        >
-                            Go to @{searchQuery}
-                        </Link>
-
-                    </>
-                </SearchBar>
+                <SearchBar defaultSearch={true} />
                 <Connect />
                 <Trending />
                 <Links />

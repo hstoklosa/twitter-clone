@@ -1,27 +1,22 @@
 .tweet-route-header {
     border-bottom: 0 !important;
     padding: 0 1rem !important;
-    height: 50px !important;
+    /* height: 50px !important; */
 }
 
 .tweet-route .original-tweet {
     overflow: hidden;
-    position: relative;
     padding-bottom: 1rem;
     z-index: 1111;
 }
 
 .tweet-route_general .tweet {
     border: 0;
-    padding: 1rem;
-}
-
-.tweet-route_general .relevant-tweets {
-    overflow: hidden !important;
+    padding: 0 1rem;
 }
 
 .tweet-route .original-tweet .pfp-container {
-    z-index: 999999999;
+    z-index: 99;
     position: relative;
 }
 
@@ -30,29 +25,40 @@
     z-index: 999999999;
 }
 
+.tweet-route .quote-preview {
+    margin-bottom: 1rem;
+}
+
 .tweet-route .original-tweet .pfp-container::after {
     content: "";
     position: absolute;
-    top: 20px;
-    width: 2px;
-    height: 100vh;
-    z-index: 11;
+    left: 40%;
+    transform: translateX(-50%);
     background-color: var(--border-2);
-}
-
-.tweet-route_general .current-tweet .pfp-container {
-    overflow: hidden;
+    border: 1px solid var(--border-2);
+    height: 999vh;
+    z-index: 11;
 }
 
 .tweet-route_general .current-tweet {
     position: relative !important;
-    z-index: 1111111;
+    z-index: 111;
     padding: 0 1rem;
 }
 
-.tweet-details {
+.tweet-route .tweet-details_wrapper {
     width: 100%;
     display: flex;
+}
+
+.tweet-route .current-tweet .pfp-container {
+    margin-right: 0.75rem;
+    min-width: 40px;
+}
+
+.relevant-tweets .current-tweet .user-info {
+    display: flex;
+    flex-direction: column;
 }
 
 .user-info .pfp-container {
@@ -61,7 +67,11 @@
 
 .user-info {
     display: flex;
-    width: 100%;
+    width: 90%;
+}
+
+.user-info.flex-truncate_parent .flex-truncate_child {
+    max-width: 40%;
 }
 
 .wrapper .displayName {
@@ -87,7 +97,8 @@
     margin: 0 0.5rem;
 }
 
-.tweet-route .tweet-stats .link:hover {
+.tweet-route .tweet-stats .link:hover,
+.tweet-route .tweet-stats .link:active {
     text-decoration-line: underline;
     text-decoration-color: var(--grey);
     text-underline-offset: 2px;
@@ -113,14 +124,14 @@
     border: 0 !important;
 }
 
-.tweet-route_general > .tweet-actions {
+.tweet-route_general .route_wrapper > .tweet-actions {
     padding: 1rem !important;
     margin-top: 1rem;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
 }
 
-.tweet-route_general > .tweet-actions .action-btn .icon-container {
+.tweet-route_general .route_wrapper > .tweet-actions .action-btn .icon-container {
     width: 20px;
     height: 20px;
 }
@@ -128,4 +139,13 @@
 .tweet-route_general .preview-list .tweet {
     border-bottom: 1px solid var(--border);
     padding: 0.75rem 1rem;
+}
+
+.tweet-route .tweet-form {
+    padding: 0.5rem 1rem 0.5rem 1rem !important;
+}
+
+.relevant-tweets .relevant-tweet:first-child .tweet {
+    margin-top: 0.5rem;
+    padding-bottom: 1rem;
 }
