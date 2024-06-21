@@ -70,6 +70,28 @@ export const tweetApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: (result, error, tweetId) => [{ type: "Post", id: tweetId }],
         }),
+        likeTweet: builder.mutation({
+            query: ({ id, userId }) => ({
+                url: `/tweets/${id}/like`,
+                method: "POST",
+                body: { userId }
+            }),
+            invalidatesTags: (result, error, { id, userId }) => [
+                { type: "Post", id },
+                { type: "User", userId }
+            ],
+        }),
+        unlikeTweet: builder.mutation({
+            query: ({ id, userId }) => ({
+                url: `/tweets/${id}/like`,
+                method: "DELETE",
+                body: { userId }
+            }),
+            invalidatesTags: (result, error, { id, userId }) => [
+                { type: "Post", id },
+                { type: "User", userId }
+            ],
+        }),
     }),
 });
 
@@ -86,5 +108,7 @@ export const {
     useGetLikeUsersQuery,
     useGetTrendingTweetsQuery,
     useGetRepliesQuery,
-    useGetSearchTweetsQuery
+    useGetSearchTweetsQuery,
+    useLikeTweetMutation,
+    useUnlikeTweetMutation,
 } = tweetApi;

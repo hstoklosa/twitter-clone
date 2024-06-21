@@ -27,7 +27,7 @@ export const userApi = baseApi.injectEndpoints({
             query: ({ id, page, limit }) => ({
                 url: `/users/${id}/recommended?page=${page}&limit=${limit}`,
             }),
-            providesTags: (result) => providesList(result?.data, "User", "RECOMMENDED"),
+            providesTags: (result) => providesList(result?.data, "UserWidget"),
         }),
         updateUser: builder.mutation({
             query: ({ id, data }) => ({
@@ -40,44 +40,9 @@ export const userApi = baseApi.injectEndpoints({
                     type: "User",
                     id: arg.id,
                 },
-            ],
-        }),
-        getBookmarks: builder.query({
-            query: ({ id, page, limit }) => ({
-                url: `/users/${id}/bookmarks?page=${page}&limit=${limit}`,
-            }),
-            providesTags: (result) => providesList(result?.data, "Post", "BOOKMARKS"),
-        }),
-        createBookmark: builder.mutation({
-            query: ({ userId, tweetId }) => ({
-                url: `/users/${userId}/bookmarks`,
-                method: "POST",
-                body: {
-                    tweetId,
-                },
-            }),
-            invalidatesTags: (result, error, { userId }) => [
-                { type: "Post", id: "BOOKMARKS" },
-                { type: "User", id: userId },
-            ],
-        }),
-        deleteBookmark: builder.mutation({
-            query: ({ userId, tweetId }) => ({
-                url: `/users/${userId}/bookmarks/${tweetId}`,
-                method: "DELETE",
-            }),
-            invalidatesTags: (result, error, { userId }) => [
-                { type: "Post", id: "BOOKMARKS" },
-                { type: "User", id: userId },
-            ],
-        }),
-        deleteAllBookmarks: builder.mutation({
-            query: (userId) => ({
-                url: `/users/${userId}/bookmarks`,
-                method: "DELETE",
-            }),
-            invalidatesTags: (result, error, userId) => [
-                { type: "User", id: userId },
+                {
+                    type: "Auth"
+                }
             ],
         }),
         getUserFollowers: builder.query({
@@ -131,9 +96,8 @@ export const userApi = baseApi.injectEndpoints({
                 { type: "User", id: targetUserId },
                 { type: "User", id: "FOLLOWING" },
                 { type: "User", id: "FOLLOWERS" },
-                { type: "Post", id: "HOME_FEED" },
-                { type: "User", id: "RECOMMENDED" },
-                { type: "User", id: "SEARCH_USERS" }
+                { type: "Post" },
+                { type: "User", id: "SEARCH_USERS" },
             ],
         }),
         unfollowUser: builder.mutation({
@@ -149,9 +113,8 @@ export const userApi = baseApi.injectEndpoints({
                 { type: "User", id: targetUserId },
                 { type: "User", id: "FOLLOWING" },
                 { type: "User", id: "FOLLOWERS" },
-                { type: "Post", id: "HOME_FEED" },
-                { type: "User", id: "RECOMMENDED" },
-                { type: "User", id: "SEARCH_USERS" }
+                { type: "Post", id: "LIST" },
+                { type: "User", id: "SEARCH_USERS" },
             ],
         }),
         createRepost: builder.mutation({
@@ -168,20 +131,37 @@ export const userApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
         }),
-
-        likeTweet: builder.mutation({
-            query: ({ id }) => ({
-                url: `/tweets/${id}/like`,
+        pinTweet: builder.mutation({
+            query: ({ id, tweetId }) => ({
+                url: `/users/${id}/pin/${tweetId}`,
                 method: "POST",
             }),
-            invalidatesTags: (result, error, { id }) => [{ type: "Post", id }, { type: "Post", id: "TRENDING_TWEETS" }],
+            invalidatesTags: (result, error, args) => [
+                {
+                    type: "User",
+                    id: args.id,
+                },
+                {
+                    type: "Post",
+                    id: args.tweetId
+                }
+            ],
         }),
-        unlikeTweet: builder.mutation({
-            query: ({ id }) => ({
-                url: `/tweets/${id}/like`,
-                method: "DELETE",
+        unpinTweet: builder.mutation({
+            query: ({ id, tweetId }) => ({
+                url: `/users/${id}/pin/${tweetId}`,
+                method: "Delete",
             }),
-            invalidatesTags: (result, error, { id }) => [{ type: "Post", id }],
+            invalidatesTags: (result, error, args) => [
+                {
+                    type: "User",
+                    id: args.id,
+                },
+                {
+                    type: "Post",
+                    id: args.tweetId
+                }
+            ],
         }),
     }),
 });
@@ -194,18 +174,14 @@ export const {
     useUpdateUserMutation,
     useFollowUserMutation,
     useUnfollowUserMutation,
-    useLikeTweetMutation,
-    useUnlikeTweetMutation,
     useGetUserLikesQuery,
     useGetUserRepliesQuery,
     useGetUserMediaQuery,
     useCreateRepostMutation,
     useDeleteRepostMutation,
-    useDeleteAllBookmarksMutation,
-    useGetBookmarksQuery,
-    useCreateBookmarkMutation,
-    useDeleteBookmarkMutation,
     useGetRecommendedUsersQuery,
     useLazyGetSearchUsersQuery,
-    useGetSearchUsersQuery
+    useGetSearchUsersQuery,
+    usePinTweetMutation,
+    useUnpinTweetMutation
 } = userApi;
