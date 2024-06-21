@@ -1,4 +1,3 @@
-import withQuery from '../../../hoc/withQuery';
 import { useAppSelector } from '../../../app/store';
 
 import { useGetTrendingTweetsQuery } from '../../../features/api/tweetApi';
@@ -9,55 +8,57 @@ import {
     LeftColumn,
     ColumnHeader,
     PaginatedList,
-    PaginatedTabList,
+    TabList,
+    TabPanel,
     TweetPreview,
-    UserPreview
+    UserPreview,
+    Trending,
+    Connect,
+    Links
 } from '../../../components';
 
-const TweetList = withQuery(useGetTrendingTweetsQuery)(PaginatedList);
-const PeopleList = withQuery(useGetRecommendedUsersQuery)(PaginatedList);
 
 const ExploreTabList = () => {
     const { user: currentUser } = useAppSelector((state) => state.auth);
-
-    const renderPanel = (currTab) => {
-        switch (currTab) {
-            case 'tweets':
-                return (
-                    <TweetList
-                        component={TweetPreview}
-                    />
-                )
-            case 'people':
-                return (
-                    <PeopleList
-                        component={UserPreview}
-                        args={{ id: currentUser.id }}
-                    />
-                )
-            default:
-                break;
-        }
-    }
-
 
     return (
         <main>
             <MiddleColumn>
                 <ColumnHeader routerBack={true}>
-                    <h1>Connect</h1>
+                    <h1>Explore</h1>
                 </ColumnHeader>
 
-                <PaginatedTabList
+                <TabList
                     options={{
                         tabs: ["tweets", "people"],
                     }}
-                    renderPanel={renderPanel}
-                />
+                >
+                    <TabPanel name="tweets">
+                        <PaginatedList
+                            queryHook={useGetTrendingTweetsQuery}
+                            renderItem={(data) =>
+                                <TweetPreview tweet={data} />
+                            }
+                        />
+                    </TabPanel>
+
+                    <TabPanel name="people">
+                        <PaginatedList
+                            queryHook={useGetRecommendedUsersQuery}
+                            args={{ id: currentUser.id }}
+                            renderItem={(data) =>
+                                <UserPreview user={data} />
+                            }
+                        />
+                    </TabPanel>
+                </TabList>
+
             </MiddleColumn>
 
             <LeftColumn>
-
+                <Trending />
+                <Connect />
+                <Links />
             </LeftColumn>
         </main>
     )

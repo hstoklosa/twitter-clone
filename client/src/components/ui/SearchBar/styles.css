@@ -1,11 +1,14 @@
 .searchbar {
     position: relative;
-    z-index: 999999;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     background-color: var(--search-background);
-    border-radius: 99999999rem;
+    border-radius: 0;
+    border-top-left-radius: 99999rem;
+    border-top-right-radius: 99999rem;
+    border-bottom-left-radius: 99999rem;
+    border-bottom-right-radius: 99999rem;
     width: 100%;
     padding: 0 0.75rem 0 1rem;
     /* margin: 0.5rem 0 1rem 0; */
@@ -14,7 +17,7 @@
 .searchbar .float-options {
     top: 50px;
     left: 0;
-    z-index: 999 !important;
+    /* z-index: 999 !important; */
     width: 350px;
     border-radius: 0.5rem !important;
     padding-bottom: 0.5rem;
@@ -43,7 +46,7 @@
     font-size: 1rem;
     padding: 0.75rem 0;
     width: 100%;
-    color: var(--white);
+    color: var(--text-primary);
 }
 
 .searchbar input::placeholder {

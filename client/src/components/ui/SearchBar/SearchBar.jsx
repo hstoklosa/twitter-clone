@@ -1,15 +1,16 @@
 import "./styles.css";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 
 import useDebounce from "../../../hooks/useDebounce";
 
-const SearchBar = ({ defaultSearch = false, onFocus, onChange, onSubmit, onBlur, children, ...rest }) => {
+const SearchBar = ({ defaultSearch = true, onFocus, onChange, onSubmit, onBlur, children, ...rest }) => {
     const [search, setSearch] = useState("");
 
+    const { pathname } = useLocation();
     const navigate = useNavigate();
 
     const debouncedRequest = useDebounce(() => {
@@ -18,7 +19,11 @@ const SearchBar = ({ defaultSearch = false, onFocus, onChange, onSubmit, onBlur,
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        defaultSearch && navigate(`/search?q=${search}`);
+
+        defaultSearch && navigate(`/search?q=${search}`, {
+            state: { previousPath: pathname, },
+        });
+
         onSubmit && onSubmit(e, search);
     };
 
@@ -35,6 +40,16 @@ const SearchBar = ({ defaultSearch = false, onFocus, onChange, onSubmit, onBlur,
         onBlur && onBlur(e);
     }
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Escape") {
+            e.target.blur();
+        }
+
+        if (e.key === "Enter") {
+            handleSubmit(e);
+        }
+    }
+
     const handleSearchClear = () => {
         setSearch("");
     };
@@ -42,7 +57,7 @@ const SearchBar = ({ defaultSearch = false, onFocus, onChange, onSubmit, onBlur,
     return (
         <form
             className="searchbar"
-            onSubmit={handleSubmit}
+        // onSubmit={handleSubmit}
         >
             <label htmlFor="searchbar">
                 <BiSearch
@@ -61,13 +76,14 @@ const SearchBar = ({ defaultSearch = false, onFocus, onChange, onSubmit, onBlur,
                 onChange={handleSearchChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
                 {...rest}
             />
 
-            <button
+            {/* <button
                 type="submit"
                 hidden
-            />
+            /> */}
 
             {search.length > 0 && (
                 <button
@@ -80,17 +96,6 @@ const SearchBar = ({ defaultSearch = false, onFocus, onChange, onSubmit, onBlur,
                     />
                 </button>
             )}
-
-            {/* {(searchFloat && search.length > 0 && children) && (
-                <FloatOptions
-                    className="search-options"
-                    isOpen={searchFloat}
-                    onClose={() => setSearchFloat(false)}
-                >
-                    {children}
-
-                </FloatOptions>
-            )} */}
         </form>
     );
 };
