@@ -1,20 +1,33 @@
 .bookmarks-header {
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
     align-items: center;
     border-bottom: 0 !important;
 }
 
-.bookmarks-header .bookmarks-container h1 {
+.bookmarks-header .bookmarks-title h1 {
     font-size: 1.3rem;
 }
 
-.bookmarks-header .bookmarks-container p {
+.bookmarks-header .bookmarks-title p {
     color: var(--grey);
     font-size: 0.8125rem;
     font-weight: 500;
 }
 
-.bookmarks-header .bookmarks-container .float-options {
+.bookmarks-header .bookmarks-title .float-options {
     bottom: 0;
     right: 0;
+}
+
+.bookmarks-container {
+    margin-left: auto;
+}
+
+.more-float {
+    right: -10px;
+    top: -10px;
+}
+
+.bookmarks-container {
+    position: relative;
 }
