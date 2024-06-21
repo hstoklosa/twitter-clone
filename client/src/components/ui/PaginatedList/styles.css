@@ -1,6 +1,9 @@
 #preview-list {
     width: 100%;
-    min-height: 100vh;
+    /* min-height: 100vh; */
+    flex: 1;
+    /* height: 100% !important; */
+    overflow: hidden;
 }
 
 .first-element,
@@ -8,7 +11,12 @@
     height: 1px;
 }
 
-#preview-list .ReactVirtualized__List {
+/* #preview-list .List {
+    height: 100% !important;
+    overflow: unset !important;
+} */
+
+/* #preview-list .ReactVirtualized__List {
     overflow: visible !important;
     will-change: unset !important;
 }
@@ -17,8 +25,18 @@
     overflow: visible !important;
     height: auto !important;
     max-height: unset !important;
+    display: flex;
+    flex-direction: column;
 }
 
-.preview-list_loading {
+#preview-list
+    .ReactVirtualized__List
+    .ReactVirtualized__Grid__innerScrollContainer
+    .row {
+    flex: 1;
+    height: 100%;
+} */
+
+/* .preview-list_loading {
     min-height: 50vh;
-}
+} */

@@ -3,11 +3,18 @@ import { useState, useMemo, useCallback, useRef } from "react";
 function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
     const [currentPage, setCurrentPage] = useState(1);
 
-    const lastQueryResponse = queryHook({ ...queryArgs, page: currentPage - 1, limit }, {
-        skip: currentPage === 1 || queryOptions?.skip
-    });
-    const currentQueryResponse = queryHook({ ...queryArgs, page: currentPage, limit }, queryOptions);
-    const nextQueryResponse = queryHook({ ...queryArgs, page: currentPage + 1, limit }, queryOptions);
+    const lastQueryResponse = queryHook({
+        ...queryArgs, page: currentPage - 1, limit
+    }, { skip: currentPage === 1 || queryOptions?.skip });
+
+    const currentQueryResponse = queryHook({
+        ...queryArgs, page: currentPage, limit
+    }, queryOptions);
+
+    const nextQueryResponse = queryHook({
+        ...queryArgs, page: currentPage + 1, limit
+    }, queryOptions);
+
 
     const combinedData = useMemo(() => {
         const arr = new Array(limit * (currentPage + 1));
@@ -21,6 +28,7 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
                 const offset = (data.page - 1) * limit;
                 arr.splice(offset, data.data.length, ...data.data);
             }
+
         }
 
         const isNotFullyEmpty = arr.some((value) =>
@@ -36,8 +44,7 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
         limit,
     ]);
 
-    const { page: remotePage = 1, hasNextPage = false } =
-        currentQueryResponse?.data || {};
+    const { page: remotePage = 1, hasNextPage = false } = currentQueryResponse?.data || {};
 
     const isFetching = useMemo(
         () =>
@@ -63,7 +70,6 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
         ]
     );
 
-
     const isError = useMemo(
         () =>
             lastQueryResponse?.isError ||
@@ -82,12 +88,13 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
         (node) => {
             if (isFetching) return;
             if (lastIntObserver.current) lastIntObserver.current.disconnect();
+
             lastIntObserver.current = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && hasNextPage && currentPage === remotePage && !isFetching) {
-                    // console.log("next", isFetching, isLoading);
                     setCurrentPage(currentPage + 1);
                 }
             });
+
             if (node) lastIntObserver.current.observe(node);
         },
         [setCurrentPage, hasNextPage, isFetching, currentPage, remotePage]
@@ -101,10 +108,10 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
 
             firstIntObserver.current = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && currentPage > 1) {
-                    // console.log("prev");
                     setCurrentPage(currentPage - 1);
                 }
             });
+
             if (node) firstIntObserver.current.observe(node);
         },
         [setCurrentPage, isFetching, currentPage]
@@ -115,9 +122,9 @@ function useInfiniteScroll(queryHook, queryArgs, queryOptions, limit = 10) {
         isFetching,
         isLoading,
         isError,
-        lastRowRef,
-        firstRowRef,
         hasNextPage,
+        lastRowRef,
+        firstRowRef
     };
 }
 

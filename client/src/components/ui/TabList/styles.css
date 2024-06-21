@@ -19,7 +19,8 @@
     transition: background-color 0.1s linear;
 }
 
-.tab-item:hover {
+.tab-item:hover,
+.tab-item:active {
     background-color: var(--item-hover);
 }
 
@@ -38,4 +39,8 @@
     height: 3px;
     background-color: var(--primary-colour);
     border-radius: 99999rem;
+}
+
+.tab-list {
+    height: 100%;
 }

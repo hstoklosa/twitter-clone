@@ -1,16 +1,18 @@
 import "./styles.css";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children, cloneElement } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { getPreviousPathname, removeTrailingSlash } from "../../../helpers/pathname";
 import { capitalize } from "../../../utils/capitalize";
 
-const PaginatedTabList = ({
+
+const TabList = ({
     options = {
         tabs: [],
         index: null
     },
-    renderPanel
+    setOuterTab = () => { },
+    children
 }) => {
     const { tabs, index } = options;
 
@@ -23,7 +25,11 @@ const PaginatedTabList = ({
 
     const pathname = removeTrailingSlash(initialPathname);
     const previousPathname = getPreviousPathname(pathname);
+    const arrayChildren = Children.toArray(children);
 
+    useEffect(() => {
+        setOuterTab(activeTab);
+    }, [activeTab])
 
     useEffect(() => {
         if (index === pathname)
@@ -65,6 +71,7 @@ const PaginatedTabList = ({
                         <Link
                             key={idx}
                             className={`tab-item ${isActive && "active"}`}
+                            state={{ preventRestore: true }}
                             {...linkOptions}
                         >
                             {capitalize(tab)}
@@ -73,9 +80,14 @@ const PaginatedTabList = ({
                 })}
             </div>
 
-            {renderPanel && renderPanel(activeTab)}
+            {Children.map(arrayChildren, (child, index) =>
+                cloneElement(child, {
+                    isActive: child.props.name === activeTab
+                })
+            )}
         </div>
     );
 };
 
-export default PaginatedTabList;
+
+export default TabList;
