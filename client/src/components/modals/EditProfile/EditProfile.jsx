@@ -1,14 +1,17 @@
 import "./styles.css";
 
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import { IconContext } from "react-icons";
-import { IoMdClose, IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
-import { ColumnHeader, BaseModal, TextInput } from "../../index";
 import { useUpdateUserMutation } from "../../../features/api/userApi";
+
+import { ColumnHeader, BaseModal, TextInput } from "../../index";
 import { updateFormState } from "../../../helpers/updateState";
+
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
 
@@ -53,6 +56,10 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
             return;
         }
 
+        if (formState.displayName === "") {
+            return toast.error("Display name cannot be empty!");
+        }
+
         const formData = new FormData();
 
         formData.append("displayName", formState.displayName);
@@ -68,6 +75,10 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
         });
 
         if (!result.error) {
+            toast.success(() => (
+                <span>Your profile has been updated!</span>
+            ), { duration: 6000 });
+
             closeModal();
         }
     };
@@ -78,10 +89,9 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
             onClose={closeModal}
             className="edit-modal"
         >
-
             <ColumnHeader
                 className="edit-modal_header"
-                close={closeModal}
+                closeModal={true}
             >
                 <h1>Edit Profile</h1>
 
@@ -95,13 +105,11 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
                 </button>
             </ColumnHeader>
 
-
-
             <form
                 className="edit-profile"
                 onSubmit={handleProfileUpdate}
             >
-                <div className="banner-container">
+                {/* <div className="banner-container">
                     <label
                         htmlFor="bannerImage"
                         className="upload-btn"
@@ -150,6 +158,65 @@ const EditProfile = ({ isOpen, closeModal, user }) => {
                             alt="User Pfp"
                         />
                     </div>
+                </div> */}
+
+                <div className="banner-container">
+                    <div className="banner-img-container">
+                        <>
+                            <label
+                                htmlFor="bannerImage"
+                                className="upload-btn"
+                            >
+                                <input
+                                    type="file"
+                                    id="bannerImage"
+                                    accept=".jpg, .jpeg, .png, .gif"
+                                    style={{ display: "none" }}
+                                    onChange={handleFileChange}
+                                />
+                                <IconContext.Provider value={{ className: "upload_icon" }}>
+                                    <MdOutlineAddAPhoto size="20" />
+                                </IconContext.Provider>
+                            </label>
+
+                            {(previewState.bannerImage || user.bannerURL) ? (
+                                <img
+                                    src={previewState.bannerImage || user.bannerURL}
+                                    className="banner"
+                                    alt="User Banner"
+                                />
+                            ) : (
+                                <div className="banner-img-container empty" />
+                            )}
+                        </>
+                    </div>
+                    <div
+                        className="pfp-container"
+                    >
+                        <label
+                            htmlFor="profileImage"
+                            className="upload-btn"
+                        >
+                            <input
+                                type="file"
+                                id="profileImage"
+                                accept=".jpg, .jpeg, .png, .gif"
+                                style={{ display: "none" }}
+                                onChange={handleFileChange}
+                            />
+
+                            <IconContext.Provider value={{ className: "upload_icon" }}>
+                                <MdOutlineAddAPhoto size="20" />
+                            </IconContext.Provider>
+                        </label>
+
+                        <img
+                            src={previewState.profileImage || user.profileImageURL}
+                            className="pfp"
+                            alt="User PFP"
+                        />
+                    </div>
+
                 </div>
 
                 <div className="inputs-container">
