@@ -8,9 +8,9 @@
 .widget-container .widget-item {
     display: flex;
     flex-direction: column;
-
     padding: 0.75rem 1rem;
     width: 100%;
+    min-width: 0;
 }
 
 .widget-header {
@@ -19,15 +19,14 @@
     padding: 0.75rem 1rem;
 }
 
+.widget-item .info-container {
+    width: 70%;
+}
+
 .widget-item_header {
     font-size: 0.9375rem;
     margin: 0.25rem 0;
     color: var(--text-primary);
-    /* width: 100%; */
-    /* width: 200px; */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .widget-item_subheader {
@@ -36,9 +35,6 @@
     font-weight: 500;
 
     display: block;
-    overflow: hidden !important;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 .widget-button {
@@ -47,15 +43,19 @@
     color: var(--primary-colour);
     padding: 0.75rem 1rem;
     display: block;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
 
 .widget-item:hover,
-.widget-button:hover {
+.widget-item:active,
+.widget-button:hover,
+.widget-button:active {
     background-color: var(--tweet-hover);
 }
 
 .widget-container .follow {
-    width: auto;
+    width: 100px;
     height: 30px !important;
 }
 
@@ -67,14 +67,6 @@
     justify-content: space-between;
     align-items: center;
 }
-
-/* .trending .subheader_container svg {
-    color: var(--grey);
-}
-
-.trending .widget-item .dark_round-btn .icon {
-    color: var(--grey) !important;
-} */
 
 .trending .widget-item .blue_round-btn .icon-container::after {
     width: 25px;
@@ -104,11 +96,7 @@
 
 .simple-card .pfp-container {
     margin-right: 0.75rem;
-}
-
-.simple-card .pfp-container > .pfp {
-    width: 40px;
-    height: 40px;
+    min-width: 40px;
 }
 
 .connect-list .widget-item_header {
@@ -130,4 +118,17 @@
     font-weight: 500;
     color: var(--grey);
     margin-bottom: 0.5rem;
+}
+
+.widget-container .placeholder__icon {
+    margin-bottom: 0.75rem;
+}
+
+.widget-container .placeholder-text__subtitle {
+    color: var(--grey);
+    font-size: 1rem;
+}
+
+.widget-container .placeholder {
+    height: 125px;
 }
