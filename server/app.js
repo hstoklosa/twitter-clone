@@ -43,6 +43,8 @@ app.use(helmet({
     crossOriginEmbedderPolicy: false,
 }));
 
+app.set("trust proxy", 1);
+
 const limiter = rateLimit({
     max: 3000,
     windowMs: 60 * 60 * 1000, // In one hour
