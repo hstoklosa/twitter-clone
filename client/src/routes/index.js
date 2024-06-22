@@ -6,7 +6,6 @@ import NotFound from "./NotFound";
 import Auth from "./Auth";
 import Home from "./Home";
 import Profile from "./Profile";
-import ProfileTabList from "./Profile/ProfileTabList";
 import ProfileConnections from "./Profile/ProfileConnections";
 import Tweet from "./Tweet";
 import TweetEngagements from "./Tweet/TweetEngagements";
@@ -15,13 +14,11 @@ import Explore from "./Explore";
 import ExploreTabList from "./Explore/ExploreTabList";
 import Search from "./Search";
 
-import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 
 
 const router = createBrowserRouter([
     {
-        path: "/",
         element: <Root />,
         errorElement: <NotFound />,
         children: [
@@ -41,19 +38,12 @@ const router = createBrowserRouter([
                     {
                         path: "/home",
                         element: (
-                            <PrivateRoute>
-                                <Home />
-                            </PrivateRoute>
+                            <Home />
                         ),
                     },
-
                     {
                         path: "/:username",
-                        element: (
-                            <PrivateRoute>
-                                <Profile />
-                            </PrivateRoute>
-                        ),
+                        element: <Profile />,
                         children: [
                             ...[
                                 '',
@@ -62,7 +52,7 @@ const router = createBrowserRouter([
                                 'likes'
                             ].map(path => ({
                                 path: path,
-                                element: <ProfileTabList />
+                                element: null
                             }))
                         ],
                     },
@@ -73,15 +63,9 @@ const router = createBrowserRouter([
                         path: path,
                         element: <ProfileConnections />
                     })),
-
-
                     {
                         path: "/:username/status/:tweetId",
-                        element: (
-                            <PrivateRoute>
-                                <Tweet />
-                            </PrivateRoute>
-                        ),
+                        element: <Tweet />,
                     },
                     ...[
                         '/:username/status/:tweetId/quotes',
@@ -91,25 +75,13 @@ const router = createBrowserRouter([
                         path: path,
                         element: <TweetEngagements />
                     })),
-
                     {
                         path: "/bookmarks",
-                        element: (
-                            <PrivateRoute>
-                                <Bookmarks />
-                            </PrivateRoute>
-                        ),
+                        element: <Bookmarks />,
                     },
-
                     {
                         path: "/explore",
-                        element: (
-                            <PrivateRoute>
-                                <Explore />
-                            </PrivateRoute>
-                        ),
-                        children: [
-                        ],
+                        element: <Explore />,
                     },
                     ...[
                         '/explore/tweets',
@@ -118,30 +90,19 @@ const router = createBrowserRouter([
                         path: path,
                         element: <ExploreTabList />
                     })),
-
-
                     {
                         path: "/search",
-                        element: (
-                            <PrivateRoute>
-                                <Search />
-                            </PrivateRoute>
-                        ),
+                        element: <Search />,
                         children: [
                             ...[
                                 '/search/tweets',
                                 '/search/people',
                             ].map(path => ({
                                 path: path,
-                                element: (
-                                    <PrivateRoute>
-                                        <Search />
-                                    </PrivateRoute>
-                                )
+                                element: <Search />
                             })),
                         ],
                     },
-
                 ]
             },
             {

@@ -1,5 +1,6 @@
 import "./styles.css";
 
+import { useEffect } from "react";
 import { IconContext } from "react-icons";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +8,7 @@ import { useAppSelector, useAppDispatch } from "../../app/store";
 import { modalActions } from "../../features/slices/modalSlice";
 import { SignupModal, LoginModal, VerificationModal, Logo } from "../../components";
 
-import {
-    useSignInMutation,
-    useLazyCheckAuthQuery
-} from "../../features/api/authApi";
-import { useEffect } from "react";
+import { useSignInMutation, useLazyCheckAuthQuery } from "../../features/api/authApi";
 
 const Auth = () => {
     // const isAuth = useAppSelector((state) => state.auth.isAuth);
@@ -34,26 +31,16 @@ const Auth = () => {
     const dispatch = useAppDispatch();
 
     return (
-        <main id="app-container" className="auth-route">
-            <div className="logo-wrapper">
-                <Logo />
-
-                <h1
-                    className="logo-text"
-                    style={{
-                        fontSize: "15vmin",
-                        fontWeight: "800",
-                        color: "var(--text-primary)",
-                        textAlign: "center"
-                    }}
-                >
-                    CLONE
-                </h1>
-
+        <main className="auth-route">
+            <div className="col-1">
+                <div className="col-logo-container">
+                    <Logo />
+                </div>
             </div>
 
-
-            <div className="signup-container">
+            <div className="col-2">
+                <h1>Happening now</h1>
+                <h2>Join today.</h2>
                 <div className="wrapper">
                     <a
                         href={`${process.env.REACT_APP_API_URL}/auth/google`}
@@ -73,6 +60,8 @@ const Auth = () => {
                     >
                         Create Account
                     </button>
+
+                    <div className="separator">or</div>
 
                     <button
                         className="login btn-empty"

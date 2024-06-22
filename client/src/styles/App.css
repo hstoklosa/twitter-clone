@@ -185,15 +185,23 @@ body.modal-open {
     /* overflow: hidden; */
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
 #app-container_wrapper {
     max-width: 1270px;
     min-height: 100vh;
     margin: 0 auto;
+}
+
+#app-container_wrapper.private-route {
     display: inline-grid;
     grid-template-columns: min-content min-content; /* Second column is twice as large */
     justify-content: center; /* Horizontally center the columns in the container */
+}
+
+#app-container_wrapper.public-route {
+    width: 100%;
 }
 
 #app-container main {
@@ -207,7 +215,7 @@ body.modal-open {
     grid: 0 !important;
 }
 
-#app-container_wrapper > main {
+#app-container_wrapper.private-route > main {
     width: 100% !important;
 }
 
@@ -611,7 +619,7 @@ select {
 }
 
 #app-container .modal header,
-#app-container_wrapper header {
+#app-container_wrapper.private-route header {
     background: rgba(var(--bg-values), 0.65);
     backdrop-filter: blur(12px);
     position: sticky;
@@ -619,7 +627,7 @@ select {
     z-index: 9999;
 }
 
-body .mobile #app-container_wrapper #general > header.scroll {
+body .mobile #app-container_wrapper.private-route #general > header.scroll {
     transform: translate3d(0px, 0px, 0px) translateY(-60px);
 }
 
@@ -1167,7 +1175,7 @@ img.pfp {
     #navbar .navbar-account:active {
         background-color: none !important;
     }
-    #app-container_wrapper > main {
+    #app-container_wrapper.private-route > main {
         flex: unset;
     }
     .navbar-account {
@@ -1189,11 +1197,11 @@ img.pfp {
         display: none;
     }
 
-    #app-container_wrapper {
+    #app-container_wrapper.private-route {
         width: 100%;
         grid-template-columns: min-content auto;
     }
-    #app-container_wrapper > main #general {
+    #app-container_wrapper.private-route > main #general {
         min-width: unset;
         width: 600px !important;
     }
@@ -1205,7 +1213,7 @@ img.pfp {
         width: 100%;
         /* padding: 0.5rem 0.5rem 0 0.5rem; */
     }
-    #app-container_wrapper {
+    #app-container_wrapper.private-route {
         flex: 1;
     }
 }

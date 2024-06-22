@@ -1,31 +1,70 @@
-.auth-route#app-container {
+.auth-route {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    padding: 2rem;
+    height: 100%;
 }
 
 .auth-route > .logo {
     width: 200px;
 }
 
-.signup-container {
+.col-2 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
-    width: 90%;
-    max-width: 400px;
-    padding: 1rem;
+    /* align-items: center; */
+    /* width: 90%;
+    max-width: 400px; */
     border-radius: 1rem;
+    flex: 1;
 }
 
-.signup-container .wrapper {
+.col-2 .separator {
+    display: flex;
+    align-items: center;
+    margin: 0 0 1rem 0;
+    color: var(--primary-text);
+}
+
+.col-2 .separator::before,
+.col-2 .separator::after {
+    content: "";
+    height: 0.5px;
+    width: 175px;
+    background-color: var(--border);
+    flex-grow: 1;
+}
+
+.col-2 .separator::before {
+    margin-right: 1rem;
+}
+
+.col-2 .separator::after {
+    margin-left: 1rem;
+}
+
+.col-2 h1 {
+    font-size: clamp(3rem, 5vw, 4rem);
+    font-weight: 800;
+    margin-bottom: 4rem;
+}
+
+.col-2 h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+}
+
+.col-2 .wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 400px;
 }
 
 .signup-btn {
@@ -44,25 +83,51 @@
     margin-right: 0.3rem;
 }
 
-.auth-route .logo-wrapper {
+.auth-route .col-1 {
     display: flex;
-    /* flex-direction: column; */
+    justify-content: center;
     align-items: center;
-    margin-bottom: 3rem;
+    /* margin-bottom: 3rem; */
+    flex: 1;
+    width: 100%;
 }
 
-.auth-route .logo-wrapper h1 {
+.auth-route .col-1 h1 {
     /* margin-top: 3rem; */
     line-height: 0.7em;
     margin-left: 1rem;
     font-size: 3rem;
 }
 
-@media screen and (max-width: 542px) {
-    .auth-route > .logo {
-        margin-bottom: 1.5rem;
+.auth-route .col-1 {
+    margin-right: 3rem;
+}
+
+.auth-route .col-logo-container .logo {
+    width: 100%;
+}
+
+@media screen and (max-width: 700px) {
+    .auth-route {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+        flex: unset;
     }
-    .auth-route > .logo-text {
-        display: none;
+
+    .col-2 {
+        padding: 0;
+        justify-content: center;
+    }
+
+    .auth-route .col-1 {
+        width: 30px !important;
+        height: 30px !important;
+        margin-bottom: 0;
+        flex: unset;
+    }
+
+    .auth-route .col-1 .logo {
+        width: 100% !important;
     }
 }

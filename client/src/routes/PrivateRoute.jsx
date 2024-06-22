@@ -13,7 +13,14 @@ const PrivateRoute = ({ children }) => {
         );
     }
 
-    return children;
+    return (
+        <div
+            id="app-container_wrapper"
+            className="private-route"
+        >
+            {children}
+        </div>
+    );
 };
 
 export default PrivateRoute;

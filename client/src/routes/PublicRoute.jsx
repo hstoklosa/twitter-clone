@@ -13,7 +13,14 @@ const PublicRoute = ({ children }) => {
         );
     }
 
-    return children;
+    return (
+        <div
+            id="app-container_wrapper"
+            className="public-route"
+        >
+            {children}
+        </div>
+    );
 };
 
 export default PublicRoute;

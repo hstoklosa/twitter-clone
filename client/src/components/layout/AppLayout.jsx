@@ -15,6 +15,7 @@ const AppLayout = () => {
                     <MobileNavbar />
                 </>)
             }
+
             <Outlet />
         </PrivateRoute>
     );

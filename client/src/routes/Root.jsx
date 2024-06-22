@@ -1,5 +1,3 @@
-import "./Auth/styles.css";
-
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
 import { useMediaQuery } from "@uidotdev/usehooks";
@@ -64,12 +62,10 @@ const Root = () => {
             <div id="app-container">
                 <ModalRoot />
 
-                <div id="app-container_wrapper">
-                    {(isAuthLoading || isUserLoading)
-                        ? <Loading />
-                        : <Outlet />
-                    }
-                </div>
+                {(isAuthLoading || isUserLoading)
+                    ? <Loading />
+                    : <Outlet />
+                }
             </div>
         </div>
     );
