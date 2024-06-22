@@ -1,12 +1,13 @@
 .tweet {
     display: flex;
+    flex-direction: column;
     position: relative;
-    /* padding: 0.75rem 1rem; */
     padding: 0.65rem 1rem;
-    border-top: 1px solid var(--border);
+    /* border-top: 1px solid var(--border); */
     border-bottom: 1px solid var(--border);
     width: 100% !important;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .tweet .tweet-actions .action-btn .icon-container {
@@ -14,12 +15,18 @@
     height: 17px;
 }
 
-.tweet:hover {
+.tweet:hover,
+.tweet:active {
     background-color: var(--tweet-hover);
 }
 
+.tweet-wrapper {
+    display: flex;
+    width: 100%;
+}
+
 .tweet .pfp-container {
-    padding: 0rem 0.75rem 0 0;
+    margin-right: 0.75rem;
 }
 
 .tweet .pfp-container .pfp {
@@ -30,7 +37,8 @@
 .tweet .tweet-container {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 80%;
+    flex-grow: 1;
 }
 
 .tweet .tweet-container .quote-preview {
@@ -47,12 +55,13 @@
 .tweet-content .tweet-text {
     font-size: 0.9375rem;
     font-weight: 500;
-    /* display: block; */
     word-wrap: break-word;
+    /* word-break: break-all; */
+    /* overflow-wrap: break-word; */
 }
 
-.tweet-text p {
-    width: 100%;
+.tweet-text span {
+    word-wrap: break-word;
 }
 
 .tweet-btn {
@@ -152,12 +161,12 @@
 }
 
 .float-icon-container {
-    width: 18px !important;
-    height: 18px !important;
+    width: 20px !important;
+    height: 20px !important;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 0.75rem;
+    margin-right: 0.5rem;
 }
 
 .float-icon-container .float-icon {
@@ -166,19 +175,43 @@
     stroke-width: 2px;
 }
 
-.tweet .replyingTo {
+.tweet .special-info {
     color: var(--grey);
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
+    margin-left: 1.7rem;
 }
 
-.tweet .replyingTo-icon {
+.tweet .special-info-icon {
     margin-right: 0.25rem;
 }
 
-.tweet .replyingTo,
-.tweet .replyingTo a {
-    font-size: 0.95rem;
-    font-weight: 500;
+.special-info.pin .special-info-icon {
+    fill: var(--grey);
+}
+
+.tweet .special-info,
+.tweet .special-info a {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.tweet .special-info a {
+    margin-left: 0.25rem;
+}
+
+.replyingTo {
+    display: flex;
+    margin-bottom: 0.25rem;
+}
+
+.replyingTo p {
+    color: var(--grey);
+    margin-right: 0.25rem;
+}
+
+.replyingTo p,
+.replyingTo a {
+    font-size: 0.9375rem;
 }

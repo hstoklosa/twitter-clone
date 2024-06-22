@@ -5,6 +5,7 @@
     font-size: 0.95rem;
     margin-bottom: 0.2rem;
     width: 100%;
+    overflow: unset;
 }
 
 .tweet-details .display_name {
@@ -13,7 +14,8 @@
     margin-right: 0.3rem;
 }
 
-.tweet-details .display_name:hover {
+.tweet-details .display_name:hover,
+.tweet-details .display_name:active {
     text-decoration: underline;
     text-underline-offset: 3px;
 }
@@ -34,6 +36,11 @@
 }
 
 .tweet-details .more-options {
-    right: -8px;
-    top: 3px;
+    /* right: -8px;
+    top: 3px; */
+}
+
+.tweet-details .more .icon-container {
+    width: 17px !important;
+    height: 17px !important;
 }
