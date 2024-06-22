@@ -62,7 +62,7 @@
 }
 
 .searchbar:focus-within {
-    outline: 1px solid var(--primary-colour);
+    box-shadow: 0 0 0 1px var(--primary-colour);
     background-color: var(--background);
 }
 

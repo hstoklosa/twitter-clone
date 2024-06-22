@@ -7,7 +7,7 @@ const useScrollDirection = () => {
     useEffect(() => {
         const updateScrollDirection = () => {
             const scrollY = window.pageYOffset;
-            const direction = scrollY > lastScrollY.current ? "down" : "up";
+            const direction = (scrollY > lastScrollY.current && window.pageYOffset > 50) ? "down" : "up";
 
             if (scrollY !== lastScrollY.current) {
                 setScrollDirection(direction);
