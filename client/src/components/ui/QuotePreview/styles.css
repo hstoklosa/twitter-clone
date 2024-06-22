@@ -22,13 +22,14 @@
 .quote-preview .details-wrapper .pfp-container {
     padding: 0;
     width: 20px;
-    height: unset;
+    height: 20px;
+    min-width: unset;
     margin-right: 0.5rem !important;
 }
 
 .quote-preview .details-wrapper .pfp {
-    width: 100% !important;
-    height: auto !important;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 .quote-preview .tweet-details {
@@ -85,6 +86,11 @@
     margin-right: 0.3rem;
     color: var(--text-primary);
     font-weight: 700;
+    max-width: 100px;
+}
+
+.quote-preview .username {
+    max-width: 200px;
 }
 
 .quote-preview .date {

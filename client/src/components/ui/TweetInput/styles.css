@@ -64,7 +64,8 @@
     background-color: rgba(0, 0, 0, 0.75);
 }
 
-.media-preview .dark_round-btn:hover .icon-container::after {
+.media-preview .dark_round-btn:hover .icon-container::after,
+.media-preview .dark_round-btn:active .icon-container::after {
     background-color: rgba(26, 26, 26, 0.75);
 }
 

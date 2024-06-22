@@ -1,12 +1,12 @@
 import "./styles.css";
 
 import { Link, useLocation } from "react-router-dom";
+import { PfpContainer } from "../../index";
 import { isObjEmpty } from "../../../utils/object";
 import { getTimeDifference } from "../../../helpers/date";
 
 const QuotePreview = ({ tweet }) => {
     const { pathname } = useLocation();
-
 
     const isReply = tweet.replyTo && !isObjEmpty(tweet.replyTo);
     const formattedDate = getTimeDifference(tweet.createdAt);
@@ -16,19 +16,13 @@ const QuotePreview = ({ tweet }) => {
         <Link
             to={`/${tweet.author.username}/status/${tweet._id}`}
             state={{ previousPath: pathname }}
-            className="quote-preview"
+            className="quote-preview flex-truncate_parent"
         >
-            <div className="details-wrapper">
-                <div className="pfp-container">
-                    <img
-                        src={tweet.author.profileImageURL}
-                        className="pfp"
-                        alt="User Pfp"
-                    />
-                </div>
+            <div className="details-wrapper flex-truncate_parent">
+                <PfpContainer src={tweet.author.profileImageURL} />
 
                 <Link
-                    className="display_name"
+                    className="display_name flex-truncate_child"
                     to={`/${tweet.author.username}`}
                 >
                     {tweet.author.displayName}
