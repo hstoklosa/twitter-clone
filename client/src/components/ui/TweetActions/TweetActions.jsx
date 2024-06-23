@@ -90,7 +90,6 @@ const TweetActions = ({ tweet, currentUser }) => {
             : await createBookmark(bookmarkData);
     };
 
-
     return (
         <div className="tweet-actions">
             <LinkButton
@@ -247,7 +246,7 @@ const TweetActions = ({ tweet, currentUser }) => {
                                 type="button"
                                 className="float-btn"
                                 onClick={() => {
-                                    navigator.clipboard.writeText("XD");
+                                    navigator.clipboard.writeText(`${process.env.REACT_APP_CLIENT_ORIGIN}/${tweet.author.username}/status/${tweet._id}`);
                                     toast.success(
                                         () => <span>Link copied to clipboard.</span >,
                                         { duration: 6000 }
@@ -260,7 +259,6 @@ const TweetActions = ({ tweet, currentUser }) => {
                                         className="float-icon"
                                     />
                                 </div>
-
                                 Copy link
                             </LinkButton>
                         </>

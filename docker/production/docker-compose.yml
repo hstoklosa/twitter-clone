@@ -31,6 +31,7 @@ services:
             dockerfile: Dockerfile.prod
             args:
                 - API_URL=$API_URL
+                - CLIENT_ORIGIN=$CLIENT_ORIGIN
         restart: unless-stopped
         env_file:
             - .env

@@ -9,7 +9,9 @@ COPY package*.json ./
 RUN npm install --silent
 
 ARG API_URL
+ARG CLIENT_ORIGIN
 ENV REACT_APP_API_URL=$API_URL
+ENV REACT_APP_CLIENT_ORIGIN=$CLIENT_ORIGIN
 ENV NODE_OPTIONS=--max_old_space_size=2048
 ENV GENERATE_SOURCEMAP=false
 ENV PATH /app/node_modules/.bin:$PATH

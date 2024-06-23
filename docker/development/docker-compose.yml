@@ -35,6 +35,7 @@ services:
             dockerfile: Dockerfile
             args:
                 - API_URL=$API_URL
+                - CLIENT_ORIGIN=$CLIENT_ORIGIN
         ports:
             - $CLIENT_PORT:$CLIENT_PORT
         volumes:
