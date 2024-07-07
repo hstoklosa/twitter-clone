@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --silent
+RUN npm ci --silent
 
 ARG API_URL
 ARG CLIENT_ORIGIN
